@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import prisma from "./config/prisma.js";
 
+import errorHandler from "./middlewares/error.middleware.js";
 
 const app = express();
 
@@ -19,5 +20,8 @@ prisma.$connect()
 app.get("/", (req, res) => {
   res.send("API funcionando 🚀");
 });
+
+// ÚLTIMO middleware: manejo centralizado de errores
+app.use(errorHandler);
 
 export default app;
