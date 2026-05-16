@@ -17,6 +17,7 @@ export const register = async ({ name, email, password }) => {
       name,
       email,
       password: hashedPassword,
+      role: "USER", // siempre USER, nunca se permite definir el rol desde el body
     },
   });
 
@@ -36,7 +37,7 @@ export const login = async ({ email, password }) => {
   if (!passwordMatch) throw new CustomError("Credenciales inválidas", 401);
 
   const token = jwt.sign(
-    { userId: user.id, email: user.email, name: user.name },
+    { userId: user.id, email: user.email, name: user.name, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: "24h" }
   );
@@ -47,6 +48,7 @@ export const login = async ({ email, password }) => {
       id: user.id,
       email: user.email,
       name: user.name,
+      role: user.role,
     },
   };
 };
