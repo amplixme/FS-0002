@@ -1,6 +1,6 @@
 import { createPost } from "../services/post.service.js";
 
-export const create = async (req, res) => {
+export const create = async (req, res, next) => {
   try {
     const { title, content } = req.body;
     const authorId = req.user.id;
@@ -9,6 +9,6 @@ export const create = async (req, res) => {
 
     res.status(201).json(newPost);
   } catch (error) {
-    res.status(500).json({ message: "Error al crear el post", error: error.message });
+    next(error);
   }
 };
