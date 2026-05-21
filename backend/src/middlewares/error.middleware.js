@@ -21,6 +21,7 @@ const errorHandler = (err, req, res, next) => {
   // Error genérico
   const status = err.status || err.statusCode || 500;
   const message = err.message || "Error interno del servidor";
+  
 
   return res.status(status).json({
     error: {
