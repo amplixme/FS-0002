@@ -1,7 +1,7 @@
 import { success } from "../utils/response.js";
 import {
   createPost,
-  getAllPost,
+  getAllPosts,
   getPostById as getPostByIdService
 } from "../services/post.service.js";
 import CustomError from "../utils/custom-error.js";
@@ -21,7 +21,7 @@ export const create = async (req, res, next) => {
 
 export const getPost = async (req, res, next) => {
   try {
-    const post = await getAllPost();
+    const post = await getAllPosts();
     return success(res, post);
   } catch (error) {
     next(error);

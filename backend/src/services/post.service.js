@@ -18,7 +18,7 @@ export const createPost = async (title, content, authorId) => {
   return post;
 };
 
-export const getAllPost = async () => {
+export const getAllPosts = async () => {
   const post = await prisma.post.findMany({
     where: { published: true },
     orderBy: { createdAt: "desc" },
@@ -32,13 +32,17 @@ export const getAllPost = async () => {
 };
 
 export const getPostById = async (id) => {
+  const numericId = parseInt(id);
+
+  if (isNaN(numericId)) return null;
+
   const post = await prisma.post.findUnique({
-    where: { id: parseInt(id) },
+    where: { id: numericId },
     include: {
       author: {
         select: { name: true },
       },
     },
   });
-  return post
+  return post;
 };
