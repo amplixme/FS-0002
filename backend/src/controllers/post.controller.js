@@ -2,11 +2,11 @@ import { success } from "../utils/response.js";
 import {
   createPost,
   getAllPosts,
-  getPostById as getPostByIdService
+  getPostById as getPostByIdService,
+  updatePostService,
+  deletePostService,
 } from "../services/post.service.js";
 import CustomError from "../utils/custom-error.js";
-import { createPost } from "../services/post.service.js";
-import { success } from "../utils/response.js"
 
 export const create = async (req, res, next) => {
   try {
@@ -15,13 +15,13 @@ export const create = async (req, res, next) => {
 
     const newPost = await createPost(title, content, authorId);
 
-    return success(res,newPost,201)
+    return success(res, newPost, 201);
   } catch (error) {
     next(error);
   }
 };
 
-export const getPost = async (req, res, next) => {
+export const getPosts = async (req, res, next) => {
   try {
     const post = await getAllPosts();
     return success(res, post);
@@ -33,11 +33,52 @@ export const getPost = async (req, res, next) => {
 export const getPostById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const post = await getPostByIdService(id)
+    const post = await getPostByIdService(id);
 
-    if(!post) throw new CustomError("Post no encontrado", 404)
+    if (!post) throw new CustomError("Post no encontrado", 404);
 
-    return success(res, post)
+    return success(res, post);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updatePost = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+    const post = await getPostByIdService(id);
+    if (!post) throw new CustomError("Post no encontrado", 404);
+
+    if (post.authorId !== userId && userRole !== "ADMIN") {
+      throw new CustomError("No tienes permiso para modificar este post", 403);
+    }
+
+    const updatedPost = await updatePostService(id, data);
+    return success(res, updatedPost, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deletePost = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+    const post = await getPostByIdService(id);
+    if (!post) throw new CustomError("Post no encontrado", 404);
+
+    if (post.authorId !== userId && userRole !== "ADMIN") {
+      throw new CustomError("No tienes permiso para modificar este post", 403);
+    }
+
+    await deletePostService(id);
+    return success(res, { message: "Post eliminado correctamente" }, 200);
   } catch (error) {
     next(error);
   }
