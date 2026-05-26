@@ -90,7 +90,8 @@ Este npm install hace lo mismo que el anterior, instala las dependencias pero en
 ```bash
 cp .env.example .env
 ```
-Al ejecutar este comando, va a copiar lo que tiene el archivo .env.example a tu archivo .env local con el puerto, URL de la base de datos y JWT_secretas correspondientes que van a permitir poder levantar el proyecto de manera satisfactoria.
+Al ejecutar este comando, va a copiar lo que tiene el archivo .env.example a tu archivo .env local con el puerto (en caso que el archivo no exista, este lo crea), URL de la base de datos y JWT_secretas correspondientes que van a permitir poder levantar el proyecto de manera satisfactoria.
+Se debe ingresar al archivo .env y realizar las modificaciones correspondientes que se indicarán en el mismo archivo.
 
 #### Iniciar el servidor frontend
 
