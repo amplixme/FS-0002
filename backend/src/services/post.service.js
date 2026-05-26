@@ -46,3 +46,25 @@ export const getPostById = async (id) => {
   });
   return post;
 };
+
+export const updatePostService = async (id, data) => {
+  const numericId = parseInt(id);
+  const post = await prisma.post.update({
+    where: { id: numericId },
+    data,
+    include: {
+      author: {
+        select: { name: true },
+      },
+    },
+  });
+  return post;
+};
+
+export const deletePostService = async (id) => {
+  const numericId = parseInt(id);
+  await prisma.post.delete({
+    where: { id: numericId },
+  });
+  return true;
+};
