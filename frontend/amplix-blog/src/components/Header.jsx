@@ -1,8 +1,19 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const { user, isAuthenticated, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    setMenuOpen(false);
+    navigate("/login");
+  };
+
   return (
     <header className="border-b border-gray-200 px-6 py-4 bg-white">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -29,22 +40,37 @@ const Header = () => {
           </nav>
         </div>
 
-        {/* Botones derecha */}
+        {/* Botones derecha (Desktop) */}
         <div className="hidden md:flex items-center gap-3">
-          <Link to="/login" className="text-gray-600 font-medium">
-            Log In
-          </Link>
-          <Link
-            to="/register"
-            className="text-white bg-blue-700 py-2 px-6 rounded-3xl font-black"
-          >
-            Subscribe
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <span className="text-gray-800 font-medium mr-2">
+                Hola, {user?.name}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="text-red-600 font-medium hover:text-red-800 transition cursor-pointer"
+              >
+                Log Out
+              </button>
 
-          {/* Avatar placeholder */}
-          <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm text-gray-600 font-medium">
-            U
-          </div>
+              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-sm text-blue-700 font-bold uppercase">
+                {user?.name ? user.name.charAt(0) : "U"}
+              </div>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="text-gray-600 font-medium">
+                Log In
+              </Link>
+              <Link
+                to="/register"
+                className="text-white bg-blue-700 py-2 px-6 rounded-3xl font-black hover:bg-blue-800 transition"
+              >
+                Subscribe
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Hamburguesa mobile */}
@@ -60,7 +86,7 @@ const Header = () => {
 
       {/* Menú mobile */}
       {menuOpen && (
-        <div className="md:hidden flex flex-col gap-4 mt-4 px-4 text-sm text-gray-600 font-medium">
+        <div className="md:hidden flex flex-col gap-4 mt-4 px-4 text-sm text-gray-600 font-medium pb-4">
           <Link to="/" onClick={() => setMenuOpen(false)}>
             Latest
           </Link>
@@ -70,12 +96,35 @@ const Header = () => {
           <Link to="/newsletter" onClick={() => setMenuOpen(false)}>
             Newsletter
           </Link>
-          <Link to="/login" onClick={() => setMenuOpen(false)}>
-            Log In
-          </Link>
-          <Link to="/register" onClick={() => setMenuOpen(false)}>
-            Subscribe
-          </Link>
+
+          <hr className="border-gray-200 my-2" />
+
+          {isAuthenticated ? (
+            <>
+              <span className="text-gray-800 font-medium">
+                Hola, {user?.name}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="text-left text-red-600 font-medium cursor-pointer"
+              >
+                Log Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" onClick={() => setMenuOpen(false)}>
+                Log In
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setMenuOpen(false)}
+                className="text-blue-700 font-bold"
+              >
+                Subscribe
+              </Link>
+            </>
+          )}
         </div>
       )}
     </header>

@@ -5,6 +5,8 @@ import {
   getPostById as getPostByIdService
 } from "../services/post.service.js";
 import CustomError from "../utils/custom-error.js";
+import { createPost } from "../services/post.service.js";
+import { success } from "../utils/response.js"
 
 export const create = async (req, res, next) => {
   try {
@@ -13,7 +15,7 @@ export const create = async (req, res, next) => {
 
     const newPost = await createPost(title, content, authorId);
 
-    res.status(201).json(newPost);
+    return success(res,newPost,201)
   } catch (error) {
     next(error);
   }
