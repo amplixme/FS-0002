@@ -74,7 +74,7 @@ export const deletePost = async (req, res, next) => {
     if (!post) throw new CustomError("Post no encontrado", 404);
 
     if (post.authorId !== userId && userRole !== "ADMIN") {
-      throw new CustomError("No tienes permiso para modificar este post", 403);
+      throw new CustomError("No tienes permiso para eliminar este post", 403);
     }
 
     await deletePostService(id);

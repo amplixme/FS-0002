@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CreatePost from "./pages/CreatePost";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PostDetail from "./pages/PostDetail";
 import "./App.css";
 
 function App() {
@@ -32,6 +33,14 @@ function App() {
                   <CreatePost />
                 </Layout>
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/posts/:id"
+            element={
+              <Layout>
+                <PostDetail />
+              </Layout>
             }
           />
         </Routes>
