@@ -16,7 +16,7 @@ export default function PostDetail() {
     const fetchPost = async () => {
       try {
         const result = await getPostById(id);
-        const postData = result.success ? result.data : result;
+        const postData = result.data ? result.data : result;
         setPost(postData);
       } catch (err) {
         setError(err.message || "Error al cargar el artículo");
