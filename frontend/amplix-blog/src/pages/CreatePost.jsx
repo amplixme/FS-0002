@@ -6,6 +6,8 @@ export default function CreatePost() {
   const navigate = useNavigate();
 
   // Estados del formulario
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [published, setPublished] = useState(false);
@@ -14,14 +16,30 @@ export default function CreatePost() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+
+  function handleImageChange(e) {   // ← agregás acá
+    const file = e.target.files[0];
+    if (!file) return;
+    setImage(file);
+    setImagePreview(URL.createObjectURL(file));
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
+      formData.append("published", published);
+      if (image) {
+        formData.append("image",image);
+      }
+
       // Llamamos a la función del servicio de Ángel
-      const newPost = await createPost({ title, content, published });
+      await createPost(formData);
 
       // La tarjeta pide redirigir al detalle, pero como la Card 26 (Detalle)
       // todavía no la hicimos, lo mandamos al inicio por ahora.
@@ -89,6 +107,32 @@ export default function CreatePost() {
                   placeholder="Escribe el contenido de tu artículo aquí..."
                   className="block w-full px-4 py-3 bg-surface-container-low border-transparent rounded-xl text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all resize-y"
                 ></textarea>
+              </div>
+
+              {/* Imagen de portada */}
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-on-surface">
+                  Imagen de portada
+                  <span className="text-outline font-normal ml-1">(opcional)</span>
+                </label>
+
+                <label className="flex flex-col items-center justify-center w-full h-40 bg-surface-container-low rounded-xl cursor-pointer hover:bg-surface-container transition-colors border-2 border-dashed border-outline-variant">
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="preview" className="w-full h-full object-cover rounded-xl" />
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 text-outline">
+                      <span className="material-symbols-outlined text-4xl">add_photo_alternate</span>
+                      <span className="text-sm font-medium">Hacé clic para subir una imagen</span>
+                      <span className="text-xs">JPG, PNG, WEBP — máx. 5MB</span>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+                </label>
               </div>
 
               {/* Toggle Publicar/Borrador */}
