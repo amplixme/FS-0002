@@ -1,8 +1,14 @@
 export const validateBody = (schema) => {
   return (req, res, next) => {
-    const result = schema.safeParse(req.body);
+    
+    const plainBody = {...req.body };
+    console.log("PlainBody: ", plainBody);
+
+    const result = schema.safeParse(plainBody);
+    console.log("result:", result);
 
     if (result.success) {
+      req.body = result.data;
       return next();
     }
 
