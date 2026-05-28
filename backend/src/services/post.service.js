@@ -1,12 +1,15 @@
 // src/services/post.service.js
+import { promise } from "zod";
 import prisma from "../config/prisma.js"; // ← importar el singleton
 
-export const createPost = async (title, content, authorId) => {
+export const createPost = async (title, content, authorId, imageUrl,published) => {
   const post = await prisma.post.create({
     data: {
       title,
       content,
       authorId,
+      imageUrl,
+      published
     },
     include: {
       author: {
@@ -18,17 +21,32 @@ export const createPost = async (title, content, authorId) => {
   return post;
 };
 
-export const getAllPosts = async () => {
-  const post = await prisma.post.findMany({
-    where: { published: true },
-    orderBy: { createdAt: "desc" },
-    include: {
-      author: {
-        select: { name: true },
+export const getAllPosts = async (page = 1, limit = 4) => {
+  const skip = (page - 1) * limit;
+
+  const [posts, total] = await Promise.all([
+    prisma.post.findMany({
+      where: { published: true },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+      include: {
+        author: {
+          select: { name: true },
+        },
       },
-    },
-  });
-  return post;
+    }),
+    prisma.post.count({
+      where: { published: true },
+    }),
+  ]);
+
+  return {
+    posts,
+    total,
+    totalPages: Math.ceil(total / limit),
+    currentPage: page,
+  };
 };
 
 export const getPostById = async (id) => {

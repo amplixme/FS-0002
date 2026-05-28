@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { validateBody } from "../middlewares/validate.middleware.js";
 import { createPostSchema } from "../schemas/post.schema.js";
+import { upload } from "../middlewares/upload.middleware.js";
 import {
   create,
   getPosts,
@@ -12,7 +13,7 @@ import {
 
 const router = Router();
 
-router.post("/", authMiddleware, validateBody(createPostSchema), create);
+router.post("/", authMiddleware, upload.single("image"), validateBody(createPostSchema), create);
 router.put("/:id", authMiddleware, updatePost);
 router.delete("/:id", authMiddleware, deletePost);
 

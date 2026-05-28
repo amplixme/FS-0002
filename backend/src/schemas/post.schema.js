@@ -12,4 +12,6 @@ export const createPostSchema = z.object({
       required_error: "El contenido es obligatorio",
     })
     .min(10, "El contenido debe tener al menos 10 caracteres"),
+
+    published: z.string().optional(),
 });

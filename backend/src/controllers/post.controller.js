@@ -1,4 +1,5 @@
 import { success } from "../utils/response.js";
+import { uploadImage } from "../utils/uploadImage.js";
 import {
   createPost,
   getAllPosts,
@@ -7,24 +8,36 @@ import {
   deletePostService,
 } from "../services/post.service.js";
 import CustomError from "../utils/custom-error.js";
+import { upload } from "../middlewares/upload.middleware.js";
 
 export const create = async (req, res, next) => {
   try {
-    const { title, content } = req.body;
+    console.log("req.body después de validación:", req.body);
+    
+    const { title, content, published } = req.body;
     const authorId = req.user.id;
+    const publishedBool = published === "true";
 
-    const newPost = await createPost(title, content, authorId);
+    let imageUrl = null;
+    if (req.file){
+      imageUrl = await uploadImage(req.file.buffer, req.file.originalname);
+    }
+
+
+    const newPost = await createPost(title, content, authorId, imageUrl, publishedBool);
 
     return success(res, newPost, 201);
-  } catch (error) {
+  } catch (error){
     next(error);
   }
 };
 
 export const getPosts = async (req, res, next) => {
   try {
-    const post = await getAllPosts();
-    return success(res, post);
+    const page = parseInt(req.query.page) || 1;
+    console.log("page recibida:", page);
+    const result = await getAllPosts(page);    
+    return success(res, result);
   } catch (error) {
     next(error);
   }
