@@ -3,7 +3,12 @@ import { useNavigate } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import { getPosts } from "../services/post.service";
 
-const CATEGORIES = ["Featured", "Latest", "Tecnología", "Diseño", "Cultura"];
+// 1. Array unificado con name, slug e icon
+const CATEGORIES = [
+  { name: "Tecnología", slug: "tecnologia", icon: "code" },
+  { name: "Diseño", slug: "diseno", icon: "design_services" },
+  { name: "Cultura", slug: "cultura", icon: "groups" },
+];
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -39,7 +44,7 @@ export default function Home() {
     return () => {
       cancelled = true;
     };
-  }, [currentPage, activeCategory]); // ← se vuelve a ejecutar cada vez que cambia la página
+  }, [currentPage, activeCategory]);
 
   function handleCardClick(id) {
     navigate(`/posts/${id}`);
@@ -88,17 +93,14 @@ export default function Home() {
         </div>
 
         <div className="flex gap-8">
-          {/* Sidebar izquierdo */}
+          {/* Sidebar izquierdo (Desktop) */}
           <aside className="hidden lg:block w-48 flex-shrink-0">
             <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
               Categorías
             </h2>
             <ul className="space-y-1">
-              {[
-                { name: "Tecnología", slug: "tecnologia", icon: "code" },
-                { name: "Diseño", slug: "diseno", icon: "design_services" },
-                { name: "Cultura", slug: "cultura", icon: "groups" },
-              ].map((cat) => (
+              {/* 2. El sidebar ahora mapea la constante unificada */}
+              {CATEGORIES.map((cat) => (
                 <li key={cat.slug}>
                   <button
                     onClick={() => {
@@ -144,19 +146,23 @@ export default function Home() {
 
           {/* Contenido principal */}
           <div className="flex-1 min-w-0">
-            {/* Category Chips — solo mobile */}
+            {/* Category Chips (Mobile) */}
             <div className="flex lg:hidden overflow-x-auto no-scrollbar gap-2 pb-4 mb-2">
+              {/* 3. Chips de mobile usan la misma constante y envían el slug */}
               {CATEGORIES.map((cat) => (
                 <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
+                  key={cat.slug}
+                  onClick={() => {
+                    setActiveCategory(cat.slug);
+                    setCurrentPage(1); // Resetea la página al filtrar
+                  }}
                   className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-semibold transition-all ${
-                    activeCategory === cat
+                    activeCategory === cat.slug
                       ? "bg-[#024ce2] text-white"
                       : "bg-surface-container-lowest text-slate-600 hover:bg-slate-100 font-medium"
                   }`}
                 >
-                  {cat}
+                  {cat.name}
                 </button>
               ))}
             </div>
