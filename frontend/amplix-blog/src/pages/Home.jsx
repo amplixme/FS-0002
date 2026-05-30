@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import { getPosts } from "../services/post.service";
-import { Spinner } from "../components/common/Spinner";
+import { SkeletonLoader } from "../components/common/SkeletonLoader";
 import { ErrorMessage } from "../components/common/ErrorMessage";
 import { EmptyState } from "../components/common/EmptyState";
 
@@ -132,7 +132,7 @@ export default function Home() {
               ))}
             </div>
 
-            {status === "loading" && <Spinner />}
+            {status === "loading" && <SkeletonLoader />}
             {status === "error" && <ErrorMessage onRetry={handleRetry} />}
             {status === "empty" && <EmptyState message="No hay publicaciones todavía" />}
 

@@ -14,10 +14,10 @@ function SkeletonCard() {
   );
 }
 
-export function Spinner() {
+export function SkeletonLoader() {
   return (    
     <div className="space-y-12 mt-4">
-      {[2].map((i) => (
+      {[1,2].map((i) => (
         <SkeletonCard key={i} />
       ))}
     </div>
