@@ -1,7 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Component } from "react";
 import { useNavigate } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import { getPosts } from "../services/post.service";
+import {Spinner} from "../components/common/Spinner";
+import { ErrorMessage } from "../components/common/ErrorMessage";
+import { EmptyState } from "../components/common/EmptyState";
 
 const CATEGORIES = ["Featured", "Latest", "Tecnología", "Diseño", "Cultura"];
 
@@ -21,6 +24,7 @@ export default function Home() {
       try {
         console.log("Fetching page:", currentPage);
         const { data } = await getPosts(currentPage);
+        
         if (cancelled) return;
         if (!data?.posts || data.posts.length === 0) {
           setStatus("empty");
@@ -140,33 +144,14 @@ export default function Home() {
           </div>
 
           {/* Estado: Cargando */}
-          {status === "loading" && <SkeletonList />}
+          {status === "loading" && <Spinner />}
 
           {/* Estado: Error */}
-          {status === "error" && (
-            <div className="flex flex-col items-center justify-center py-20 gap-4">
-              <span className="material-symbols-outlined text-5xl text-error">error_outline</span>
-              <p className="text-slate-600 text-center text-sm">
-                No se pudieron cargar las publicaciones.
-                <br />
-                Verificá tu conexión e intentá de nuevo.
-              </p>
-              <button
-                onClick={handleRetry}
-                className="px-6 py-2 rounded-full bg-[#024ce2] text-white text-sm font-semibold active:scale-95 transition-transform"
-              >
-                Reintentar
-              </button>
-            </div>
-          )}
+          
+          {status === "error" && <ErrorMessage onRetry={handleRetry} />}
 
-          {/* Estado: Vacío */}
-          {status === "empty" && (
-            <div className="flex flex-col items-center justify-center py-20 gap-3">
-              <span className="material-symbols-outlined text-5xl text-outline">article</span>
-              <p className="text-slate-500 text-sm font-medium">No hay publicaciones todavía</p>
-            </div>
-          )}
+          {/* Estado: Vacío */}          
+          {status === "empty" && <EmptyState message="No hay publicaciones todavia" />}
 
           {/* Estado: Success */}
           {status === "success" && posts.length > 0 && (
@@ -232,28 +217,5 @@ export default function Home() {
 );
 }
 
-function SkeletonCard() {
-  return (
-    <div className="animate-pulse">
-      <div className="w-full aspect-[16/9] bg-surface-container rounded-xl mb-5" />
-      <div className="h-3 bg-surface-container rounded w-24 mb-3" />
-      <div className="h-6 bg-surface-container rounded w-3/4 mb-2" />
-      <div className="h-4 bg-surface-container rounded w-full mb-1" />
-      <div className="h-4 bg-surface-container rounded w-5/6 mb-4" />
-      <div className="flex items-center gap-3">
-        <div className="w-6 h-6 bg-surface-container rounded-full" />
-        <div className="h-3 bg-surface-container rounded w-28" />
-      </div>
-    </div>
-  );
-}
 
-function SkeletonList() {
-  return (
-    <div className="space-y-12 mt-4">
-      {[1, 2, 3].map((i) => (
-        <SkeletonCard key={i} />
-      ))}
-    </div>
-  );
-}
+
