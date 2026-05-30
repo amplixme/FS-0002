@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import { getPosts } from "../services/post.service";
+import { SkeletonLoader } from "../components/common/SkeletonLoader";
+import { ErrorMessage } from "../components/common/ErrorMessage";
+import { EmptyState } from "../components/common/EmptyState";
 
-// 1. Array unificado con name, slug e icon
 const CATEGORIES = [
   { name: "Tecnología", slug: "tecnologia", icon: "code" },
   { name: "Diseño", slug: "diseno", icon: "design_services" },
@@ -13,7 +15,6 @@ const CATEGORIES = [
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [status, setStatus] = useState("loading");
-
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [activeCategory, setActiveCategory] = useState(null);
@@ -21,11 +22,9 @@ export default function Home() {
 
   useEffect(() => {
     let cancelled = false;
-
     async function fetchPosts() {
       setStatus("loading");
       try {
-        console.log("Fetching page:", currentPage);
         const { data } = await getPosts(currentPage, activeCategory);
         if (cancelled) return;
         if (!data?.posts || data.posts.length === 0) {
@@ -39,11 +38,8 @@ export default function Home() {
         if (!cancelled) setStatus("error");
       }
     }
-
     fetchPosts();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [currentPage, activeCategory]);
 
   function handleCardClick(id) {
@@ -75,15 +71,10 @@ export default function Home() {
   return (
     <div className="bg-surface text-on-surface min-h-screen">
       <main className="max-w-7xl mx-auto px-4 pb-12">
-        {/* Header de la página */}
         <div className="py-8 border-b border-slate-100 mb-6">
-          <h1 className="text-3xl font-extrabold tracking-tight mb-4">
-            Últimas publicaciones
-          </h1>
+          <h1 className="text-3xl font-extrabold tracking-tight mb-4">Últimas publicaciones</h1>
           <div className="relative">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
-              search
-            </span>
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
             <input
               type="text"
               placeholder="Buscar artículos..."
@@ -93,69 +84,43 @@ export default function Home() {
         </div>
 
         <div className="flex gap-8">
-          {/* Sidebar izquierdo (Desktop) */}
           <aside className="hidden lg:block w-48 flex-shrink-0">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
-              Categorías
-            </h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Categorías</h2>
             <ul className="space-y-1">
-              {/* 2. El sidebar ahora mapea la constante unificada */}
               {CATEGORIES.map((cat) => (
                 <li key={cat.slug}>
                   <button
-                    onClick={() => {
-                      setActiveCategory(cat.slug);
-                      setCurrentPage(1);
-                    }}
+                    onClick={() => { setActiveCategory(cat.slug); setCurrentPage(1); }}
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors group ${
-                      activeCategory === cat.slug
-                        ? "bg-primary text-white"
-                        : "hover:bg-surface-container"
+                      activeCategory === cat.slug ? "bg-primary text-white" : "hover:bg-surface-container"
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-[18px]">
-                        {cat.icon}
-                      </span>
+                      <span className="material-symbols-outlined text-[18px]">{cat.icon}</span>
                       <span className="text-sm font-medium">{cat.name}</span>
                     </div>
                   </button>
                 </li>
               ))}
             </ul>
-
             <div className="mt-8 space-y-1">
               <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
-                <span className="material-symbols-outlined text-[18px] text-slate-400">
-                  help
-                </span>
-                <span className="text-sm font-medium text-on-surface">
-                  Help
-                </span>
+                <span className="material-symbols-outlined text-[18px] text-slate-400">help</span>
+                <span className="text-sm font-medium text-on-surface">Help</span>
               </button>
               <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
-                <span className="material-symbols-outlined text-[18px] text-slate-400">
-                  settings
-                </span>
-                <span className="text-sm font-medium text-on-surface">
-                  Settings
-                </span>
+                <span className="material-symbols-outlined text-[18px] text-slate-400">settings</span>
+                <span className="text-sm font-medium text-on-surface">Settings</span>
               </button>
             </div>
           </aside>
 
-          {/* Contenido principal */}
           <div className="flex-1 min-w-0">
-            {/* Category Chips (Mobile) */}
             <div className="flex lg:hidden overflow-x-auto no-scrollbar gap-2 pb-4 mb-2">
-              {/* 3. Chips de mobile usan la misma constante y envían el slug */}
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.slug}
-                  onClick={() => {
-                    setActiveCategory(cat.slug);
-                    setCurrentPage(1); // Resetea la página al filtrar
-                  }}
+                  onClick={() => { setActiveCategory(cat.slug); setCurrentPage(1); }}
                   className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-semibold transition-all ${
                     activeCategory === cat.slug
                       ? "bg-[#024ce2] text-white"
@@ -167,42 +132,10 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Estado: Cargando */}
-            {status === "loading" && <SkeletonList />}
+            {status === "loading" && <SkeletonLoader />}
+            {status === "error" && <ErrorMessage onRetry={handleRetry} />}
+            {status === "empty" && <EmptyState message="No hay publicaciones todavía" />}
 
-            {/* Estado: Error */}
-            {status === "error" && (
-              <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <span className="material-symbols-outlined text-5xl text-error">
-                  error_outline
-                </span>
-                <p className="text-slate-600 text-center text-sm">
-                  No se pudieron cargar las publicaciones.
-                  <br />
-                  Verificá tu conexión e intentá de nuevo.
-                </p>
-                <button
-                  onClick={handleRetry}
-                  className="px-6 py-2 rounded-full bg-[#024ce2] text-white text-sm font-semibold active:scale-95 transition-transform"
-                >
-                  Reintentar
-                </button>
-              </div>
-            )}
-
-            {/* Estado: Vacío */}
-            {status === "empty" && (
-              <div className="flex flex-col items-center justify-center py-20 gap-3">
-                <span className="material-symbols-outlined text-5xl text-outline">
-                  article
-                </span>
-                <p className="text-slate-500 text-sm font-medium">
-                  No hay publicaciones todavía
-                </p>
-              </div>
-            )}
-
-            {/* Estado: Success */}
             {status === "success" && posts.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {posts.map((post) => (
@@ -211,14 +144,11 @@ export default function Home() {
                     post={{
                       ...post,
                       author: post.author?.name ?? "",
-                      date: new Date(post.createdAt).toLocaleDateString(
-                        "es-AR",
-                        {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        },
-                      ),
+                      date: new Date(post.createdAt).toLocaleDateString("es-AR", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      }),
                       excerpt: post.content,
                     }}
                     onClick={handleCardClick}
@@ -227,7 +157,6 @@ export default function Home() {
               </div>
             )}
 
-            {/* Paginación */}
             {status === "success" && totalPages > 1 && (
               <nav className="flex justify-between items-center py-12 border-t border-slate-100 mt-8">
                 <button
@@ -235,12 +164,9 @@ export default function Home() {
                   disabled={currentPage === 1}
                   className="flex items-center gap-2 text-slate-400 font-semibold text-sm active:scale-95 transition-transform disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  <span className="material-symbols-outlined text-sm">
-                    arrow_back
-                  </span>
+                  <span className="material-symbols-outlined text-sm">arrow_back</span>
                   Anterior
                 </button>
-
                 <div className="flex gap-2">
                   {Array.from({ length: totalPages }, (_, i) => (
                     <button
@@ -252,48 +178,19 @@ export default function Home() {
                     />
                   ))}
                 </div>
-
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
                   className="flex items-center gap-2 text-[#024ce2] font-bold text-sm active:scale-95 transition-transform disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   Siguiente
-                  <span className="material-symbols-outlined text-sm">
-                    arrow_forward
-                  </span>
+                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
                 </button>
               </nav>
             )}
           </div>
         </div>
       </main>
-    </div>
-  );
-}
-
-function SkeletonCard() {
-  return (
-    <div className="animate-pulse">
-      <div className="w-full aspect-[16/9] bg-surface-container rounded-xl mb-5" />
-      <div className="h-3 bg-surface-container rounded w-24 mb-3" />
-      <div className="h-6 bg-surface-container rounded w-3/4 mb-2" />
-      <div className="h-4 bg-surface-container rounded w-full mb-1" />
-      <div className="h-4 bg-surface-container rounded w-5/6 mb-4" />
-      <div className="flex items-center gap-3">
-        <div className="w-6 h-6 bg-surface-container rounded-full" />
-        <div className="h-3 bg-surface-container rounded w-28" />
-      </div>
-    </div>
-  );
-}
-
-function SkeletonList() {
-  return (
-    <div className="space-y-12 mt-4">
-      {[1, 2, 3].map((i) => (
-        <SkeletonCard key={i} />
-      ))}
     </div>
   );
 }
