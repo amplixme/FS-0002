@@ -4,6 +4,11 @@ import CustomError from "../utils/custom-error.js";
 export const getAllCategories = async () => {
   const categories = await prisma.category.findMany({
     orderBy: { name: "asc" },
+    include: {
+      _count: {
+        select: { posts: true },  // ← agrega { _count: { posts: N } } a cada categoría
+      },
+    },
   });
   return categories;
 };

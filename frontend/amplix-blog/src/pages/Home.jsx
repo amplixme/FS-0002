@@ -1,16 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PostCard from "../components/PostCard";
-import { getPosts } from "../services/post.service";
+import { CategorySidebar, CategoryChips } from "../components/CategoryFilter";
 import { SkeletonLoader } from "../components/common/SkeletonLoader";
 import { ErrorMessage } from "../components/common/ErrorMessage";
 import { EmptyState } from "../components/common/EmptyState";
-
-const CATEGORIES = [
-  { name: "Tecnología", slug: "tecnologia", icon: "code" },
-  { name: "Diseño", slug: "diseno", icon: "design_services" },
-  { name: "Cultura", slug: "cultura", icon: "groups" },
-];
+import { getPosts } from "../services/post.service";
+import { getAll as getCategories } from "../services/category.service";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -18,32 +14,44 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [activeCategory, setActiveCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
+  // Carga las categorías una sola vez al montar
+  useEffect(() => {
+    getCategories()
+      .then((res) => setCategories(res.data ?? []))
+      .catch(() => setCategories([]));
+  }, []);
+
+  // Recarga posts cuando cambia la página o la categoría activa
   useEffect(() => {
     let cancelled = false;
+
     async function fetchPosts() {
       setStatus("loading");
       try {
         const { data } = await getPosts(currentPage, activeCategory);
         if (cancelled) return;
-        if (!data?.posts || data.posts.length === 0) {
+        if (!data?.posts?.length) {
           setStatus("empty");
         } else {
           setPosts(data.posts);
           setTotalPages(data.totalPages);
           setStatus("success");
         }
-      } catch (err) {
+      } catch {
         if (!cancelled) setStatus("error");
       }
     }
+
     fetchPosts();
     return () => { cancelled = true; };
   }, [currentPage, activeCategory]);
 
-  function handleCardClick(id) {
-    navigate(`/posts/${id}`);
+  function handleCategorySelect(slug) {
+    setActiveCategory(slug);   // null = "Todas" → limpia el filtro
+    setCurrentPage(1);
   }
 
   function handlePageChange(newPage) {
@@ -56,85 +64,54 @@ export default function Home() {
     setStatus("loading");
     try {
       const { data } = await getPosts(currentPage, activeCategory);
-      if (!data?.posts || data.posts.length === 0) {
-        setStatus("empty");
-      } else {
-        setPosts(data.posts);
-        setTotalPages(data.totalPages);
-        setStatus("success");
-      }
-    } catch {
-      setStatus("error");
-    }
+      if (!data?.posts?.length) setStatus("empty");
+      else { setPosts(data.posts); setTotalPages(data.totalPages); setStatus("success"); }
+    } catch { setStatus("error"); }
   }
 
   return (
     <div className="bg-surface text-on-surface min-h-screen">
       <main className="max-w-7xl mx-auto px-4 pb-12">
+
+        {/* Encabezado + buscador */}
         <div className="py-8 border-b border-slate-100 mb-6">
-          <h1 className="text-3xl font-extrabold tracking-tight mb-4">Últimas publicaciones</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight mb-4">
+            Últimas publicaciones
+          </h1>
           <div className="relative">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
+              search
+            </span>
             <input
               type="text"
               placeholder="Buscar artículos..."
-              className="w-full max-w-md pl-10 pr-4 py-2.5 bg-surface-container-low rounded-full text-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-full max-w-md pl-10 pr-4 py-2.5 bg-surface-container-low rounded-full text-sm placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
 
         <div className="flex gap-8">
-          <aside className="hidden lg:block w-48 flex-shrink-0">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Categorías</h2>
-            <ul className="space-y-1">
-              {CATEGORIES.map((cat) => (
-                <li key={cat.slug}>
-                  <button
-                    onClick={() => { setActiveCategory(cat.slug); setCurrentPage(1); }}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors group ${
-                      activeCategory === cat.slug ? "bg-primary text-white" : "hover:bg-surface-container"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-[18px]">{cat.icon}</span>
-                      <span className="text-sm font-medium">{cat.name}</span>
-                    </div>
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 space-y-1">
-              <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
-                <span className="material-symbols-outlined text-[18px] text-slate-400">help</span>
-                <span className="text-sm font-medium text-on-surface">Help</span>
-              </button>
-              <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
-                <span className="material-symbols-outlined text-[18px] text-slate-400">settings</span>
-                <span className="text-sm font-medium text-on-surface">Settings</span>
-              </button>
-            </div>
-          </aside>
+
+          {/* Sidebar de categorías — solo desktop */}
+          <CategorySidebar
+            categories={categories}
+            activeCategory={activeCategory}
+            onSelect={handleCategorySelect}
+          />
 
           <div className="flex-1 min-w-0">
-            <div className="flex lg:hidden overflow-x-auto no-scrollbar gap-2 pb-4 mb-2">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat.slug}
-                  onClick={() => { setActiveCategory(cat.slug); setCurrentPage(1); }}
-                  className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-semibold transition-all ${
-                    activeCategory === cat.slug
-                      ? "bg-[#024ce2] text-white"
-                      : "bg-surface-container-lowest text-slate-600 hover:bg-slate-100 font-medium"
-                  }`}
-                >
-                  {cat.name}
-                </button>
-              ))}
-            </div>
 
+            {/* Chips de categorías — solo mobile */}
+            <CategoryChips
+              categories={categories}
+              activeCategory={activeCategory}
+              onSelect={handleCategorySelect}
+            />
+
+            {/* Estados de la lista de posts */}
             {status === "loading" && <SkeletonLoader />}
-            {status === "error" && <ErrorMessage onRetry={handleRetry} />}
-            {status === "empty" && <EmptyState message="No hay publicaciones todavía" />}
+            {status === "error"   && <ErrorMessage onRetry={handleRetry} />}
+            {status === "empty"   && <EmptyState message="No hay publicaciones todavía" />}
 
             {status === "success" && posts.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -151,12 +128,13 @@ export default function Home() {
                       }),
                       excerpt: post.content,
                     }}
-                    onClick={handleCardClick}
+                    onClick={() => navigate(`/posts/${post.id}`)}
                   />
                 ))}
               </div>
             )}
 
+            {/* Paginación */}
             {status === "success" && totalPages > 1 && (
               <nav className="flex justify-between items-center py-12 border-t border-slate-100 mt-8">
                 <button
@@ -167,27 +145,30 @@ export default function Home() {
                   <span className="material-symbols-outlined text-sm">arrow_back</span>
                   Anterior
                 </button>
+
                 <div className="flex gap-2">
                   {Array.from({ length: totalPages }, (_, i) => (
                     <button
                       key={i}
                       onClick={() => handlePageChange(i + 1)}
                       className={`w-2 h-2 rounded-full transition-colors ${
-                        currentPage === i + 1 ? "bg-[#024ce2]" : "bg-slate-200"
+                        currentPage === i + 1 ? "bg-primary" : "bg-slate-200"
                       }`}
                     />
                   ))}
                 </div>
+
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="flex items-center gap-2 text-[#024ce2] font-bold text-sm active:scale-95 transition-transform disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 text-primary font-bold text-sm active:scale-95 transition-transform disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   Siguiente
                   <span className="material-symbols-outlined text-sm">arrow_forward</span>
                 </button>
               </nav>
             )}
+
           </div>
         </div>
       </main>
