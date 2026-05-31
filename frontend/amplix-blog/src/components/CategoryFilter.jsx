@@ -1,26 +1,18 @@
 // CategoryFilter.jsx
-// Sidebar desktop con ícono + badge de cantidad · Chips mobile (solo nombre)
 
-// ─── Mapeo slug → ícono Material Symbols ───────────────────────────────────
 const SLUG_TO_ICON = {
-  // diseño / design
   design: "palette",
   diseno: "palette",
-  // ingeniería / engineering
   engineering: "code",
   ingenieria: "code",
   "ciencia-tecnologia": "code",
   tecnologia: "computer",
-  // producto / product
   product: "grid_view",
   producto: "grid_view",
-  // cultura / culture
   culture: "groups",
   cultura: "groups",
-  // noticias / news
   news: "newspaper",
   noticias: "newspaper",
-  // otros comunes
   devops: "terminal",
   opinion: "forum",
   ciencia: "science",
@@ -32,7 +24,6 @@ function getIcon(slug) {
   return SLUG_TO_ICON[slug?.toLowerCase()] ?? "label";
 }
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
 const TODAS = { id: "todas", name: "Todas", slug: null };
 
 function buildList(categories) {
@@ -43,7 +34,27 @@ function isActive(activeCategory, slug) {
   return activeCategory === slug;
 }
 
-// ─── Desktop: sidebar lateral ───────────────────────────────────────────────
+// ─── Botones inferiores reutilizables ────────────────────────────────────────
+function SidebarFooterButtons() {
+  return (
+    <div className="mt-8 space-y-1">
+      <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
+        <span className="material-symbols-outlined text-[18px] text-slate-400">
+          help
+        </span>
+        <span className="text-sm font-medium text-on-surface">Help</span>
+      </button>
+      <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
+        <span className="material-symbols-outlined text-[18px] text-slate-400">
+          settings
+        </span>
+        <span className="text-sm font-medium text-on-surface">Settings</span>
+      </button>
+    </div>
+  );
+}
+
+// ─── Desktop: sidebar lateral ────────────────────────────────────────────────
 export function CategorySidebar({ categories, activeCategory, onSelect }) {
   const list = buildList(categories);
 
@@ -52,6 +63,7 @@ export function CategorySidebar({ categories, activeCategory, onSelect }) {
       <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
         Categorías
       </h2>
+
       <ul className="space-y-0.5">
         {list.map((cat) => {
           const active = isActive(activeCategory, cat.slug);
@@ -67,7 +79,6 @@ export function CategorySidebar({ categories, activeCategory, onSelect }) {
                     : "text-on-surface hover:bg-surface-container"
                 }`}
               >
-                {/* Ícono — solo para categorías reales (no "Todas") */}
                 {cat.slug ? (
                   <span className="material-symbols-outlined text-[18px] flex-shrink-0">
                     {getIcon(cat.slug)}
@@ -78,10 +89,8 @@ export function CategorySidebar({ categories, activeCategory, onSelect }) {
                   </span>
                 )}
 
-                {/* Nombre */}
                 <span className="flex-1 text-left">{cat.name}</span>
 
-                {/* Badge de cantidad — solo si viene del backend */}
                 {count != null && (
                   <span
                     className={`text-[11px] font-semibold min-w-[20px] text-center px-1.5 py-0.5 rounded-full ${
@@ -98,11 +107,14 @@ export function CategorySidebar({ categories, activeCategory, onSelect }) {
           );
         })}
       </ul>
+
+      {/* ── Botones Help y Settings al fondo ── */}
+      <SidebarFooterButtons />
     </aside>
   );
 }
 
-// ─── Mobile: chips horizontales scrolleables ─────────────────────────────────
+// ─── Mobile: chips horizontales scrolleables ──────────────────────────────────
 export function CategoryChips({ categories, activeCategory, onSelect }) {
   const list = buildList(categories);
 
