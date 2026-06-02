@@ -28,12 +28,13 @@ export default function PostCard({ post, onClick }) {
           <img
             src={coverImage}
             alt={title}
+            
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <div className="w-full h-full bg-surface-container flex items-center justify-center">
-            <span className="material-symbols-outlined text-4xl text-outline">article</span>
-          </div>
+  <span className="material-symbols-outlined text-4xl text-outline">article</span>
+</div>
         )}
       </div>
 
