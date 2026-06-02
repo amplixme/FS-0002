@@ -46,11 +46,13 @@ export default function Home() {
     }
 
     fetchPosts();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [currentPage, activeCategory]);
 
   function handleCategorySelect(slug) {
-    setActiveCategory(slug);   // null = "Todas" → limpia el filtro
+    setActiveCategory(slug); // null = "Todas" → limpia el filtro
     setCurrentPage(1);
   }
 
@@ -65,14 +67,19 @@ export default function Home() {
     try {
       const { data } = await getPosts(currentPage, activeCategory);
       if (!data?.posts?.length) setStatus("empty");
-      else { setPosts(data.posts); setTotalPages(data.totalPages); setStatus("success"); }
-    } catch { setStatus("error"); }
+      else {
+        setPosts(data.posts);
+        setTotalPages(data.totalPages);
+        setStatus("success");
+      }
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
     <div className="bg-surface text-on-surface min-h-screen">
       <main className="max-w-7xl mx-auto px-4 pb-12">
-
         {/* Encabezado + buscador */}
         <div className="py-8 border-b border-slate-100 mb-6">
           <h1 className="text-3xl font-extrabold tracking-tight mb-4">
@@ -91,7 +98,6 @@ export default function Home() {
         </div>
 
         <div className="flex gap-8">
-
           {/* Sidebar de categorías — solo desktop */}
           <CategorySidebar
             categories={categories}
@@ -100,7 +106,6 @@ export default function Home() {
           />
 
           <div className="flex-1 min-w-0">
-
             {/* Chips de categorías — solo mobile */}
             <CategoryChips
               categories={categories}
@@ -110,8 +115,10 @@ export default function Home() {
 
             {/* Estados de la lista de posts */}
             {status === "loading" && <SkeletonLoader />}
-            {status === "error"   && <ErrorMessage onRetry={handleRetry} />}
-            {status === "empty"   && <EmptyState message="No hay publicaciones todavía" />}
+            {status === "error" && <ErrorMessage onRetry={handleRetry} />}
+            {status === "empty" && (
+              <EmptyState message="No hay publicaciones todavía" />
+            )}
 
             {status === "success" && posts.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -121,14 +128,18 @@ export default function Home() {
                     post={{
                       ...post,
                       author: post.author?.name ?? "",
-                      date: new Date(post.createdAt).toLocaleDateString("es-AR", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      }),
+                      date: new Date(post.createdAt).toLocaleDateString(
+                        "es-AR",
+                        {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        },
+                      ),
                       excerpt: post.content,
                     }}
                     onClick={() => navigate(`/posts/${post.id}`)}
+                    onCategoryClick={handleCategorySelect}
                   />
                 ))}
               </div>
@@ -142,7 +153,9 @@ export default function Home() {
                   disabled={currentPage === 1}
                   className="flex items-center gap-2 text-slate-400 font-semibold text-sm active:scale-95 transition-transform disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  <span className="material-symbols-outlined text-sm">arrow_back</span>
+                  <span className="material-symbols-outlined text-sm">
+                    arrow_back
+                  </span>
                   Anterior
                 </button>
 
@@ -164,11 +177,12 @@ export default function Home() {
                   className="flex items-center gap-2 text-primary font-bold text-sm active:scale-95 transition-transform disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   Siguiente
-                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                  <span className="material-symbols-outlined text-sm">
+                    arrow_forward
+                  </span>
                 </button>
               </nav>
             )}
-
           </div>
         </div>
       </main>
