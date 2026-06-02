@@ -2,13 +2,13 @@
 import { promise } from "zod";
 import prisma from "../config/prisma.js"; // ← importar el singleton
 
-export const createPost = async (title, content, authorId, imageUrl,published) => {
+export const createPost = async (title, content, authorId, coverImage,published) => {
   const post = await prisma.post.create({
     data: {
       title,
       content,
       authorId,
-      imageUrl,
+      coverImage,
       published
     },
     include: {

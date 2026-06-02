@@ -12,7 +12,7 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     let cancelled = false;
 

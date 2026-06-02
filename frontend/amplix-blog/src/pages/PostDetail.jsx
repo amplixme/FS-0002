@@ -8,6 +8,7 @@ import { useDeletePost } from "../hooks/useDeletePost";
 
 export default function PostDetail() {
   const { id } = useParams();
+  const navigate = useNavigate()
   const { user } = useContext(AuthContext);
 
   const [post, setPost] = useState(null);
@@ -95,7 +96,7 @@ export default function PostDetail() {
               {isAuthor && (
                 <div className="flex items-center justify-center gap-3 mt-10 pt-8 border-t border-outline-variant/30">
                   <button
-                    onClick={() => alert("Acá iría a la vista de editar")}
+                    onClick={() => navigate(`/posts/${id}/edit`)}
                     className="inline-flex items-center gap-1 px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold rounded-full transition-colors text-sm"
                   >
                     <span className="material-symbols-outlined text-[18px]">edit</span>

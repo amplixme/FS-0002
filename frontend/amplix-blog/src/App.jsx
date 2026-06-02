@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import CreatePost from "./pages/CreatePost";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PostDetail from "./pages/PostDetail";
+import EditPost from "./pages/EditPost";
 import "./App.css";
 
 function App() {
@@ -31,6 +32,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <CreatePost />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/posts/:id/edit"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <EditPost />
                 </Layout>
               </ProtectedRoute>
             }
