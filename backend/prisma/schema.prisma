@@ -36,7 +36,7 @@ model Post {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   categories Category[] @relation("PostCategories")
-  imageUrl String?
+  coverImage String?
 }
 
 model Category {
