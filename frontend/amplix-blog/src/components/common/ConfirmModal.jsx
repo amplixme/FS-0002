@@ -1,18 +1,5 @@
 import { useEffect } from "react";
 
-/**
- * Modal de confirmación reutilizable.
- *
- * Props:
- * - isOpen       {boolean}  — controla si el modal es visible
- * - title        {string}   — título del modal (opcional)
- * - message      {string}   — mensaje/pregunta que se muestra al usuario
- * - confirmLabel {string}   — texto del botón de confirmación (default: "Eliminar")
- * - cancelLabel  {string}   — texto del botón de cancelar (default: "Cancelar")
- * - onConfirm    {function} — callback al confirmar
- * - onCancel     {function} — callback al cancelar / cerrar
- * - loading      {boolean}  — deshabilita botones mientras se ejecuta la acción
- */
 export default function ConfirmModal({
   isOpen,
   title = "Confirmar acción",
@@ -22,20 +9,17 @@ export default function ConfirmModal({
   onConfirm,
   onCancel,
   loading = false,
+  error = null,           // ← nueva prop
 }) {
-  // Cierra el modal con la tecla Escape
   useEffect(() => {
     if (!isOpen) return;
-
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && !loading) onCancel();
     };
-
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, loading, onCancel]);
 
-  // Bloquea el scroll del body mientras el modal está abierto
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -50,29 +34,26 @@ export default function ConfirmModal({
   if (!isOpen) return null;
 
   return (
-    /* Overlay */
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       aria-modal="true"
       role="dialog"
       aria-labelledby="confirm-modal-title"
     >
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={!loading ? onCancel : undefined}
       />
 
-      {/* Panel */}
       <div className="relative z-10 bg-surface-container-lowest rounded-2xl ambient-shadow w-full max-w-md p-8 flex flex-col gap-6">
-        {/* Ícono de advertencia */}
+        {/* ── Ícono ── */}
         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-error/10 mx-auto">
           <span className="material-symbols-outlined text-error text-[28px]">
             warning
           </span>
         </div>
 
-        {/* Título */}
+        {/* ── Título ── */}
         <h2
           id="confirm-modal-title"
           className="text-xl font-extrabold text-on-surface text-center"
@@ -80,14 +61,24 @@ export default function ConfirmModal({
           {title}
         </h2>
 
-        {/* Mensaje */}
+        {/* ── Mensaje ── */}
         {message && (
           <p className="text-sm text-on-surface-variant text-center leading-relaxed">
             {message}
           </p>
         )}
 
-        {/* Botones */}
+        {/* ── Error ── */}
+        {error && (
+          <div className="flex items-start gap-2 p-3 bg-error/10 border border-error/20 rounded-xl">
+            <span className="material-symbols-outlined text-error text-[18px] flex-shrink-0 mt-0.5">
+              error
+            </span>
+            <p className="text-sm text-error font-medium">{error}</p>
+          </div>
+        )}
+
+        {/* ── Botones ── */}
         <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
           <button
             onClick={onCancel}
@@ -111,9 +102,7 @@ export default function ConfirmModal({
               </>
             ) : (
               <>
-                <span className="material-symbols-outlined text-[18px]">
-                  delete
-                </span>
+                <span className="material-symbols-outlined text-[18px]">delete</span>
                 {confirmLabel}
               </>
             )}
