@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { getPostById, updatePost } from "../services/post.service";
+import { getAll } from "../services/category.service";
 import PostForm from "../components/common/PostForm";
 
 const EditPost = () => {
@@ -17,31 +18,57 @@ const EditPost = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fetching, setFetching] = useState(true);
+  const [availableCategories, setAvailableCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
+  // Cargar el Post y las Categorías al mismo tiempo
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetchData = async () => {
       try {
-        const result = await getPostById(id);
-        const post = result.data ? result.data : result;
+        // Ejecutamos ambas peticiones en paralelo para que sea más rápido
+        const [postResult, categoriesResult] = await Promise.all([
+          getPostById(id),
+          getAll(),
+        ]);
+
+        const post = postResult.data ? postResult.data : postResult;
 
         if (user.id !== post.authorId) {
           navigate("/");
           return;
         }
 
+        // Llenar datos del post
         setTitle(post.title);
         setContent(post.content);
         setPublished(post.published);
-        if (post.imageUrl) setImagePreview(post.imageUrl);
+        if (post.coverImage) setImagePreview(post.coverImage); // Ajustado a coverImage por si acaso
+
+        // Llenar categorías disponibles
+        setAvailableCategories(categoriesResult.data ?? []);
+
+        // Pre-seleccionar las categorías que ya tiene el post
+        if (post.categories && post.categories.length > 0) {
+          // Asumiendo que post.categories es un array de objetos con { id, name... }
+          setSelectedCategories(post.categories.map((cat) => cat.id));
+        }
       } catch (error) {
-        setError(error.message || "error al cargar el articulo");
+        setError(error.message || "Error al cargar los datos del artículo");
       } finally {
         setFetching(false);
       }
     };
 
-    fetchPost();
-  }, [id]);
+    fetchData();
+  }, [id, user.id, navigate]);
+
+  const toggleCategory = (catId) => {
+    setSelectedCategories((prev) =>
+      prev.includes(catId)
+        ? prev.filter((id) => id !== catId)
+        : [...prev, catId],
+    );
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -60,11 +87,15 @@ const EditPost = () => {
       formData.append("title", title);
       formData.append("content", content);
       formData.append("published", published);
+      // Agregamos las categorías editadas
+      formData.append("categories", JSON.stringify(selectedCategories));
+
       if (image) formData.append("image", image);
+
       await updatePost(id, formData);
       navigate(`/posts/${id}`);
     } catch (error) {
-      setError(error.message || "Error al actualizar un articulo");
+      setError(error.message || "Error al actualizar el artículo");
     } finally {
       setLoading(false);
     }
@@ -104,6 +135,10 @@ const EditPost = () => {
               setPublished={setPublished}
               imagePreview={imagePreview}
               handleImageChange={handleImageChange}
+              // Props de categorías
+              availableCategories={availableCategories}
+              selectedCategories={selectedCategories}
+              toggleCategory={toggleCategory}
               onSubmit={handleSubmit}
               loading={loading}
               error={error}

@@ -14,9 +14,12 @@ export const create = async (req, res, next) => {
   try {
     console.log("req.body después de validación:", req.body);
 
-    const { title, content, published } = req.body;
+    const { title, content, published, categories } = req.body;
     const authorId = req.user.id;
     const publishedBool = published === "true";
+
+    // Parsear las categorías que vienen como string
+    const parsedCategories = categories ? JSON.parse(categories) : [];
 
     let coverImage = null;
     if (req.file) {
@@ -29,6 +32,7 @@ export const create = async (req, res, next) => {
       authorId,
       coverImage,
       publishedBool,
+      parsedCategories,
     );
 
     return success(res, newPost, 201);
@@ -65,25 +69,33 @@ export const getPostById = async (req, res, next) => {
 export const updatePost = async (req, res, next) => {
   try {
     const { id } = req.params;
-   const { title, content, published } = req.body
+    const { title, content, published, categories } = req.body;
     const userId = req.user.id;
     const userRole = req.user.role;
     const publishedBool = published === "true";
+
+    // Parsear las categorías que vienen como string
+    const parsedCategories = categories ? JSON.parse(categories) : [];
 
     const post = await getPostByIdService(id);
     if (!post) throw new CustomError("Post no encontrado", 404);
 
     if (post.authorId !== userId && userRole !== "ADMIN") {
-      throw new CustomError("No tienes permiso para modificar este post", 403)
+      throw new CustomError("No tienes permiso para modificar este post", 403);
     }
 
-
-     let coverImage = post.coverImage; // mantiene la imagen actual por defecto
+    let coverImage = post.coverImage;
     if (req.file) {
       coverImage = await uploadImage(req.file.buffer, req.file.originalname);
     }
 
-    const updatedPost = await updatePostService(id, { title, content, published: publishedBool, coverImage });
+    const updatedPost = await updatePostService(id, {
+      title,
+      content,
+      published: publishedBool,
+      coverImage,
+      categories: parsedCategories,
+    });
     return success(res, updatedPost, 200);
   } catch (error) {
     next(error);

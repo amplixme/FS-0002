@@ -1,6 +1,4 @@
-// src/services/post.service.js
-import { promise } from "zod";
-import prisma from "../config/prisma.js"; // ← importar el singleton
+import prisma from "../config/prisma.js";
 
 export const createPost = async (
   title,
@@ -8,6 +6,7 @@ export const createPost = async (
   authorId,
   coverImage,
   published,
+  categories = [],
 ) => {
   const post = await prisma.post.create({
     data: {
@@ -15,12 +14,14 @@ export const createPost = async (
       content,
       authorId,
       coverImage,
-      published
+      published,
+      categories: {
+        connect: categories.map((id) => ({ id })),
+      },
     },
     include: {
-      author: {
-        select: { name: true },
-      },
+      author: { select: { name: true, email: true } },
+      categories: true,
     },
   });
 
@@ -75,22 +76,34 @@ export const getPostById = async (id) => {
     where: { id: numericId },
     include: {
       author: {
-        select: { name: true },
+        select: { name: true, email: true },
       },
+      categories: true,
     },
   });
   return post;
 };
 
 export const updatePostService = async (id, data) => {
+  const { categories, ...restData } = data;
   const numericId = parseInt(id);
+
   const post = await prisma.post.update({
     where: { id: numericId },
-    data,
+    data: {
+      ...restData,
+      // Usamos set para reemplazar las categorías actuales por las nuevas
+      ...(categories && {
+        categories: {
+          set: categories.map((id) => ({ id })),
+        },
+      }),
+    },
     include: {
       author: {
-        select: { name: true },
+        select: { name: true, email: true },
       },
+      categories: true,
     },
   });
   return post;

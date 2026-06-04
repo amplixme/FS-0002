@@ -9,6 +9,9 @@ const PostForm = ({
   setPublished,
   imagePreview,
   handleImageChange,
+  availableCategories = [],
+  selectedCategories = [],
+  toggleCategory,
   onSubmit,
   loading,
   error,
@@ -55,6 +58,36 @@ const PostForm = ({
           placeholder="Escribe el contenido de tu artículo aquí..."
           className="block w-full px-4 py-3 bg-surface-container-low border-transparent rounded-xl text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all resize-y"
         />
+      </div>
+
+      {/* Categorías  */}
+      <div className="space-y-3">
+        <label className="block text-sm font-bold text-on-surface">
+          Categorías
+        </label>
+        {availableCategories.length === 0 ? (
+          <p className="text-sm text-outline">Cargando categorías...</p>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            {availableCategories.map((cat) => {
+              const isSelected = selectedCategories.includes(cat.id);
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => toggleCategory(cat.id)}
+                  className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-all ${
+                    isSelected
+                      ? "bg-primary border-primary text-white"
+                      : "bg-surface-container-low border-outline-variant text-on-surface-variant hover:border-primary/50"
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Imagen de portada */}
