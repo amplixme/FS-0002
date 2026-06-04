@@ -6,7 +6,7 @@ export const createPost = async (
   title,
   content,
   authorId,
-  imageUrl,
+  coverImage,
   published,
 ) => {
   const post = await prisma.post.create({
@@ -14,7 +14,7 @@ export const createPost = async (
       title,
       content,
       authorId,
-      imageUrl,
+      coverImage,
       published,
     },
     include: {

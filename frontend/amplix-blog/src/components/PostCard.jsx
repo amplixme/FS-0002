@@ -1,6 +1,7 @@
 // PostCard.jsx
 // Sigue el design system del wireframe: Inter, colores custom Tailwind, cards con imagen 16/9
 
+
 export default function PostCard({ post, onClick, onCategoryClick }) {
   const {
     id,
@@ -9,8 +10,8 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
     author,
     authorAvatar,
     date,
-    categories = [],
-    imageUrl,
+    categories = [], 
+    coverImage
     readTime,
   } = post;
   // Trunca el extracto a ~150 chars
@@ -25,19 +26,25 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
       onClick={() => onClick && onClick(id)}
     >
       {/* Imagen */}
+
       <div className="w-full aspect-[16/9] bg-surface-container-low rounded-xl overflow-hidden mb-5 relative">
-        {imageUrl ? (
+        
+        {coverImage ? (
+
           <img
-            src={imageUrl}
+            src={coverImage}
             alt={title}
+            loading="lazy"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
+
           <div className="w-full h-full bg-surface-container flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
             <span className="material-symbols-outlined text-4xl text-outline">
               article
             </span>
           </div>
+
         )}
       </div>
 

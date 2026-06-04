@@ -18,16 +18,16 @@ export const create = async (req, res, next) => {
     const authorId = req.user.id;
     const publishedBool = published === "true";
 
-    let imageUrl = null;
+    let coverImage = null;
     if (req.file) {
-      imageUrl = await uploadImage(req.file.buffer, req.file.originalname);
+      coverImage = await uploadImage(req.file.buffer, req.file.originalname);
     }
 
     const newPost = await createPost(
       title,
       content,
       authorId,
-      imageUrl,
+      coverImage,
       publishedBool,
     );
 

@@ -65,8 +65,20 @@ export default function PostDetail() {
           </div>
 
           <article className="bg-surface-container-lowest rounded-2xl ambient-shadow overflow-hidden">
-            <div className="h-2 w-full bg-gradient-to-r from-primary to-secondary-container" />
-
+            
+            {/* Imagen de portada */}
+{post.coverImage ? (
+  <img
+    src={post.coverImage}
+    alt={post.title}
+    loading="lazy"
+    className="w-full aspect-[16/9] object-cover"
+  />
+) : (
+  <div className="w-full aspect-[16/9] bg-surface-container flex items-center justify-center">
+    <span className="material-symbols-outlined text-6xl text-outline">article</span>
+  </div>
+)}
             <div className="p-8 sm:p-12">
               <header className="mb-8 border-b border-outline-variant/30 pb-8">
                 <h1 className="text-4xl font-extrabold text-on-surface tracking-tight mb-6 leading-tight">
