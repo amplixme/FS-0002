@@ -54,7 +54,9 @@ export const createPost = async (data) => {
  */
 export const updatePost = async (id, data) => {
   try {
-    const response = await api.put(`/posts/${id}`, data);
+    const response = await api.put(`/posts/${id}`, data, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.error?.message || 'Error al actualizar el post');

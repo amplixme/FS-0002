@@ -21,51 +21,56 @@ const EditPost = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const result = await getPostById(id)
-        const post = result.data ? result.data : result
+        const result = await getPostById(id);
+        const post = result.data ? result.data : result;
 
-        if(user.id !== post.authorId) {
-          navigate("/")
-          return
+        if (user.id !== post.authorId) {
+          navigate("/");
+          return;
         }
 
-        setTitle(post.title)
-        setContent(post.content)
-        setPublished(post.published)
-        if (post.imageUrl) setImagePreview(post.imageUrl)
+        setTitle(post.title);
+        setContent(post.content);
+        setPublished(post.published);
+        if (post.imageUrl) setImagePreview(post.imageUrl);
       } catch (error) {
-        setError(error.message || "error al cargar el articulo")
-      }finally {
-        setFetching(false)
-      } 
-    }
+        setError(error.message || "error al cargar el articulo");
+      } finally {
+        setFetching(false);
+      }
+    };
 
-    fetchPost()
-  },[id])
+    fetchPost();
+  }, [id]);
 
-    const handleImageChange =  (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setImage(file);
     setImagePreview(URL.createObjectURL(file));
-  }
+  };
 
-  const handleSubmit = async(e) => {
-    e.preventDefault 
-    setError("")
-    setLoading(true)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
-      await updatePost(id, {title, content, published})
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
+      formData.append("published", published);
+      if (image) formData.append("image", image);
+      await updatePost(id, formData);
       navigate(`/posts/${id}`);
     } catch (error) {
-      setError(error.message || "Error al actualizar un articulo")
-    }finally{
-      setLoading(false)
+      setError(error.message || "Error al actualizar un articulo");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
- if (fetching) {
+  if (fetching) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <span className="material-symbols-outlined animate-spin text-[28px] text-primary">
@@ -75,7 +80,8 @@ const EditPost = () => {
     );
   }
 
-  return ( <div className="min-h-screen bg-background py-10 px-4 sm:px-6 lg:px-8">
+  return (
+    <div className="min-h-screen bg-background py-10 px-4 sm:px-6 lg:px-8">
       <main className="max-w-3xl mx-auto">
         <div className="bg-surface-container-lowest rounded-2xl ambient-shadow overflow-hidden">
           <div className="h-2 w-full bg-gradient-to-r from-primary to-secondary-container"></div>
@@ -90,9 +96,12 @@ const EditPost = () => {
             </header>
 
             <PostForm
-              title={title} setTitle={setTitle}
-              content={content} setContent={setContent}
-              published={published} setPublished={setPublished}
+              title={title}
+              setTitle={setTitle}
+              content={content}
+              setContent={setContent}
+              published={published}
+              setPublished={setPublished}
               imagePreview={imagePreview}
               handleImageChange={handleImageChange}
               onSubmit={handleSubmit}
@@ -104,7 +113,8 @@ const EditPost = () => {
           </div>
         </div>
       </main>
-    </div>)
+    </div>
+  );
 };
 
 export default EditPost;

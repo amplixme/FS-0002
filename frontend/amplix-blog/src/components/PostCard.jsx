@@ -2,7 +2,7 @@
 // Sigue el design system del wireframe: Inter, colores custom Tailwind, cards con imagen 16/9
 
 export default function PostCard({ post, onClick }) {
-  const { id, title, excerpt, author, authorAvatar, date, category, categoryColor, imageUrl, readTime } = post;
+ const { id, title, excerpt, author, authorAvatar, date, category, categoryColor, coverImage, readTime } = post;
 
   // Trunca el extracto a ~150 chars
   const truncatedExcerpt =
@@ -24,9 +24,9 @@ export default function PostCard({ post, onClick }) {
     >
       {/* Imagen */}
       <div className="w-full aspect-[16/9] bg-surface-container-low rounded-xl overflow-hidden mb-5">
-        {imageUrl ? (
+        {coverImage ? (
           <img
-            src={imageUrl}
+            src={coverImage}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
