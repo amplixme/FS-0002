@@ -8,7 +8,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
     excerpt,
     author,
     authorAvatar,
-    date,
+    createdAt,
     categories = [],
     coverImage,
     readTime,
@@ -108,9 +108,9 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
           <span className="text-sm text-on-surface font-semibold leading-tight">
             {author}
           </span>
-          {date && (
+          {createdAt && (
             <span className="text-[11px] font-medium text-slate-500 mt-0.5">
-              {formatRelativeTime(date)}
+              {formatRelativeTime(createdAt)}
             </span>
           )}
         </div>
