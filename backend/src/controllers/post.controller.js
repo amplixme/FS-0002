@@ -13,21 +13,26 @@ import { upload } from "../middlewares/upload.middleware.js";
 export const create = async (req, res, next) => {
   try {
     console.log("req.body después de validación:", req.body);
-    
+
     const { title, content, published } = req.body;
     const authorId = req.user.id;
     const publishedBool = published === "true";
 
-    let imageUrl = null;
-    if (req.file){
-      imageUrl = await uploadImage(req.file.buffer, req.file.originalname);
+    let coverImage = null;
+    if (req.file) {
+      coverImage = await uploadImage(req.file.buffer, req.file.originalname);
     }
 
-
-    const newPost = await createPost(title, content, authorId, imageUrl, publishedBool);
+    const newPost = await createPost(
+      title,
+      content,
+      authorId,
+      coverImage,
+      publishedBool,
+    );
 
     return success(res, newPost, 201);
-  } catch (error){
+  } catch (error) {
     next(error);
   }
 };
@@ -36,7 +41,8 @@ export const getPosts = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     console.log("page recibida:", page);
-    const result = await getAllPosts(page);    
+    const category = req.query.category;
+    const result = await getAllPosts(page, 4, category);
     return success(res, result);
   } catch (error) {
     next(error);

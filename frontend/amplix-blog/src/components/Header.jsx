@@ -23,7 +23,7 @@ const Header = () => {
             Amplix
           </Link>
 
-          {/* Nav destkop */}
+          {/* Nav desktop */}
           <nav className=" md:flex items-center gap-6 text-md text-gray-600 font-medium">
             <Link
               to="/"
@@ -37,6 +37,14 @@ const Header = () => {
             <Link to="/newsletter" className="hover:text-gray-900 transition">
               Newsletter
             </Link>
+            {isAuthenticated && (
+              <Link
+                to="/categorias"
+                className="hover:text-gray-900 transition font-semibold"
+              >
+                Categorías
+              </Link>
+            )}
           </nav>
         </div>
 
@@ -96,6 +104,15 @@ const Header = () => {
           <Link to="/newsletter" onClick={() => setMenuOpen(false)}>
             Newsletter
           </Link>
+          {isAuthenticated && (
+            <Link
+              to="/categorias"
+              onClick={() => setMenuOpen(false)}
+              className="font-semibold"
+            >
+              Categorías
+            </Link>
+          )}
 
           <hr className="border-gray-200 my-2" />
 

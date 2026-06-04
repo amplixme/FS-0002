@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CreatePost from "./pages/CreatePost";
+import Categorias from "./pages/Categorias";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PostDetail from "./pages/PostDetail";
 import EditPost from "./pages/EditPost";
@@ -36,6 +37,18 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/categorias"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Categorias />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/posts/:id/edit"
             element={

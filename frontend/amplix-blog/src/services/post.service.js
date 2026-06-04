@@ -1,15 +1,20 @@
-import api from './api';
+import api from "./api";
 
 /**
  * Obtiene todos los posts.
  * @returns {Promise<Array>} Array de posts
  */
-export const getPosts = async (page = 1) => {
+export const getPosts = async (page = 1, category = null) => {
   try {
-    const response = await api.get(`/posts?page=${page}`);
+    const url = category
+      ? `/posts?page=${page}&category=${category}`
+      : `/posts?page=${page}`;
+    const response = await api.get(url);
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.error?.message || 'Error al obtener los posts');
+    throw new Error(
+      error.response?.data?.error?.message || "Error al obtener los posts",
+    );
   }
 };
 
@@ -23,7 +28,9 @@ export const getPostById = async (id) => {
     const response = await api.get(`/posts/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.error?.message || 'Error al obtener el post');
+    throw new Error(
+      error.response?.data?.error?.message || "Error al obtener el post",
+    );
   }
 };
 
@@ -34,15 +41,17 @@ export const getPostById = async (id) => {
  */
 export const createPost = async (data) => {
   try {
-    const response = await api.post('/posts', data, {
+    const response = await api.post("/posts", data, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
     return response.data;
   } catch (error) {
     console.log("Error completo:", error.response?.data);
-    throw new Error(error.response?.data?.error?.message || 'Error al crear el post');
+    throw new Error(
+      error.response?.data?.error?.message || "Error al crear el post",
+    );
   }
 };
 
@@ -59,7 +68,9 @@ export const updatePost = async (id, data) => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.error?.message || 'Error al actualizar el post');
+    throw new Error(
+      error.response?.data?.error?.message || "Error al actualizar el post",
+    );
   }
 };
 
@@ -73,6 +84,8 @@ export const deletePost = async (id) => {
     const response = await api.delete(`/posts/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.error?.message || 'Error al eliminar el post');
+    throw new Error(
+      error.response?.data?.error?.message || "Error al eliminar el post",
+    );
   }
 };
