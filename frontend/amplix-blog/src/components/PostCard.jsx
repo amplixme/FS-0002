@@ -1,6 +1,6 @@
 // PostCard.jsx
 // Sigue el design system del wireframe: Inter, colores custom Tailwind, cards con imagen 16/9
-
+import { formatRelativeTime } from "../utils/dateFormatter";
 export default function PostCard({ post, onClick, onCategoryClick }) {
   const {
     id,
@@ -110,7 +110,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
           </span>
           {date && (
             <span className="text-[11px] font-medium text-slate-500 mt-0.5">
-              {date}
+              {formatRelativeTime(date)}
             </span>
           )}
         </div>
