@@ -15,7 +15,7 @@ export const createPost = async (
       content,
       authorId,
       coverImage,
-      published,
+      published
     },
     include: {
       author: {

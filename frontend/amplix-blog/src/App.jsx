@@ -8,6 +8,7 @@ import CreatePost from "./pages/CreatePost";
 import Categorias from "./pages/Categorias";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PostDetail from "./pages/PostDetail";
+import EditPost from "./pages/EditPost";
 import "./App.css";
 
 function App() {
@@ -48,6 +49,16 @@ function App() {
             }
           />
 
+          <Route
+            path="/posts/:id/edit"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <EditPost />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/posts/:id"
             element={

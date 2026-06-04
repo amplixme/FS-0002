@@ -65,18 +65,25 @@ export const getPostById = async (req, res, next) => {
 export const updatePost = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const data = req.body;
+   const { title, content, published } = req.body
     const userId = req.user.id;
     const userRole = req.user.role;
+    const publishedBool = published === "true";
 
     const post = await getPostByIdService(id);
     if (!post) throw new CustomError("Post no encontrado", 404);
 
     if (post.authorId !== userId && userRole !== "ADMIN") {
-      throw new CustomError("No tienes permiso para modificar este post", 403);
+      throw new CustomError("No tienes permiso para modificar este post", 403)
     }
 
-    const updatedPost = await updatePostService(id, data);
+
+     let coverImage = post.coverImage; // mantiene la imagen actual por defecto
+    if (req.file) {
+      coverImage = await uploadImage(req.file.buffer, req.file.originalname);
+    }
+
+    const updatedPost = await updatePostService(id, { title, content, published: publishedBool, coverImage });
     return success(res, updatedPost, 200);
   } catch (error) {
     next(error);
