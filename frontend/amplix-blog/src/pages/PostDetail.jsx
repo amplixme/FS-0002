@@ -5,6 +5,7 @@ import { getPostById } from "../services/post.service";
 import ConfirmModal from "../components/common/ConfirmModal";
 import Toast from "../components/common/Toast";
 import { useDeletePost } from "../hooks/useDeletePost";
+import { formatRelativeTime } from "../utils/dateFormatter";
 
 export default function PostDetail() {
   const { id } = useParams();
@@ -15,8 +16,15 @@ export default function PostDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const { showModal, deleting, toast, openModal, cancelModal, confirmDelete, clearToast } =
-    useDeletePost(id);
+  const {
+    showModal,
+    deleting,
+    toast,
+    openModal,
+    cancelModal,
+    confirmDelete,
+    clearToast,
+  } = useDeletePost(id);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -36,7 +44,9 @@ export default function PostDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex items-center gap-3 text-primary font-medium">
-          <span className="material-symbols-outlined animate-spin text-[28px]">progress_activity</span>
+          <span className="material-symbols-outlined animate-spin text-[28px]">
+            progress_activity
+          </span>
           Cargando artículo...
         </div>
       </div>
@@ -46,8 +56,12 @@ export default function PostDetail() {
   if (error || !post) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
-        <p className="text-error font-bold text-xl">{error || "Artículo no encontrado"}</p>
-        <Link to="/" className="text-primary hover:underline font-medium">← Volver al inicio</Link>
+        <p className="text-error font-bold text-xl">
+          {error || "Artículo no encontrado"}
+        </p>
+        <Link to="/" className="text-primary hover:underline font-medium">
+          ← Volver al inicio
+        </Link>
       </div>
     );
   }
@@ -59,27 +73,33 @@ export default function PostDetail() {
       <div className="min-h-screen bg-background py-10 px-4 sm:px-6 lg:px-8">
         <main className="max-w-4xl mx-auto">
           <div className="mb-6">
-            <Link to="/" className="inline-flex items-center text-sm font-bold text-primary hover:text-on-primary-fixed-variant transition-colors">
-              <span className="material-symbols-outlined text-[20px] mr-1">arrow_back</span>
+            <Link
+              to="/"
+              className="inline-flex items-center text-sm font-bold text-primary hover:text-on-primary-fixed-variant transition-colors"
+            >
+              <span className="material-symbols-outlined text-[20px] mr-1">
+                arrow_back
+              </span>
               Volver a inicio
             </Link>
           </div>
 
           <article className="bg-surface-container-lowest rounded-2xl ambient-shadow overflow-hidden">
-            
             {/* Imagen de portada */}
-{post.coverImage ? (
-  <img
-    src={post.coverImage}
-    alt={post.title}
-    loading="lazy"
-    className="w-full aspect-[16/9] object-cover"
-  />
-) : (
-  <div className="w-full aspect-[16/9] bg-surface-container flex items-center justify-center">
-    <span className="material-symbols-outlined text-6xl text-outline">article</span>
-  </div>
-)}
+            {post.coverImage ? (
+              <img
+                src={post.coverImage}
+                alt={post.title}
+                loading="lazy"
+                className="w-full aspect-[16/9] object-cover"
+              />
+            ) : (
+              <div className="w-full aspect-[16/9] bg-surface-container flex items-center justify-center">
+                <span className="material-symbols-outlined text-6xl text-outline">
+                  article
+                </span>
+              </div>
+            )}
             <div className="p-8 sm:p-12">
               <header className="mb-8 border-b border-outline-variant/30 pb-8">
                 <h1 className="text-4xl font-extrabold text-on-surface tracking-tight mb-6 leading-tight">
@@ -91,9 +111,11 @@ export default function PostDetail() {
                     {post.author?.name ? post.author.name.charAt(0) : "U"}
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-on-surface">{post.author?.name || "Usuario Anónimo"}</p>
+                    <p className="text-sm font-bold text-on-surface">
+                      {post.author?.name || "Usuario Anónimo"}
+                    </p>
                     <p className="text-xs font-medium text-outline">
-                      {new Date(post.createdAt).toLocaleDateString("es-AR", { year: "numeric", month: "long", day: "numeric" })}
+                      {formatRelativeTime(post.createdAt)}
                     </p>
                   </div>
                 </div>
@@ -101,7 +123,9 @@ export default function PostDetail() {
 
               <div className="prose prose-lg max-w-none text-on-surface-variant leading-relaxed">
                 {(post.content || "").split("\n").map((paragraph, index) => (
-                  <p key={index} className="mb-4">{paragraph}</p>
+                  <p key={index} className="mb-4">
+                    {paragraph}
+                  </p>
                 ))}
               </div>
 
@@ -111,14 +135,18 @@ export default function PostDetail() {
                     onClick={() => navigate(`/posts/${id}/edit`)}
                     className="inline-flex items-center gap-1 px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold rounded-full transition-colors text-sm"
                   >
-                    <span className="material-symbols-outlined text-[18px]">edit</span>
+                    <span className="material-symbols-outlined text-[18px]">
+                      edit
+                    </span>
                     Editar
                   </button>
                   <button
                     onClick={openModal}
                     className="inline-flex items-center gap-1 px-4 py-2 bg-error/10 hover:bg-error/20 text-error font-bold rounded-full transition-colors text-sm"
                   >
-                    <span className="material-symbols-outlined text-[18px]">delete</span>
+                    <span className="material-symbols-outlined text-[18px]">
+                      delete
+                    </span>
                     Eliminar
                   </button>
                 </div>
@@ -137,7 +165,9 @@ export default function PostDetail() {
         loading={deleting}
       />
 
-      {toast && <Toast message={toast.message} type={toast.type} onClose={clearToast} />}
+      {toast && (
+        <Toast message={toast.message} type={toast.type} onClose={clearToast} />
+      )}
     </>
   );
 }
