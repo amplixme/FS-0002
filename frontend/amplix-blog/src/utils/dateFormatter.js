@@ -20,17 +20,23 @@ export function formatRelativeTime(dateString) {
   }
 
   if (secondsPast < 604800) {
-    // Menos de 7 días
     const days = Math.floor(secondsPast / 86400);
     return `hace ${days} ${days === 1 ? "día" : "días"}`;
   }
 
   if (secondsPast < 2592000) {
-    // Entre 7 y 30 días
     const weeks = Math.floor(secondsPast / 604800);
     return `hace ${weeks} ${weeks === 1 ? "semana" : "semanas"}`;
   }
 
-  const months = Math.floor(secondsPast / 2592000);
-  return `hace ${months} ${months === 1 ? "mes" : "meses"}`;
+  if (secondsPast < 31536000) {
+    const months = Math.floor(secondsPast / 2592000);
+    return `hace ${months} ${months === 1 ? "mes" : "meses"}`;
+  }
+
+  return date.toLocaleDateString("es-AR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }
