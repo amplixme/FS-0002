@@ -1,5 +1,4 @@
 import { success } from "../utils/response.js";
-import { uploadImage } from "../utils/uploadImage.js";
 import {
   createPost,
   getAllPosts,
@@ -8,29 +7,19 @@ import {
   deletePostService,
 } from "../services/post.service.js";
 import CustomError from "../utils/custom-error.js";
-import { upload } from "../middlewares/upload.middleware.js";
 
 export const create = async (req, res, next) => {
   try {
-    console.log("req.body después de validación:", req.body);
-
-    const { title, content, published, categories } = req.body;
+    const { title, content, published, coverImage, categories } = req.body;
     const authorId = req.user.id;
     const publishedBool = published === "true";
-
-    // Parsear las categorías que vienen como string
     const parsedCategories = categories ? JSON.parse(categories) : [];
-
-    let coverImage = null;
-    if (req.file) {
-      coverImage = await uploadImage(req.file.buffer, req.file.originalname);
-    }
 
     const newPost = await createPost(
       title,
       content,
       authorId,
-      coverImage,
+      coverImage ?? null,
       publishedBool,
       parsedCategories,
     );
@@ -44,7 +33,6 @@ export const create = async (req, res, next) => {
 export const getPosts = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    console.log("page recibida:", page);
     const category = req.query.category;
     const result = await getAllPosts(page, 4, category);
     return success(res, result);
@@ -57,9 +45,7 @@ export const getPostById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const post = await getPostByIdService(id);
-
     if (!post) throw new CustomError("Post no encontrado", 404);
-
     return success(res, post);
   } catch (error) {
     next(error);
@@ -69,12 +55,10 @@ export const getPostById = async (req, res, next) => {
 export const updatePost = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, content, published, categories } = req.body;
+    const { title, content, published, coverImage, categories } = req.body;
     const userId = req.user.id;
     const userRole = req.user.role;
     const publishedBool = published === "true";
-
-    // Parsear las categorías que vienen como string
     const parsedCategories = categories ? JSON.parse(categories) : [];
 
     const post = await getPostByIdService(id);
@@ -84,16 +68,11 @@ export const updatePost = async (req, res, next) => {
       throw new CustomError("No tienes permiso para modificar este post", 403);
     }
 
-    let coverImage = post.coverImage;
-    if (req.file) {
-      coverImage = await uploadImage(req.file.buffer, req.file.originalname);
-    }
-
     const updatedPost = await updatePostService(id, {
       title,
       content,
       published: publishedBool,
-      coverImage,
+      coverImage: coverImage ?? post.coverImage,
       categories: parsedCategories,
     });
     return success(res, updatedPost, 200);

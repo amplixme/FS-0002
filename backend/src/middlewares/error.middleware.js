@@ -1,4 +1,22 @@
 const errorHandler = (err, req, res, next) => {
+  
+   if (err.code === "LIMIT_FILE_SIZE") {
+    return res.status(400).json({
+      error: {
+        message: "El archivo supera el tamaño máximo de 5MB",
+        status: 400,
+      },
+    });
+  }
+
+  if (err.message === "Formato de imagen no permitido") {
+    return res.status(400).json({
+      error: {
+        message: "Formato de imagen no permitido. Solo se aceptan jpg, png y webp",
+        status: 400,
+      },
+    });
+  }
   // Errores de validación de Prisma
   if (err.code === "P2002") {
     return res.status(409).json({
