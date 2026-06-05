@@ -1,4 +1,3 @@
-import { error } from "node:console";
 import multer from "multer";
 
 const storage = multer.memoryStorage();
@@ -11,7 +10,7 @@ export const upload = multer ({
         if (allowedTypes.includes(file.mimetype)){
             cb(null, true);
         }else{
-            cb(new Error ("Formato de imagen no permitido"));
+            cb(new Error("Formato de imagen no permitido"), false);
         }
     },
 });

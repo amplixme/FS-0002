@@ -1,5 +1,4 @@
 import { success } from "../utils/response.js";
-import { uploadImage } from "../utils/uploadImage.js";
 import {
   createPost,
   getAllPosts,
@@ -8,26 +7,18 @@ import {
   deletePostService,
 } from "../services/post.service.js";
 import CustomError from "../utils/custom-error.js";
-import { upload } from "../middlewares/upload.middleware.js";
 
 export const create = async (req, res, next) => {
   try {
-    console.log("req.body después de validación:", req.body);
-
-    const { title, content, published } = req.body;
+    const { title, content, published, coverImage } = req.body;
     const authorId = req.user.id;
     const publishedBool = published === "true";
-
-    let coverImage = null;
-    if (req.file) {
-      coverImage = await uploadImage(req.file.buffer, req.file.originalname);
-    }
 
     const newPost = await createPost(
       title,
       content,
       authorId,
-      coverImage,
+      coverImage ?? null,
       publishedBool,
     );
 
@@ -40,7 +31,6 @@ export const create = async (req, res, next) => {
 export const getPosts = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    console.log("page recibida:", page);
     const category = req.query.category;
     const result = await getAllPosts(page, 4, category);
     return success(res, result);
@@ -53,9 +43,7 @@ export const getPostById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const post = await getPostByIdService(id);
-
     if (!post) throw new CustomError("Post no encontrado", 404);
-
     return success(res, post);
   } catch (error) {
     next(error);
@@ -65,7 +53,7 @@ export const getPostById = async (req, res, next) => {
 export const updatePost = async (req, res, next) => {
   try {
     const { id } = req.params;
-   const { title, content, published } = req.body
+    const { title, content, published, coverImage } = req.body;
     const userId = req.user.id;
     const userRole = req.user.role;
     const publishedBool = published === "true";
@@ -74,16 +62,15 @@ export const updatePost = async (req, res, next) => {
     if (!post) throw new CustomError("Post no encontrado", 404);
 
     if (post.authorId !== userId && userRole !== "ADMIN") {
-      throw new CustomError("No tienes permiso para modificar este post", 403)
+      throw new CustomError("No tienes permiso para modificar este post", 403);
     }
 
-
-     let coverImage = post.coverImage; // mantiene la imagen actual por defecto
-    if (req.file) {
-      coverImage = await uploadImage(req.file.buffer, req.file.originalname);
-    }
-
-    const updatedPost = await updatePostService(id, { title, content, published: publishedBool, coverImage });
+    const updatedPost = await updatePostService(id, {
+      title,
+      content,
+      published: publishedBool,
+      coverImage: coverImage ?? post.coverImage,
+    });
     return success(res, updatedPost, 200);
   } catch (error) {
     next(error);

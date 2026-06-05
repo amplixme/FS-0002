@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPost } from "../services/post.service";
+import { createPost, uploadImage } from "../services/post.service";
 import PostForm from "../components/common/PostForm.jsx";
 
 export default function CreatePost() {
@@ -31,16 +31,18 @@ export default function CreatePost() {
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("content", content);
-      formData.append("published", published);
-      if (image) {
-        formData.append("image", image);
-      }
+      let coverImage = null;
+      if (image){
+        coverImage = await uploadImage(image);
+      }      
 
       // Llamamos a la función del servicio de Ángel
-      await createPost(formData);
+      await createPost({
+        title,
+        content,
+        published : String(published),
+        coverImage,
+      });
 
       // La tarjeta pide redirigir al detalle, pero como la Card 26 (Detalle)
       // todavía no la hicimos, lo mandamos al inicio por ahora.

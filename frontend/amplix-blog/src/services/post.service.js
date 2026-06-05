@@ -41,11 +41,7 @@ export const getPostById = async (id) => {
  */
 export const createPost = async (data) => {
   try {
-    const response = await api.post("/posts", data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await api.post("/posts", data);
     return response.data;
   } catch (error) {
     console.log("Error completo:", error.response?.data);
@@ -86,6 +82,29 @@ export const deletePost = async (id) => {
   } catch (error) {
     throw new Error(
       error.response?.data?.error?.message || "Error al eliminar el post",
+    );
+  }
+};
+
+/**
+ * Sube una imagen a Cloudinary via el backend.
+ * @param {File} file - Archivo de imagen
+ * @returns {Promise<string>} URL de la imagen subida
+ */
+export const uploadImage = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await api.post("/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data.data.url;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.error?.message || "Error al subir la imagen",
     );
   }
 };

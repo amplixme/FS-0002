@@ -1,15 +1,19 @@
-import axios from "axios";
-import FormData from "form-data";
+import { v2 as cloudinary } from "cloudinary";
 
-export async function uploadImage(fileBuffer, fileName) {
-  const formData = new FormData();
-  formData.append("image", fileBuffer, fileName);
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-  const response = await axios.post(
-    `https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`,
-    formData,
-    { headers: formData.getHeaders() }
-  );
-
-  return response.data.data.url;
+export async function uploadImage(fileBuffer) {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      { folder: "posts" },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result.secure_url);
+      }
+    ).end(fileBuffer);
+  });
 }

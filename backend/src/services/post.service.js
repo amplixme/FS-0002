@@ -1,5 +1,4 @@
 // src/services/post.service.js
-import { promise } from "zod";
 import prisma from "../config/prisma.js"; // ← importar el singleton
 
 export const createPost = async (
@@ -103,3 +102,4 @@ export const deletePostService = async (id) => {
   });
   return true;
 };
+
