@@ -21,10 +21,12 @@ model User {
   password  String
   name      String
   role      Role     @default(USER)
+  bio       String?  
+  avatarUrl String?  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  posts      Post[]
-  comments Comment[]
+  posts     Post[]
+  comments  Comment[]
 }
 
 model Post {
