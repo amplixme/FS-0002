@@ -12,9 +12,12 @@ import PostDetail from "./pages/PostDetail";
 import EditPost from "./pages/EditPost";
 import Admin from "./pages/Admin";
 import "./App.css";
+import NotFound from "./pages/NotFound";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
   return (
+    <ErrorBoundary>
     <AuthProvider>
       <BrowserRouter>
         <Routes>
@@ -80,9 +83,11 @@ function App() {
               </ProtectedAdminRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
