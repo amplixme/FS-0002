@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPost, uploadImage } from "../services/post.service";
+import { createPost } from "../services/post.service";
 import { getAll } from "../services/category.service";
 import PostForm from "../components/common/PostForm.jsx";
 
@@ -8,8 +8,7 @@ export default function CreatePost() {
   const navigate = useNavigate();
 
   // Estados del formulario
-  const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState("");
+  const [coverImage, setCoverImage] = useState(null); // URL de Cloudinary
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [published, setPublished] = useState(false);
@@ -35,22 +34,13 @@ export default function CreatePost() {
     fetchCategories();
   }, []);
 
-  // Función para seleccionar/deseleccionar categorías
   const toggleCategory = (catId) => {
     setSelectedCategories((prev) =>
       prev.includes(catId)
         ? prev.filter((id) => id !== catId)
-        : [...prev, catId],
+        : [...prev, catId]
     );
   };
-
-  function handleImageChange(e) {
-    // ← agregás acá
-    const file = e.target.files[0];
-    if (!file) return;
-    setImage(file);
-    setImagePreview(URL.createObjectURL(file));
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,23 +48,13 @@ export default function CreatePost() {
     setLoading(true);
 
     try {
-      let coverImage = null;
-      if (image){
-        coverImage = await uploadImage(image);
-      }      
-        
-
-      // Llamamos a la función del servicio de Ángel
       await createPost({
         title,
         content,
-        published : String(published),
-        coverImage,
-        categories:  JSON.stringify(selectedCategories),
+        published: String(published),
+        ...(coverImage && { coverImage }),
+        categories: JSON.stringify(selectedCategories),
       });
-
-      // La tarjeta pide redirigir al detalle, pero como la Card 26 (Detalle)
-      // todavía no la hicimos, lo mandamos al inicio por ahora.
       navigate("/");
     } catch (err) {
       setError(err.message || "Error al crear el artículo");
@@ -107,8 +87,7 @@ export default function CreatePost() {
               setContent={setContent}
               published={published}
               setPublished={setPublished}
-              imagePreview={imagePreview}
-              handleImageChange={handleImageChange}
+              onImageUpload={setCoverImage}
               availableCategories={availableCategories}
               selectedCategories={selectedCategories}
               toggleCategory={toggleCategory}
