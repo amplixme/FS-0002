@@ -10,9 +10,10 @@ import CustomError from "../utils/custom-error.js";
 
 export const create = async (req, res, next) => {
   try {
-    const { title, content, published, coverImage } = req.body;
+    const { title, content, published, coverImage, categories } = req.body;
     const authorId = req.user.id;
     const publishedBool = published === "true";
+    const parsedCategories = categories ? JSON.parse(categories) : [];
 
     const newPost = await createPost(
       title,
@@ -20,6 +21,7 @@ export const create = async (req, res, next) => {
       authorId,
       coverImage ?? null,
       publishedBool,
+      parsedCategories,
     );
 
     return success(res, newPost, 201);
@@ -53,10 +55,11 @@ export const getPostById = async (req, res, next) => {
 export const updatePost = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, content, published, coverImage } = req.body;
+    const { title, content, published, coverImage, categories } = req.body;
     const userId = req.user.id;
     const userRole = req.user.role;
     const publishedBool = published === "true";
+    const parsedCategories = categories ? JSON.parse(categories) : [];
 
     const post = await getPostByIdService(id);
     if (!post) throw new CustomError("Post no encontrado", 404);
@@ -70,6 +73,7 @@ export const updatePost = async (req, res, next) => {
       content,
       published: publishedBool,
       coverImage: coverImage ?? post.coverImage,
+      categories: parsedCategories,
     });
     return success(res, updatedPost, 200);
   } catch (error) {

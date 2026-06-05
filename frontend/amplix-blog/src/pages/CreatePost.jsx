@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPost, uploadImage } from "../services/post.service";
+import { getAll } from "../services/category.service";
 import PostForm from "../components/common/PostForm.jsx";
 
 export default function CreatePost() {
@@ -13,9 +14,35 @@ export default function CreatePost() {
   const [content, setContent] = useState("");
   const [published, setPublished] = useState(false);
 
+  // Estados para Categorías
+  const [availableCategories, setAvailableCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
   // Estados de la petición
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Obtener categorías al cargar la página
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await getAll();
+        setAvailableCategories(res.data ?? []);
+      } catch (err) {
+        console.error("Error al cargar categorías", err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Función para seleccionar/deseleccionar categorías
+  const toggleCategory = (catId) => {
+    setSelectedCategories((prev) =>
+      prev.includes(catId)
+        ? prev.filter((id) => id !== catId)
+        : [...prev, catId],
+    );
+  };
 
   function handleImageChange(e) {
     // ← agregás acá
@@ -35,6 +62,7 @@ export default function CreatePost() {
       if (image){
         coverImage = await uploadImage(image);
       }      
+        
 
       // Llamamos a la función del servicio de Ángel
       await createPost({
@@ -42,6 +70,7 @@ export default function CreatePost() {
         content,
         published : String(published),
         coverImage,
+        categories:  JSON.stringify(selectedCategories),
       });
 
       // La tarjeta pide redirigir al detalle, pero como la Card 26 (Detalle)
@@ -80,6 +109,9 @@ export default function CreatePost() {
               setPublished={setPublished}
               imagePreview={imagePreview}
               handleImageChange={handleImageChange}
+              availableCategories={availableCategories}
+              selectedCategories={selectedCategories}
+              toggleCategory={toggleCategory}
               onSubmit={handleSubmit}
               loading={loading}
               error={error}
