@@ -13,19 +13,16 @@ const EditPost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [published, setPublished] = useState(false);
-  const [imagePreview, setImagePreview] = useState("");
-  const [image, setImage] = useState(null);
+  const [coverImage, setCoverImage] = useState(null); // URL de Cloudinary
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fetching, setFetching] = useState(true);
   const [availableCategories, setAvailableCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  // Cargar el Post y las Categorías al mismo tiempo
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Ejecutamos ambas peticiones en paralelo para que sea más rápido
         const [postResult, categoriesResult] = await Promise.all([
           getPostById(id),
           getAll(),
@@ -38,18 +35,14 @@ const EditPost = () => {
           return;
         }
 
-        // Llenar datos del post
         setTitle(post.title);
         setContent(post.content);
         setPublished(post.published);
-        if (post.coverImage) setImagePreview(post.coverImage); // Ajustado a coverImage por si acaso
+        if (post.coverImage) setCoverImage(post.coverImage);
 
-        // Llenar categorías disponibles
         setAvailableCategories(categoriesResult.data ?? []);
 
-        // Pre-seleccionar las categorías que ya tiene el post
         if (post.categories && post.categories.length > 0) {
-          // Asumiendo que post.categories es un array de objetos con { id, name... }
           setSelectedCategories(post.categories.map((cat) => cat.id));
         }
       } catch (error) {
@@ -66,15 +59,8 @@ const EditPost = () => {
     setSelectedCategories((prev) =>
       prev.includes(catId)
         ? prev.filter((id) => id !== catId)
-        : [...prev, catId],
+        : [...prev, catId]
     );
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setImage(file);
-    setImagePreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (e) => {
@@ -83,16 +69,13 @@ const EditPost = () => {
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("content", content);
-      formData.append("published", published);
-      // Agregamos las categorías editadas
-      formData.append("categories", JSON.stringify(selectedCategories));
-
-      if (image) formData.append("image", image);
-
-      await updatePost(id, formData);
+      await updatePost(id, {
+        title,
+        content,
+        published: String(published),
+        ...(coverImage && { coverImage }),
+        categories: JSON.stringify(selectedCategories),
+      });
       navigate(`/posts/${id}`);
     } catch (error) {
       setError(error.message || "Error al actualizar el artículo");
@@ -133,9 +116,7 @@ const EditPost = () => {
               setContent={setContent}
               published={published}
               setPublished={setPublished}
-              imagePreview={imagePreview}
-              handleImageChange={handleImageChange}
-              // Props de categorías
+              onImageUpload={setCoverImage}
               availableCategories={availableCategories}
               selectedCategories={selectedCategories}
               toggleCategory={toggleCategory}
