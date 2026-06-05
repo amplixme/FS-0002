@@ -7,8 +7,10 @@ import Register from "./pages/Register";
 import CreatePost from "./pages/CreatePost";
 import Categorias from "./pages/Categorias";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import PostDetail from "./pages/PostDetail";
 import EditPost from "./pages/EditPost";
+import Admin from "./pages/Admin";
 import "./App.css";
 
 function App() {
@@ -67,6 +69,17 @@ function App() {
               </Layout>
             }
           />
+
+          <Route
+            path="/admin"
+            element={
+              <ProtectedAdminRoute>
+                <Layout>
+                  <Admin />
+                </Layout>
+              </ProtectedAdminRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
@@ -74,3 +87,4 @@ function App() {
 }
 
 export default App;
+
