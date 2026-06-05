@@ -45,6 +45,14 @@ const Header = () => {
                 Categorías
               </Link>
             )}
+            {user?.role === "ADMIN" && (
+              <Link
+                to="/admin"
+                className="hover:text-gray-900 transition font-bold text-primary"
+              >
+                Admin
+              </Link>
+            )}
           </nav>
         </div>
 
@@ -111,6 +119,15 @@ const Header = () => {
               className="font-semibold"
             >
               Categorías
+            </Link>
+          )}
+          {user?.role === "ADMIN" && (
+            <Link
+              to="/admin"
+              onClick={() => setMenuOpen(false)}
+              className="font-bold text-primary"
+            >
+              Admin
             </Link>
           )}
 
