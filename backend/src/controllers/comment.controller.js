@@ -5,7 +5,7 @@ export const createCommentController = async (req, res, next) => {
   try {
     const { content } = req.body;
     const authorId = req.user.id;
-    const postId = req.params.postId;
+    const postId = parseInt(req.params.postId);
 
     const newComment = await createComment(content, postId, authorId);
 
