@@ -1,7 +1,6 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function NotFound() {
-  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
@@ -13,12 +12,12 @@ export default function NotFound() {
         <p className="text-on-surface-variant mb-8">
           La página que buscás no existe o fue movida.
         </p>
-        <button
-          onClick={() => navigate("/")}
-          className="px-6 py-3 rounded-full font-bold text-on-primary bg-primary hover:bg-on-primary-fixed-variant transition-colors"
+        <Link
+          to="/"
+          className="inline-block px-6 py-3 rounded-full font-bold text-on-primary bg-primary hover:bg-on-primary-fixed-variant transition-colors"
         >
           Volver al inicio
-        </button>
+        </Link>
       </div>
     </div>
   );
