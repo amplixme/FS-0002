@@ -1,16 +1,20 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { uploadImage } from "../../services/post.service";
 
 const MAX_SIZE_MB = 5;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-export default function ImageUpload({ onUpload, onRemove }) {
+export default function ImageUpload({ onUpload, onRemove, initialImage }) {
   const [preview, setPreview] = useState(null);
   const [progress, setProgress] = useState(0); // 0-100
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+      if (initialImage) setPreview(initialImage);
+    }, [initialImage]);
 
   // Validación client-side
   const validate = (file) => {
@@ -31,6 +35,8 @@ export default function ImageUpload({ onUpload, onRemove }) {
       setError(validationError);
       return;
     }
+
+    
 
     // Mostrar preview local inmediatamente
     setPreview(URL.createObjectURL(file));
@@ -64,6 +70,7 @@ export default function ImageUpload({ onUpload, onRemove }) {
   };
 
   const handleRemove = () => {
+    if (preview && !initialImage) URL.revokeObjectURL(preview);
     setPreview(null);
     setProgress(0);
     setError("");

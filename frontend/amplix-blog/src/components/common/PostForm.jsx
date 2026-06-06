@@ -9,6 +9,7 @@ const PostForm = ({
   published,
   setPublished,
   onImageUpload,
+  initialImage,
   availableCategories = [],
   selectedCategories = [],
   toggleCategory,
@@ -70,11 +71,10 @@ const PostForm = ({
                   key={cat.id}
                   type="button"
                   onClick={() => toggleCategory(cat.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-all ${
-                    isSelected
+                  className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-all ${isSelected
                       ? "bg-primary border-primary text-white"
                       : "bg-surface-container-low border-outline-variant text-on-surface-variant hover:border-primary/50"
-                  }`}
+                    }`}
                 >
                   {cat.name}
                 </button>
@@ -85,7 +85,11 @@ const PostForm = ({
       </div>
 
       {/* Imagen de portada */}
-      <ImageUpload onUpload={onImageUpload} />
+      <ImageUpload
+        onUpload={onImageUpload}
+        initialImage={initialImage}
+        onRemove={() => onImageUpload(null)}
+      />
 
       {/* Toggle publicar */}
       <div className="flex items-center gap-3 pt-2">
@@ -94,14 +98,12 @@ const PostForm = ({
           role="switch"
           aria-checked={published}
           onClick={() => setPublished(!published)}
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 ${
-            published ? "bg-primary" : "bg-outline-variant"
-          }`}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 ${published ? "bg-primary" : "bg-outline-variant"
+            }`}
         >
           <span
-            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-              published ? "translate-x-6" : "translate-x-1"
-            }`}
+            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${published ? "translate-x-6" : "translate-x-1"
+              }`}
           />
         </button>
         <span className="text-sm font-medium text-on-surface">

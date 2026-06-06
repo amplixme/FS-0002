@@ -121,6 +121,7 @@ const EditPost = () => {
               selectedCategories={selectedCategories}
               toggleCategory={toggleCategory}
               onSubmit={handleSubmit}
+              initialImage={coverImage}
               loading={loading}
               error={error}
               submitLabel="Guardar Cambios"
