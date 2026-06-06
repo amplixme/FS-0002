@@ -37,9 +37,11 @@ export const getUserPublicProfile = async (id) => {
  * Devuelve los campos del perfil (sin password).
  */
 export const updateUserProfile = async (id, data) => {
+  const { name, bio, avatarUrl } = data;
+
   const user = await prisma.user.update({
     where: { id },
-    data,
+    data: { name, bio, avatarUrl },   // ← el objeto whitelist, no `data`
     select: {
       id: true,
       name: true,

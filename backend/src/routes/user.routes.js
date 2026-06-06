@@ -9,7 +9,7 @@ import {
 
 const router = Router();
 
-// PUT /api/users/me — debe ir ANTES de /:id para que "me" no sea capturado como id
+
 router.put("/me", authMiddleware, validateBody(updateProfileSchema), updateProfile);
 
 // GET /api/users/:id — perfil público, sin auth
