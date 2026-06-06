@@ -13,7 +13,7 @@ export const create = async (req, res, next) => {
     const { title, content, published, coverImage, categories } = req.body;
     const authorId = req.user.id;
     const publishedBool = published === "true";
-    const parsedCategories = categories ? JSON.parse(categories) : [];
+    const parsedCategories = categories ?? [];
 
     const newPost = await createPost(
       title,

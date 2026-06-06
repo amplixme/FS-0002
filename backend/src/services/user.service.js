@@ -3,7 +3,7 @@ import prisma from "../config/prisma.js";
 /**
  * Devuelve el perfil público de un usuario.
  * NUNCA incluye password ni email.
- * Incluye el conteo de posts publicados.
+ * Incluye postCount y createdAt (para "Miembro desde").
  */
 export const getUserPublicProfile = async (id) => {
   const numericId = parseInt(id);
@@ -16,6 +16,7 @@ export const getUserPublicProfile = async (id) => {
       name: true,
       bio: true,
       avatarUrl: true,
+      createdAt: true,          // ← necesario para "Miembro desde [fecha]"
       _count: {
         select: {
           posts: { where: { published: true } },
@@ -32,6 +33,24 @@ export const getUserPublicProfile = async (id) => {
 };
 
 /**
+ * Devuelve los posts publicados de un usuario dado su ID.
+ * Incluye autor y categorías para que el PostCard funcione correctamente.
+ */
+export const getUserPublishedPosts = async (id) => {
+  const numericId = parseInt(id);
+  if (isNaN(numericId)) return [];
+
+  return prisma.post.findMany({
+    where: { authorId: numericId, published: true },
+    orderBy: { createdAt: "desc" },
+    include: {
+      author: { select: { id: true, name: true, avatarUrl: true } },
+      categories: true,
+    },
+  });
+};
+
+/**
  * Actualiza el perfil del usuario autenticado.
  * Solo permite modificar name, bio y avatarUrl.
  * Devuelve los campos del perfil (sin password).
@@ -41,7 +60,7 @@ export const updateUserProfile = async (id, data) => {
 
   const user = await prisma.user.update({
     where: { id },
-    data: { name, bio, avatarUrl },   // ← el objeto whitelist, no `data`
+    data: { name, bio, avatarUrl },
     select: {
       id: true,
       name: true,

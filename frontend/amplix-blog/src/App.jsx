@@ -11,6 +11,7 @@ import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import PostDetail from "./pages/PostDetail";
 import EditPost from "./pages/EditPost";
 import Admin from "./pages/Admin";
+import UserProfile from "./pages/UserProfile";
 import "./App.css";
 import NotFound from "./pages/NotFound";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -18,78 +19,89 @@ import ErrorBoundary from "./components/ErrorBoundary";
 function App() {
   return (
     <ErrorBoundary>
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Layout>
-                <Home />
-              </Layout>
-            }
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-
-          <Route
-            path="/create-post"
-            element={
-              <ProtectedRoute>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
                 <Layout>
-                  <CreatePost />
+                  <Home />
                 </Layout>
-              </ProtectedRoute>
-            }
-          />
+              }
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-          <Route
-            path="/categorias"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Categorias />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/create-post"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <CreatePost />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/posts/:id/edit"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <EditPost />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/posts/:id"
-            element={
-              <Layout>
-                <PostDetail />
-              </Layout>
-            }
-          />
+            <Route
+              path="/categorias"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Categorias />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/admin"
-            element={
-              <ProtectedAdminRoute>
+            <Route
+              path="/posts/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <EditPost />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/posts/:id"
+              element={
                 <Layout>
-                  <Admin />
+                  <PostDetail />
                 </Layout>
-              </ProtectedAdminRoute>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+              }
+            />
+
+            {/* ── Perfil público ── */}
+            <Route
+              path="/perfil/:id"
+              element={
+                <Layout>
+                  <UserProfile />
+                </Layout>
+              }
+            />
+
+            <Route
+              path="/admin"
+              element={
+                <ProtectedAdminRoute>
+                  <Layout>
+                    <Admin />
+                  </Layout>
+                </ProtectedAdminRoute>
+              }
+            />
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </ErrorBoundary>
   );
 }
 
 export default App;
-

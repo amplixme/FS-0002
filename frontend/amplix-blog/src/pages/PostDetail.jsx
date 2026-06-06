@@ -9,7 +9,7 @@ import { formatRelativeTime } from "../utils/dateFormatter";
 
 export default function PostDetail() {
   const { id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
   const [post, setPost] = useState(null);
@@ -100,6 +100,7 @@ export default function PostDetail() {
                 </span>
               </div>
             )}
+
             <div className="p-8 sm:p-12">
               <header className="mb-8 border-b border-outline-variant/30 pb-8">
                 <h1 className="text-4xl font-extrabold text-on-surface tracking-tight mb-6 leading-tight">
@@ -107,13 +108,33 @@ export default function PostDetail() {
                 </h1>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold uppercase">
-                    {post.author?.name ? post.author.name.charAt(0) : "U"}
-                  </div>
+                  {/* Avatar del autor */}
+                  {post.author?.avatarUrl ? (
+                    <img
+                      src={post.author.avatarUrl}
+                      alt={post.author?.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold uppercase">
+                      {post.author?.name ? post.author.name.charAt(0) : "U"}
+                    </div>
+                  )}
+
                   <div>
-                    <p className="text-sm font-bold text-on-surface">
-                      {post.author?.name || "Usuario Anónimo"}
-                    </p>
+                    {/* Nombre del autor → enlaza al perfil público */}
+                    {post.authorId ? (
+                      <Link
+                        to={`/perfil/${post.authorId}`}
+                        className="text-sm font-bold text-on-surface hover:text-primary transition-colors"
+                      >
+                        {post.author?.name || "Usuario Anónimo"}
+                      </Link>
+                    ) : (
+                      <p className="text-sm font-bold text-on-surface">
+                        {post.author?.name || "Usuario Anónimo"}
+                      </p>
+                    )}
                     <p className="text-xs font-medium text-outline">
                       {formatRelativeTime(post.createdAt)}
                     </p>
