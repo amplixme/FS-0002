@@ -52,6 +52,7 @@ export const getAllPosts = async (page = 1, limit = 4, categorySlug = null) => {
           select: { name: true },
         },
         categories: true,
+        _count: { select: { comments: true } },
       },
     }),
     prisma.post.count({
@@ -116,4 +117,3 @@ export const deletePostService = async (id) => {
   });
   return true;
 };
-
