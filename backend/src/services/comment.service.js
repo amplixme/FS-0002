@@ -13,3 +13,21 @@ export const createComment = async (content, postId, authorId) => {
 
   return comment;
 };
+
+export const getCommentsByPostId = async (postId) => {
+  const numericId = parseInt(postId);
+
+  if (isNaN(numericId)) return [];
+
+  const comments = await prisma.comment.findMany({
+    where: { postId: numericId },
+    orderBy: { createdAt: "desc" },
+    include: {
+      author: {
+        select: { name: true, avatarUrl: true },
+      },
+    },
+  });
+
+  return comments;
+};
