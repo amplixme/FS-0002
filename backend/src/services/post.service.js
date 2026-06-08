@@ -41,7 +41,7 @@ export const getAllPosts = async (page = 1, limit = 4, categorySlug = null) => {
     };
   }
 
-  const [posts, total] = await Promise.all([
+  const [rawPosts, total] = await Promise.all([
     prisma.post.findMany({
       where: whereClause,
       orderBy: { createdAt: "desc" },
@@ -52,12 +52,18 @@ export const getAllPosts = async (page = 1, limit = 4, categorySlug = null) => {
           select: { name: true },
         },
         categories: true,
+         _count: { select: { comments: true } }, //le dice a Prisma que cuente los comentarios de cada post
       },
     }),
     prisma.post.count({
       where: whereClause,
     }),
   ]);
+
+  const posts = rawPosts.map(({_count, ...rest}) => ({
+    ...rest,      // Los campos del post menos _count
+    commentCount: _count.comments, // agrega commentCount con el valor de _count.comments
+  }))
 
   return {
     posts,
@@ -116,4 +122,3 @@ export const deletePostService = async (id) => {
   });
   return true;
 };
-
