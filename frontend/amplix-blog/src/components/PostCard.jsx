@@ -1,18 +1,22 @@
 // PostCard.jsx
 // Sigue el design system del wireframe: Inter, colores custom Tailwind, cards con imagen 16/9
+import { Link } from "react-router-dom";
 import { formatRelativeTime } from "../utils/dateFormatter";
+
 export default function PostCard({ post, onClick, onCategoryClick }) {
   const {
     id,
     title,
     excerpt,
     author,
+    authorId,
     authorAvatar,
     createdAt,
     categories = [],
     coverImage,
     readTime,
   } = post;
+
   // Trunca el extracto a ~150 chars
   const truncatedExcerpt =
     excerpt && excerpt.length > 150 ? excerpt.slice(0, 150) + "…" : excerpt;
@@ -25,7 +29,6 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
       onClick={() => onClick && onClick(id)}
     >
       {/* Imagen */}
-
       <div className="w-full aspect-[16/9] bg-surface-container-low rounded-xl overflow-hidden mb-5 relative">
         {coverImage ? (
           <img
@@ -105,9 +108,19 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
           </div>
         )}
         <div className="flex flex-col">
-          <span className="text-sm text-on-surface font-semibold leading-tight">
-            {author}
-          </span>
+          {authorId ? (
+            <Link
+              to={`/perfil/${authorId}`}
+              onClick={(e) => e.stopPropagation()}
+              className="text-sm text-on-surface font-semibold leading-tight hover:text-primary transition-colors"
+            >
+              {author}
+            </Link>
+          ) : (
+            <span className="text-sm text-on-surface font-semibold leading-tight">
+              {author}
+            </span>
+          )}
           {createdAt && (
             <span className="text-[11px] font-medium text-slate-500 mt-0.5">
               {formatRelativeTime(createdAt)}

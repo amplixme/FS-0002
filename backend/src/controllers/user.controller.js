@@ -1,6 +1,7 @@
 import { success } from "../utils/response.js";
 import {
   getUserPublicProfile,
+  getUserPublishedPosts,
   updateUserProfile,
 } from "../services/user.service.js";
 import CustomError from "../utils/custom-error.js";
@@ -8,7 +9,7 @@ import CustomError from "../utils/custom-error.js";
 /**
  * GET /api/users/:id
  * Perfil público — sin autenticación requerida.
- * Expone: name, bio, avatarUrl, postCount.
+ * Expone: name, bio, avatarUrl, postCount, createdAt.
  */
 export const getPublicProfile = async (req, res, next) => {
   try {
@@ -18,6 +19,21 @@ export const getPublicProfile = async (req, res, next) => {
     if (!user) throw new CustomError("Usuario no encontrado", 404);
 
     return success(res, user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * GET /api/users/:id/posts
+ * Posts publicados de un usuario — sin autenticación requerida.
+ */
+export const getPublicProfilePosts = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const posts = await getUserPublishedPosts(id);
+    return success(res, posts);
   } catch (error) {
     next(error);
   }

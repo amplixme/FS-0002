@@ -15,4 +15,5 @@ export const createPostSchema = z.object({
 
     published: z.string().optional(),
     coverImage: z.string().optional(),
+    categories: z.array(z.string().uuid()).optional().default([]),
 });

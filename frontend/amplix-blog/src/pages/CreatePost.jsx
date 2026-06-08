@@ -53,7 +53,7 @@ export default function CreatePost() {
         content,
         published: String(published),
         ...(coverImage && { coverImage }),
-        categories: JSON.stringify(selectedCategories),
+        categories: selectedCategories,
       });
       navigate("/");
     } catch (err) {
