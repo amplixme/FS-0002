@@ -6,6 +6,7 @@ import ConfirmModal from "../components/common/ConfirmModal";
 import Toast from "../components/common/Toast";
 import { useDeletePost } from "../hooks/useDeletePost";
 import { formatRelativeTime } from "../utils/dateFormatter";
+import CommentSection from "../components/comments/CommentSection";
 
 export default function PostDetail() {
   const { id } = useParams();
@@ -173,6 +174,7 @@ export default function PostDetail() {
                 </div>
               )}
             </div>
+            <CommentSection postId={id} />
           </article>
         </main>
       </div>
@@ -180,12 +182,11 @@ export default function PostDetail() {
       <ConfirmModal
         isOpen={showModal}
         title="Eliminar artículo"
-        message="¿Estás seguro de que deseas eliminar este artículo? Esta acción no se puede deshacer."
+        message="¿Estás seguro de que deseas eliminar este artículo?"
         onConfirm={confirmDelete}
         onCancel={cancelModal}
         loading={deleting}
       />
-
       {toast && (
         <Toast message={toast.message} type={toast.type} onClose={clearToast} />
       )}
