@@ -76,6 +76,7 @@ function App() {
               }
             />
 
+<<<<<<< HEAD
             {/* ── Edición de perfil (ruta protegida) — va ANTES de /perfil/:id
                 para que React Router no resuelva "editar" como un :id ── */}
             <Route
@@ -89,6 +90,8 @@ function App() {
               }
             />
 
+=======
+>>>>>>> origin/develop
             {/* ── Perfil público ── */}
             <Route
               path="/perfil/:id"

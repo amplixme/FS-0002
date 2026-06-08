@@ -10,14 +10,30 @@ import {
   updatePost,
   deletePost,
 } from "../controllers/post.controller.js";
+import { createCommentController } from "../controllers/comment.controller.js";
+import { createCommentSchema } from "../schemas/comment.schema.js";
 
 const router = Router();
 
-router.post("/", authMiddleware, upload.single("image"), validateBody(createPostSchema), create);
+router.post(
+  "/",
+  authMiddleware,
+  upload.single("image"),
+  validateBody(createPostSchema),
+  create,
+);
 router.put("/:id", authMiddleware, upload.single("image"), updatePost);
 router.delete("/:id", authMiddleware, deletePost);
 
 router.get("/", getPosts);
 router.get("/:id", getPostById);
+
+//! Comments
+router.post(
+  "/:postId/comments",
+  authMiddleware,
+  validateBody(createCommentSchema),
+  createCommentController,
+);
 
 export default router;
