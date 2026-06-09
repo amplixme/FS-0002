@@ -10,8 +10,11 @@ import {
   updatePost,
   deletePost,
 } from "../controllers/post.controller.js";
-import { createCommentController } from "../controllers/comment.controller.js";
 import { createCommentSchema } from "../schemas/comment.schema.js";
+import {
+  createCommentController,
+  getCommentsController,
+} from "../controllers/comment.controller.js";
 
 const router = Router();
 
@@ -29,6 +32,8 @@ router.get("/", getPosts);
 router.get("/:id", getPostById);
 
 //! Comments
+router.get("/:postId/comments", getCommentsController);
+
 router.post(
   "/:postId/comments",
   authMiddleware,
