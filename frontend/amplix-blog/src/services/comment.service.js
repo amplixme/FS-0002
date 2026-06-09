@@ -23,3 +23,23 @@ export const create = async (postId, content) => {
     );
   }
 };
+
+// Actualizar comentario (Preparado para el futuro)
+export const update = async (id, data) => {
+  try {
+    const response = await api.put(`/comments/${id}`, data);
+    return response.data;
+  } catch (error) {
+    throw new Error("Error al actualizar el comentario");
+  }
+};
+
+// Eliminar comentario (Preparado para el futuro)
+export const remove = async (id) => {
+  try {
+    const response = await api.delete(`/comments/${id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Error al eliminar el comentario");
+  }
+};

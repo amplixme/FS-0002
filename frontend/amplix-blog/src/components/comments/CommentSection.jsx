@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { getByPostId, create } from "../../services/comment.service";
 import { formatRelativeTime } from "../../utils/dateFormatter";
@@ -89,7 +90,13 @@ export default function CommentSection({ postId }) {
         </form>
       ) : (
         <p className="text-sm font-medium text-outline">
-          Inicia sesión para comentar
+          <Link
+            to="/login"
+            className="text-primary hover:underline font-medium"
+          >
+            Inicia sesión
+          </Link>{" "}
+          para comentar
         </p>
       )}
     </div>
