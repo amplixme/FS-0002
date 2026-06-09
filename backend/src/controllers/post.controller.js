@@ -33,8 +33,11 @@ export const create = async (req, res, next) => {
 export const getPosts = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     const category = req.query.category;
-    const result = await getAllPosts(page, 4, category);
+    const sort = req.query.sort || "newest";
+    const result = await getAllPosts(page, limit, category, sort);
+
     return success(res, result);
   } catch (error) {
     next(error);

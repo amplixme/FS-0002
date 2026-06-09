@@ -28,31 +28,40 @@ export const createPost = async (
   return post;
 };
 
-export const getAllPosts = async (page = 1, limit = 4, categorySlug = null) => {
+export const getAllPosts = async (
+  page = 1,
+  limit = 10,
+  categorySlug,
+  sort = "newest",
+) => {
   const skip = (page - 1) * limit;
 
-  const whereClause = { published: true };
+  const whereClause = {
+    published: true,
+    ...(categorySlug && {
+      categories: { some: { slug: categorySlug } },
+    }),
+  };
 
-  if (categorySlug) {
-    whereClause.categories = {
-      some: {
-        slug: categorySlug,
-      },
-    };
+  let orderByClause;
+  if (sort === "oldest") {
+    orderByClause = { createdAt: "asc" };
+  } else if (sort === "comments") {
+    orderByClause = { comments: { _count: "desc" } };
+  } else {
+    orderByClause = { createdAt: "desc" };
   }
 
   const [rawPosts, total] = await Promise.all([
     prisma.post.findMany({
       where: whereClause,
-      orderBy: { createdAt: "desc" },
+      orderBy: orderByClause,
       skip,
       take: limit,
       include: {
-        author: {
-          select: { name: true },
-        },
+        author: { select: { id: true, name: true, avatarUrl: true } },
         categories: true,
-         _count: { select: { comments: true } },
+        _count: { select: { comments: true } },
       },
     }),
     prisma.post.count({
@@ -60,19 +69,20 @@ export const getAllPosts = async (page = 1, limit = 4, categorySlug = null) => {
     }),
   ]);
 
-  const posts = rawPosts.map(({_count, ...rest}) => ({
+  const data = rawPosts.map(({ _count, ...rest }) => ({
     ...rest,
     commentCount: _count.comments,
-  }))
+  }));
+
+  const totalPages = Math.ceil(total / limit);
 
   return {
-    posts,
+    data,
     total,
-    totalPages: Math.ceil(total / limit),
-    currentPage: page,
+    page,
+    totalPages,
   };
 };
-
 export const getPostById = async (id) => {
   const numericId = parseInt(id);
 
@@ -98,7 +108,6 @@ export const updatePostService = async (id, data) => {
     where: { id: numericId },
     data: {
       ...restData,
-      // Usamos set para reemplazar las categorías actuales por las nuevas
       ...(categories && {
         categories: {
           set: categories.map((id) => ({ id })),
