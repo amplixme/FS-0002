@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import PostCard from "../components/PostCard";
+import Pagination from "../components/common/Pagination";
 import { CategorySidebar, CategoryChips } from "../components/CategoryFilter";
 import { SkeletonLoader } from "../components/common/SkeletonLoader";
 import { ErrorMessage } from "../components/common/ErrorMessage";
@@ -9,6 +11,7 @@ import { getPosts } from "../services/post.service";
 import { getAll as getCategories } from "../services/category.service";
 
 export default function Home() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [posts, setPosts] = useState([]);
   const [status, setStatus] = useState("loading");
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,6 +19,8 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const currentPage = parseInt(searchParams.get("page")) || 1;
+  const currentCategory = searchParams.get("category") || "";
 
   // Carga las categorías una sola vez al montar
   useEffect(() => {
