@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import Pagination from "../components/common/Pagination";
 import { CategorySidebar, CategoryChips } from "../components/CategoryFilter";
@@ -14,11 +13,11 @@ export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [posts, setPosts] = useState([]);
   const [status, setStatus] = useState("loading");
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [activeCategory, setActiveCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+
+  // 1. Leer valores desde la URL (fuente de la verdad)
   const currentPage = parseInt(searchParams.get("page")) || 1;
   const currentCategory = searchParams.get("category") || "";
 
@@ -29,20 +28,30 @@ export default function Home() {
       .catch(() => setCategories([]));
   }, []);
 
-  // Recarga posts cuando cambia la página o la categoría activa
+  // Recarga posts cuando cambia la página o la categoría en la URL
   useEffect(() => {
     let cancelled = false;
 
     async function fetchPosts() {
       setStatus("loading");
       try {
-        const { data } = await getPosts(currentPage, activeCategory);
+        // Llamamos al servicio con el nuevo formato
+        const result = await getPosts({
+          page: currentPage,
+          limit: 6,
+          category: currentCategory,
+        });
+
         if (cancelled) return;
-        if (!data?.posts?.length) {
+
+        // Extraemos data y totalPages de la respuesta de tu backend
+        const postsData = result.data || result.posts || [];
+
+        if (!postsData.length) {
           setStatus("empty");
         } else {
-          setPosts(data.posts);
-          setTotalPages(data.totalPages);
+          setPosts(postsData);
+          setTotalPages(result.totalPages || 1);
           setStatus("success");
         }
       } catch {
@@ -54,27 +63,42 @@ export default function Home() {
     return () => {
       cancelled = true;
     };
-  }, [currentPage, activeCategory]);
+  }, [currentPage, currentCategory]);
 
+  // Manejador de categorías sincronizado con la URL
   function handleCategorySelect(slug) {
-    setActiveCategory(slug); // null = "Todas" → limpia el filtro
-    setCurrentPage(1);
+    const params = new URLSearchParams(searchParams);
+    if (slug) {
+      params.set("category", slug);
+    } else {
+      params.delete("category"); // null = "Todas" limpia el filtro
+    }
+    params.set("page", 1); // Al cambiar categoría, volvemos a la primera página
+    setSearchParams(params);
   }
 
+  // Manejador de paginación sincronizado con la URL
   function handlePageChange(newPage) {
     if (newPage < 1 || newPage > totalPages) return;
-    setCurrentPage(newPage);
+    const params = new URLSearchParams(searchParams);
+    params.set("page", newPage);
+    setSearchParams(params);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   async function handleRetry() {
     setStatus("loading");
     try {
-      const { data } = await getPosts(currentPage, activeCategory);
-      if (!data?.posts?.length) setStatus("empty");
+      const result = await getPosts({
+        page: currentPage,
+        limit: 6,
+        category: currentCategory,
+      });
+      const postsData = result.data || result.posts || [];
+      if (!postsData.length) setStatus("empty");
       else {
-        setPosts(data.posts);
-        setTotalPages(data.totalPages);
+        setPosts(postsData);
+        setTotalPages(result.totalPages || 1);
         setStatus("success");
       }
     } catch {
@@ -106,7 +130,7 @@ export default function Home() {
           {/* Sidebar de categorías — solo desktop */}
           <CategorySidebar
             categories={categories}
-            activeCategory={activeCategory}
+            activeCategory={currentCategory}
             onSelect={handleCategorySelect}
           />
 
@@ -114,7 +138,7 @@ export default function Home() {
             {/* Chips de categorías — solo mobile */}
             <CategoryChips
               categories={categories}
-              activeCategory={activeCategory}
+              activeCategory={currentCategory}
               onSelect={handleCategorySelect}
             />
 
@@ -150,43 +174,13 @@ export default function Home() {
               </div>
             )}
 
-            {/* Paginación */}
+            {/* Componente de Paginación */}
             {status === "success" && totalPages > 1 && (
-              <nav className="flex justify-between items-center py-12 border-t border-slate-100 mt-8">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="flex items-center gap-2 text-slate-400 font-semibold text-sm active:scale-95 transition-transform disabled:opacity-30 disabled:cursor-not-allowed"
-                >
-                  <span className="material-symbols-outlined text-sm">
-                    arrow_back
-                  </span>
-                  Anterior
-                </button>
-
-                <div className="flex gap-2">
-                  {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => handlePageChange(i + 1)}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        currentPage === i + 1 ? "bg-primary" : "bg-slate-200"
-                      }`}
-                    />
-                  ))}
-                </div>
-
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="flex items-center gap-2 text-primary font-bold text-sm active:scale-95 transition-transform disabled:opacity-30 disabled:cursor-not-allowed"
-                >
-                  Siguiente
-                  <span className="material-symbols-outlined text-sm">
-                    arrow_forward
-                  </span>
-                </button>
-              </nav>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             )}
           </div>
         </div>
