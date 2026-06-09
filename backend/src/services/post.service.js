@@ -52,7 +52,7 @@ export const getAllPosts = async (page = 1, limit = 4, categorySlug = null) => {
           select: { name: true },
         },
         categories: true,
-         _count: { select: { comments: true } }, //le dice a Prisma que cuente los comentarios de cada post
+         _count: { select: { comments: true } },
       },
     }),
     prisma.post.count({
@@ -61,8 +61,8 @@ export const getAllPosts = async (page = 1, limit = 4, categorySlug = null) => {
   ]);
 
   const posts = rawPosts.map(({_count, ...rest}) => ({
-    ...rest,      // Los campos del post menos _count
-    commentCount: _count.comments, // agrega commentCount con el valor de _count.comments
+    ...rest,
+    commentCount: _count.comments,
   }))
 
   return {
