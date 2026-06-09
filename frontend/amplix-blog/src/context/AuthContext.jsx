@@ -33,6 +33,17 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  /**
+   * Actualiza los datos del usuario en el estado y en localStorage.
+   * Se llama después de una edición de perfil exitosa.
+   * @param {Object} userData — campos actualizados del usuario
+   */
+  const updateUser = (userData) => {
+    const updatedUser = { ...user, ...userData };
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -41,6 +52,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: !!token,
         login,
         logout,
+        updateUser,
         loading,
       }}
     >

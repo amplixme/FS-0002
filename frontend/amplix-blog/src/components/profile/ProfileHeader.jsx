@@ -51,13 +51,13 @@ export default function ProfileHeader({ profile, isOwnProfile, onEdit }) {
           </div>
 
           {isOwnProfile && (
-            <button
-              onClick={onEdit}
+            <Link
+              to="/perfil/editar"
               className="mt-4 inline-flex items-center gap-1.5 px-4 py-1.5 border border-primary text-primary text-sm font-semibold rounded-full hover:bg-primary/5 transition-colors"
             >
               <span className="material-symbols-outlined text-[16px]">edit</span>
               Editar perfil
-            </button>
+            </Link>
           )}
         </div>
       </div>

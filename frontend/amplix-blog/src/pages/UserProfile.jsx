@@ -12,7 +12,7 @@ import Toast from "../components/common/Toast";
 
 export default function UserProfile() {
   const { id } = useParams();
-  const { user: authUser } = useContext(AuthContext);
+  const { user: authUser, updateUser } = useContext(AuthContext);
 
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -47,20 +47,38 @@ export default function UserProfile() {
       }
     };
     fetchData();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   const handleSave = async (formData) => {
     setSaving(true);
-    const res = await updateProfile(formData);
-    const updated = res.data ?? res;
-    setProfile((prev) => ({ ...prev, ...updated }));
-    setIsEditing(false);
-    setToast({ message: "Perfil actualizado correctamente", type: "success" });
-    setSaving(false);
+    try {
+      const res = await updateProfile(formData);
+      const updated = res.data ?? res;
+
+      // Actualizar el perfil local de la página
+      setProfile((prev) => ({ ...prev, ...updated }));
+
+      // Actualizar AuthContext (estado global + localStorage) si es el propio perfil
+      if (isOwnProfile) {
+        updateUser(updated);
+      }
+
+      setIsEditing(false);
+      setToast({ message: "Perfil actualizado correctamente", type: "success" });
+    } catch (err) {
+      setToast({
+        message: err.message || "Error al guardar los cambios",
+        type: "error",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
-  // Loading state
+  // ── Loading ──
   if (loading) {
     return (
       <div className="min-h-screen bg-background py-10 px-4 sm:px-6 lg:px-8">
@@ -86,18 +104,20 @@ export default function UserProfile() {
     );
   }
 
-  // Error state
+  // ── Error ──
   if (error || !profile) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
         <span className="material-symbols-outlined text-5xl text-outline">person_off</span>
         <p className="text-error font-bold text-xl">{error || "Perfil no encontrado"}</p>
-        <Link to="/" className="text-primary hover:underline font-medium">← Volver al inicio</Link>
+        <Link to="/" className="text-primary hover:underline font-medium">
+          ← Volver al inicio
+        </Link>
       </div>
     );
   }
 
-  // Main render
+  // ── Main ──
   return (
     <>
       <div className="min-h-screen bg-background py-10 px-4 sm:px-6 lg:px-8">
@@ -129,7 +149,9 @@ export default function UserProfile() {
         </main>
       </div>
 
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      {toast && (
+        <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+      )}
     </>
   );
 }
