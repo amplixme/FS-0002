@@ -17,35 +17,32 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
-  // 1. Leer valores desde la URL (fuente de la verdad)
   const currentPage = parseInt(searchParams.get("page")) || 1;
   const currentCategory = searchParams.get("category") || "";
+  const currentSort = searchParams.get("sort") || "newest";
 
-  // Carga las categorías una sola vez al montar
   useEffect(() => {
     getCategories()
       .then((res) => setCategories(res.data ?? []))
       .catch(() => setCategories([]));
   }, []);
 
-  // Recarga posts cuando cambia la página o la categoría en la URL
   useEffect(() => {
     let cancelled = false;
 
     async function fetchPosts() {
       setStatus("loading");
       try {
-        // Llamamos al servicio con el nuevo formato
         const result = await getPosts({
           page: currentPage,
           limit: 6,
           category: currentCategory,
+          sort: currentSort,
         });
 
         if (cancelled) return;
 
-        // Extraemos data y totalPages de la respuesta de tu backend
-        const postsData = result.data || result.posts || [];
+        const postsData = result.data || [];
 
         if (!postsData.length) {
           setStatus("empty");
@@ -63,27 +60,33 @@ export default function Home() {
     return () => {
       cancelled = true;
     };
-  }, [currentPage, currentCategory]);
+  }, [currentPage, currentCategory, currentSort]);
 
-  // Manejador de categorías sincronizado con la URL
   function handleCategorySelect(slug) {
     const params = new URLSearchParams(searchParams);
     if (slug) {
       params.set("category", slug);
     } else {
-      params.delete("category"); // null = "Todas" limpia el filtro
+      params.delete("category");
     }
-    params.set("page", 1); // Al cambiar categoría, volvemos a la primera página
+    params.set("page", 1);
     setSearchParams(params);
   }
 
-  // Manejador de paginación sincronizado con la URL
   function handlePageChange(newPage) {
     if (newPage < 1 || newPage > totalPages) return;
     const params = new URLSearchParams(searchParams);
     params.set("page", newPage);
     setSearchParams(params);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // 3. Nuevo manejador para el select de ordenamiento
+  function handleSortChange(e) {
+    const params = new URLSearchParams(searchParams);
+    params.set("sort", e.target.value);
+    params.set("page", 1);
+    setSearchParams(params);
   }
 
   async function handleRetry() {
@@ -93,8 +96,9 @@ export default function Home() {
         page: currentPage,
         limit: 6,
         category: currentCategory,
+        sort: currentSort,
       });
-      const postsData = result.data || result.posts || [];
+      const postsData = result.data || [];
       if (!postsData.length) setStatus("empty");
       else {
         setPosts(postsData);
@@ -109,25 +113,46 @@ export default function Home() {
   return (
     <div className="bg-surface text-on-surface min-h-screen">
       <main className="max-w-7xl mx-auto px-4 pb-12">
-        {/* Encabezado + buscador */}
-        <div className="py-8 border-b border-slate-100 mb-6">
-          <h1 className="text-3xl font-extrabold tracking-tight mb-4">
-            Últimas publicaciones
-          </h1>
-          <div className="relative">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
-              search
-            </span>
-            <input
-              type="text"
-              placeholder="Buscar artículos..."
-              className="w-full max-w-md pl-10 pr-4 py-2.5 bg-surface-container-low rounded-full text-sm placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/20"
-            />
+        {/* Encabezado + buscador + ordenamiento */}
+        <div className="py-8 border-b border-slate-100 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-extrabold tracking-tight mb-4 md:mb-0">
+              Últimas publicaciones
+            </h1>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            {/* Buscador */}
+            <div className="relative flex-1 sm:w-64">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
+                search
+              </span>
+              <input
+                type="text"
+                placeholder="Buscar artículos..."
+                className="w-full pl-10 pr-4 py-2.5 bg-surface-container-low rounded-full text-sm placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
+
+            {/* Dropdown de Ordenamiento */}
+            <div className="relative">
+              <select
+                value={currentSort}
+                onChange={handleSortChange}
+                className="w-full sm:w-auto appearance-none pl-4 pr-10 py-2.5 bg-surface-container-low rounded-full text-sm font-medium text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer border border-transparent hover:border-outline-variant transition-colors"
+              >
+                <option value="newest">Más recientes</option>
+                <option value="oldest">Más antiguos</option>
+                <option value="comments">Más comentados</option>
+              </select>
+              <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[20px]">
+                expand_more
+              </span>
+            </div>
           </div>
         </div>
 
         <div className="flex gap-8">
-          {/* Sidebar de categorías — solo desktop */}
           <CategorySidebar
             categories={categories}
             activeCategory={currentCategory}
@@ -135,14 +160,12 @@ export default function Home() {
           />
 
           <div className="flex-1 min-w-0">
-            {/* Chips de categorías — solo mobile */}
             <CategoryChips
               categories={categories}
               activeCategory={currentCategory}
               onSelect={handleCategorySelect}
             />
 
-            {/* Estados de la lista de posts */}
             {status === "loading" && <SkeletonLoader />}
             {status === "error" && <ErrorMessage onRetry={handleRetry} />}
             {status === "empty" && (
@@ -174,7 +197,6 @@ export default function Home() {
               </div>
             )}
 
-            {/* Componente de Paginación */}
             {status === "success" && totalPages > 1 && (
               <Pagination
                 currentPage={currentPage}
