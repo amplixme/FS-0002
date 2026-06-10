@@ -30,19 +30,23 @@ export const createPost = async (
 
 export const getAllPosts = async (
   page = 1,
-  limit = 10,
-  categorySlug,
+  limit = 6,
+  categorySlug = null,
   sort = "newest",
 ) => {
   const skip = (page - 1) * limit;
 
-  const whereClause = {
-    published: true,
-    ...(categorySlug && {
-      categories: { some: { slug: categorySlug } },
-    }),
-  };
+  const whereClause = { published: true };
 
+  if (categorySlug) {
+    whereClause.categories = {
+      some: {
+        slug: categorySlug,
+      },
+    };
+  }
+
+  // Lógica de ordenamiento dinámico
   let orderByClause;
   if (sort === "oldest") {
     orderByClause = { createdAt: "asc" };
@@ -59,7 +63,9 @@ export const getAllPosts = async (
       skip,
       take: limit,
       include: {
-        author: { select: { id: true, name: true, avatarUrl: true } },
+        author: {
+          select: { name: true },
+        },
         categories: true,
         _count: { select: { comments: true } },
       },
@@ -74,13 +80,11 @@ export const getAllPosts = async (
     commentCount: _count.comments,
   }));
 
-  const totalPages = Math.ceil(total / limit);
-
   return {
     data,
     total,
-    page,
-    totalPages,
+    totalPages: Math.ceil(total / limit),
+    currentPage: page,
   };
 };
 export const getPostById = async (id) => {
