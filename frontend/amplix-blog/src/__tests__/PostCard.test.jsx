@@ -15,7 +15,7 @@ const mockPost = {
   author: "Juan Pérez",
   authorId: 42,
   authorAvatar: null,
-  createdAt: "2024-01-01T00:00:00.000Z",
+  createdAt: "2026-01-01T00:00:00.000Z",
   categories: [
     { id: 1, name: "React", slug: "react" },
     { id: 2, name: "Testing", slug: "testing" },
