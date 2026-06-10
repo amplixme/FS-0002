@@ -27,36 +27,37 @@ export default function Home() {
       .catch(() => setCategories([]));
   }, []);
 
+  async function loadPostsData(checkIfCancelled = () => false) {
+    setStatus("loading");
+    try {
+      const result = await getPosts({
+        page: currentPage,
+        limit: 6,
+        category: currentCategory,
+        sort: currentSort,
+      });
+
+      if (checkIfCancelled()) return;
+
+      const postsData = result.data || [];
+
+      if (!postsData.length) {
+        setStatus("empty");
+      } else {
+        setPosts(postsData);
+        setTotalPages(result.totalPages || 1);
+        setStatus("success");
+      }
+    } catch {
+      if (!checkIfCancelled()) setStatus("error");
+    }
+  }
+
   useEffect(() => {
     let cancelled = false;
 
-    async function fetchPosts() {
-      setStatus("loading");
-      try {
-        const result = await getPosts({
-          page: currentPage,
-          limit: 6,
-          category: currentCategory,
-          sort: currentSort,
-        });
+    loadPostsData(() => cancelled);
 
-        if (cancelled) return;
-
-        const postsData = result.data || [];
-
-        if (!postsData.length) {
-          setStatus("empty");
-        } else {
-          setPosts(postsData);
-          setTotalPages(result.totalPages || 1);
-          setStatus("success");
-        }
-      } catch {
-        if (!cancelled) setStatus("error");
-      }
-    }
-
-    fetchPosts();
     return () => {
       cancelled = true;
     };
@@ -81,7 +82,6 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // 3. Nuevo manejador para el select de ordenamiento
   function handleSortChange(e) {
     const params = new URLSearchParams(searchParams);
     params.set("sort", e.target.value);
@@ -90,24 +90,7 @@ export default function Home() {
   }
 
   async function handleRetry() {
-    setStatus("loading");
-    try {
-      const result = await getPosts({
-        page: currentPage,
-        limit: 6,
-        category: currentCategory,
-        sort: currentSort,
-      });
-      const postsData = result.data || [];
-      if (!postsData.length) setStatus("empty");
-      else {
-        setPosts(postsData);
-        setTotalPages(result.totalPages || 1);
-        setStatus("success");
-      }
-    } catch {
-      setStatus("error");
-    }
+    await loadPostsData();
   }
 
   return (
