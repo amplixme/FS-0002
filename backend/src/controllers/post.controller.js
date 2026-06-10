@@ -35,7 +35,11 @@ export const getPosts = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 6;
     const category = req.query.category;
-    const sort = req.query.sort || "newest";
+
+    const VALID_SORTS = ["newest", "oldest", "comments"];
+    const sort = VALID_SORTS.includes(req.query.sort)
+      ? req.query.sort
+      : "newest";
 
     const result = await getAllPosts(page, limit, category, sort);
 
