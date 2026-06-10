@@ -1,23 +1,26 @@
 import api from "./api";
 
-/**
- * Obtiene todos los posts.
- * @returns {Promise<Array>} Array de posts
- */
-export const getPosts = async (page = 1, category = null) => {
+// Obtener posts con paginación, filtros y ordenamiento
+export const getPosts = async ({
+  page = 1,
+  limit = 6,
+  category = "",
+  sort = "newest",
+  search = "",
+} = {}) => {
   try {
-    const url = category
-      ? `/posts?page=${page}&category=${category}`
-      : `/posts?page=${page}`;
-    const response = await api.get(url);
-    return response.data;
+    const response = await api.get("/posts", {
+      params: { page, limit, category, sort, search },
+    });
+
+    return response.data.data || response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.error?.message || "Error al obtener los posts",
+      error.response?.data?.error?.message ||
+        "Error al cargar las publicaciones",
     );
   }
 };
-
 /**
  * Obtiene un post por su ID.
  * @param {string|number} id - ID del post
@@ -59,7 +62,7 @@ export const createPost = async (data) => {
  */
 export const updatePost = async (id, data) => {
   try {
-    const response = await api.put(`/posts/${id}`, data);    
+    const response = await api.put(`/posts/${id}`, data);
     return response.data;
   } catch (error) {
     throw new Error(
