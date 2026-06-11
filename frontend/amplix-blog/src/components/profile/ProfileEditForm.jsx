@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ImageUpload from "../common/imageUpload";
+import ImageUpload from "../common/ImageUpload";
 
 const MAX_BIO = 200;
 

@@ -2,6 +2,8 @@
 // Sigue el design system del wireframe: Inter, colores custom Tailwind, cards con imagen 16/9
 import { Link } from "react-router-dom";
 import { formatRelativeTime } from "../utils/dateFormatter";
+import { LiaCommentSolid } from "react-icons/lia";
+
 
 export default function PostCard({ post, onClick, onCategoryClick }) {
   const {
@@ -15,6 +17,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
     categories = [],
     coverImage,
     readTime,
+    commentCount = 0,
   } = post;
 
   // Trunca el extracto a ~150 chars
@@ -93,7 +96,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
       )}
 
       {/* Autor */}
-      <div className="flex items-center gap-3 mt-auto">
+      <div className="flex items-center justify-between gap-3 mt-auto">
         {authorAvatar ? (
           <img
             src={authorAvatar}
@@ -126,6 +129,13 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
               {formatRelativeTime(createdAt)}
             </span>
           )}
+        </div>
+
+        <div className="flex items-center gap-1 text-slate-400">
+          <span className="material-symbols-outlined text-on-surface text-[14px]">
+            <LiaCommentSolid/>
+          </span>
+          <span className="text-xs font-medium text-on-surface text-[14px]">{commentCount}</span>
         </div>
       </div>
     </article>
