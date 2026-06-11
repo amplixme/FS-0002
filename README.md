@@ -146,6 +146,21 @@ nombre-del-proyecto/
 ---
 
 
+---
+
+## 🌐 Producción
+
+| Entorno | URL |
+|---------|-----|
+| **API Backend** | [https://amplix-blog-api.onrender.com](https://amplix-blog-api.onrender.com) |
+| **Health Check** | [https://amplix-blog-api.onrender.com/api/health](https://amplix-blog-api.onrender.com/api/health) |
+
+> ⚠️ **Free tier de Render**: el primer request tras inactividad puede tardar ~30s (cold start).
+> 
+> **Deploy manual**: para actualizar la API, entrar al dashboard de Render y hacer click en "Deploy Latest Commit".
+
+
+
 
 ## ❓ Problemas comunes
 
