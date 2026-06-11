@@ -1,8 +1,14 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { getByPostId, create } from "../../services/comment.service";
+import {
+  getByPostId,
+  create,
+  update,
+  remove,
+} from "../../services/comment.service";
 import { formatRelativeTime } from "../../utils/dateFormatter";
+import ConfirmModal from "../common/ConfirmModal";
 
 export default function CommentSection({ postId }) {
   const { isAuthenticated, user } = useContext(AuthContext);
@@ -10,6 +16,10 @@ export default function CommentSection({ postId }) {
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [editContent, setEditContent] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const fetchComments = async () => {
     try {
@@ -20,6 +30,37 @@ export default function CommentSection({ postId }) {
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const startEdit = (comment) => {
+    setEditingId(comment.id);
+    setEditContent(comment.content);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditContent("");
+  };
+
+  const handleUpdate = async (id) => {
+    try {
+      await update(id, { content: editContent });
+      cancelEdit();
+      await fetchComments();
+    } catch (err) {
+      console.error("Error al editar", err);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await remove(deleteTarget.id);
+      setShowDeleteModal(false);
+      setDeleteTarget(null);
+      await fetchComments();
+    } catch (err) {
+      console.error("Error al borrar", err);
     }
   };
 
@@ -60,12 +101,61 @@ export default function CommentSection({ postId }) {
               <p className="font-bold text-sm text-on-surface">
                 {c.author.name}
               </p>
-              <p className="text-sm text-on-surface-variant mt-1">
-                {c.content}
-              </p>
-              <p className="text-xs text-outline mt-2">
-                {formatRelativeTime(c.createdAt)}
-              </p>
+
+              {editingId === c.id ? (
+                // Modo edición
+                <div className="mt-2 space-y-2">
+                  <textarea
+                    value={editContent}
+                    onChange={(e) => setEditContent(e.target.value)}
+                    className="w-full p-3 bg-surface-container border border-outline-variant/40 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                    rows={3}
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleUpdate(c.id)}
+                      className="px-4 py-1.5 bg-primary text-white rounded-full text-sm font-bold"
+                    >
+                      Guardar
+                    </button>
+                    <button
+                      onClick={cancelEdit}
+                      className="px-4 py-1.5 bg-surface-container-high text-on-surface rounded-full text-sm font-bold"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                // Modo normal
+                <>
+                  <p className="text-sm text-on-surface-variant mt-1">
+                    {c.content}
+                  </p>
+                  <p className="text-xs text-outline mt-2">
+                    {formatRelativeTime(c.createdAt)}
+                  </p>
+                  {user?.id === c.authorId && (
+                    <div className="flex gap-3 mt-2">
+                      <button
+                        onClick={() => startEdit(c)}
+                        className="text-xs font-bold cursor-pointer text-primary hover:underline"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => {
+                          setDeleteTarget(c);
+                          setShowDeleteModal(true);
+                        }}
+                        className="text-xs font-bold cursor-pointer text-error hover:underline"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           ))
         )}
@@ -83,7 +173,7 @@ export default function CommentSection({ postId }) {
           <button
             type="submit"
             disabled={submitting || !newComment.trim()}
-            className="bg-primary text-white px-6 py-2.5 rounded-full font-bold text-sm disabled:opacity-50"
+            className="bg-primary text-white px-6 py-2.5 cursor-pointer rounded-full font-bold text-sm disabled:opacity-50"
           >
             {submitting ? "Enviando..." : "Comentar"}
           </button>
@@ -99,6 +189,18 @@ export default function CommentSection({ postId }) {
           para comentar
         </p>
       )}
+
+
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        title="Eliminar comentario"
+        message="¿Estás seguro de que querés eliminar este comentario? Esta acción no se puede deshacer."
+        onConfirm={handleDelete}
+        onCancel={() => {
+          setShowDeleteModal(false);
+          setDeleteTarget(null);
+        }}
+      />
     </div>
   );
 }
