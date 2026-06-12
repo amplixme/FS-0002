@@ -121,12 +121,11 @@ export default function Home() {
   return (
     <div className="bg-surface text-on-surface min-h-screen">
       <main className="max-w-7xl mx-auto px-4 pb-12">
+        {/* Header de página */}
         <div className="py-8 border-b border-slate-100 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-extrabold tracking-tight mb-4 md:mb-0">
-              Últimas publicaciones
-            </h1>
-          </div>
+          <h1 className="text-3xl font-extrabold tracking-tight">
+            Últimas publicaciones
+          </h1>
 
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             {/* Buscador */}
@@ -153,7 +152,7 @@ export default function Home() {
               )}
             </div>
 
-            {/* Dropdown de Ordenamiento */}
+            {/* Ordenamiento */}
             <div className="relative">
               <select
                 value={currentSort}
@@ -171,6 +170,7 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Layout principal: sidebar + grid */}
         <div className="flex gap-8">
           <CategorySidebar
             categories={categories}
@@ -192,7 +192,7 @@ export default function Home() {
             )}
 
             {status === "success" && posts.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {posts.map((post) => (
                   <PostCard
                     key={post.id}
@@ -205,7 +205,7 @@ export default function Home() {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
-                        },
+                        }
                       ),
                       excerpt: post.content,
                     }}
