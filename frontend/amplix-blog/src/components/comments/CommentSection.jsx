@@ -9,6 +9,7 @@ import {
 } from "../../services/comment.service";
 import { formatRelativeTime } from "../../utils/dateFormatter";
 import ConfirmModal from "../common/ConfirmModal";
+import { sileo } from "sileo";
 
 export default function CommentSection({ postId }) {
   const { isAuthenticated, user } = useContext(AuthContext);
@@ -48,8 +49,12 @@ export default function CommentSection({ postId }) {
       await update(id, { content: editContent });
       cancelEdit();
       await fetchComments();
+      sileo.success({ title: "Comentario actualizado" });
     } catch (err) {
-      console.error("Error al editar", err);
+      sileo.error({
+        title: "No se pudo actualizar el comentario",
+        description: err.message || "Intentá de nuevo más tarde.",
+      });
     }
   };
 
@@ -59,8 +64,12 @@ export default function CommentSection({ postId }) {
       setShowDeleteModal(false);
       setDeleteTarget(null);
       await fetchComments();
+      sileo.success({ title: "Comentario eliminado" });
     } catch (err) {
-      console.error("Error al borrar", err);
+      sileo.error({
+        title: "No se pudo eliminar el comentario",
+        description: err.message || "Intentá de nuevo más tarde.",
+      });
     }
   };
 
@@ -189,7 +198,6 @@ export default function CommentSection({ postId }) {
           para comentar
         </p>
       )}
-
 
       <ConfirmModal
         isOpen={showDeleteModal}

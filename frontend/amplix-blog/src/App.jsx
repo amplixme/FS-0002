@@ -16,6 +16,8 @@ import EditProfile from "./pages/EditProfile";
 import "./App.css";
 import NotFound from "./pages/NotFound";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { Toaster } from "sileo";
+
 
 function App() {
   return (
@@ -116,6 +118,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </AuthProvider>
+      <Toaster position="top-center" theme="dark" />
     </ErrorBoundary>
   );
 }
