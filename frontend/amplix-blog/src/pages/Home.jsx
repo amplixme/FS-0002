@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import Pagination from "../components/common/Pagination";
@@ -16,13 +16,14 @@ export default function Home() {
   const [totalPages, setTotalPages] = useState(1);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
-  
 
   const currentPage = parseInt(searchParams.get("page")) || 1;
   const currentCategory = searchParams.get("category") || "";
   const currentSort = searchParams.get("sort") || "newest";
   const currentSearch = searchParams.get("search") || "";
+
   const [searchInput, setSearchInput] = useState(currentSearch);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     getCategories()
@@ -31,15 +32,22 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     const timer = setTimeout(() => {
-      const params = new URLSearchParams(searchParams);
-      if (searchInput.trim()) {
-        params.set("search", searchInput.trim());
-      } else {
-        params.delete("search");
-      }
-      params.set("page", 1);
-      setSearchParams(params);
+      setSearchParams((prev) => {
+        const params = new URLSearchParams(prev);
+        if (searchInput.trim()) {
+          params.set("search", searchInput.trim());
+        } else {
+          params.delete("search");
+        }
+        params.set("page", "1");
+        return params;
+      });
     }, 300);
 
     return () => clearTimeout(timer);
@@ -74,9 +82,7 @@ export default function Home() {
 
   useEffect(() => {
     let cancelled = false;
-
     loadPostsData(() => cancelled);
-
     return () => {
       cancelled = true;
     };
@@ -115,7 +121,6 @@ export default function Home() {
   return (
     <div className="bg-surface text-on-surface min-h-screen">
       <main className="max-w-7xl mx-auto px-4 pb-12">
-        {/* Encabezado + buscador + ordenamiento */}
         <div className="py-8 border-b border-slate-100 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight mb-4 md:mb-0">
@@ -141,7 +146,9 @@ export default function Home() {
                   onClick={() => setSearchInput("")}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                 >
-                  <span className="material-symbols-outlined text-[18px]">close</span>
+                  <span className="material-symbols-outlined text-[18px]">
+                    close
+                  </span>
                 </button>
               )}
             </div>
