@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import Pagination from "../components/common/Pagination";
@@ -20,12 +20,38 @@ export default function Home() {
   const currentPage = parseInt(searchParams.get("page")) || 1;
   const currentCategory = searchParams.get("category") || "";
   const currentSort = searchParams.get("sort") || "newest";
+  const currentSearch = searchParams.get("search") || "";
+
+  const [searchInput, setSearchInput] = useState(currentSearch);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     getCategories()
       .then((res) => setCategories(res.data ?? []))
       .catch(() => setCategories([]));
   }, []);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setSearchParams((prev) => {
+        const params = new URLSearchParams(prev);
+        if (searchInput.trim()) {
+          params.set("search", searchInput.trim());
+        } else {
+          params.delete("search");
+        }
+        params.set("page", "1");
+        return params;
+      });
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   async function loadPostsData(checkIfCancelled = () => false) {
     setStatus("loading");
@@ -35,6 +61,7 @@ export default function Home() {
         limit: 6,
         category: currentCategory,
         sort: currentSort,
+        search: currentSearch,
       });
 
       if (checkIfCancelled()) return;
@@ -55,13 +82,11 @@ export default function Home() {
 
   useEffect(() => {
     let cancelled = false;
-
     loadPostsData(() => cancelled);
-
     return () => {
       cancelled = true;
     };
-  }, [currentPage, currentCategory, currentSort]);
+  }, [currentPage, currentCategory, currentSort, currentSearch]);
 
   function handleCategorySelect(slug) {
     const params = new URLSearchParams(searchParams);
@@ -96,7 +121,6 @@ export default function Home() {
   return (
     <div className="bg-surface text-on-surface min-h-screen">
       <main className="max-w-7xl mx-auto px-4 pb-12">
-        {/* Encabezado + buscador + ordenamiento */}
         <div className="py-8 border-b border-slate-100 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight mb-4 md:mb-0">
@@ -113,8 +137,20 @@ export default function Home() {
               <input
                 type="text"
                 placeholder="Buscar artículos..."
-                className="w-full pl-10 pr-4 py-2.5 bg-surface-container-low rounded-full text-sm placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/20"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="w-full pl-10 pr-9 py-2.5 bg-surface-container-low rounded-full text-sm placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
+              {searchInput && (
+                <button
+                  onClick={() => setSearchInput("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  <span className="material-symbols-outlined text-[18px]">
+                    close
+                  </span>
+                </button>
+              )}
             </div>
 
             {/* Dropdown de Ordenamiento */}
