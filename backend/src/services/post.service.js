@@ -33,6 +33,7 @@ export const getAllPosts = async (
   limit = 6,
   categorySlug = null,
   sort = "newest",
+  search = null,
 ) => {
   const skip = (page - 1) * limit;
 
@@ -44,6 +45,13 @@ export const getAllPosts = async (
         slug: categorySlug,
       },
     };
+  }
+
+  if (search) { //Conidiconal de búsqueda
+    whereClause.OR = [
+      { title:   { contains: search, mode: "insensitive" } },
+      { content: { contains: search, mode: "insensitive" } },
+    ];
   }
 
   // Lógica de ordenamiento dinámico
