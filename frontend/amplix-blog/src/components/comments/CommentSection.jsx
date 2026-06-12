@@ -49,11 +49,17 @@ export default function CommentSection({ postId }) {
       await update(id, { content: editContent });
       cancelEdit();
       await fetchComments();
-      sileo.success({ title: "Comentario actualizado" });
+      sileo.success({
+        title: "Comentario actualizado",
+        fill: "#171717",
+        styles: { title: "text-white!" },
+      });
     } catch (err) {
       sileo.error({
         title: "No se pudo actualizar el comentario",
         description: err.message || "Intentá de nuevo más tarde.",
+        fill: "#171717",
+        styles: { title: "text-white!", description: "text-white/75!" },
       });
     }
   };
@@ -64,11 +70,15 @@ export default function CommentSection({ postId }) {
       setShowDeleteModal(false);
       setDeleteTarget(null);
       await fetchComments();
-      sileo.success({ title: "Comentario eliminado" });
+      sileo.success({ title: "Comentario eliminado",
+        fill: "#171717",
+        styles: { title: "text-white!" }, });
     } catch (err) {
       sileo.error({
         title: "No se pudo eliminar el comentario",
         description: err.message || "Intentá de nuevo más tarde.",
+        fill: "#171717",
+        styles: { title: "text-white!", description: "text-white/75!" },
       });
     }
   };
