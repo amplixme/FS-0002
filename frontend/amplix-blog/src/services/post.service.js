@@ -15,10 +15,7 @@ export const getPosts = async ({
 
     return response.data.data || response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message ||
-        "Error al cargar las publicaciones",
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al cargar las publicaciones");
   }
 };
 /**
@@ -31,9 +28,7 @@ export const getPostById = async (id) => {
     const response = await api.get(`/posts/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al obtener el post",
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al obtener el post");
   }
 };
 
@@ -48,9 +43,7 @@ export const createPost = async (data) => {
     return response.data;
   } catch (error) {
     console.log("Error completo:", error.response?.data);
-    throw new Error(
-      error.response?.data?.error?.message || "Error al crear el post",
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al crear el post");
   }
 };
 
@@ -65,9 +58,7 @@ export const updatePost = async (id, data) => {
     const response = await api.put(`/posts/${id}`, data);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al actualizar el post",
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al actualizar el post");
   }
 };
 
@@ -81,9 +72,7 @@ export const deletePost = async (id) => {
     const response = await api.delete(`/posts/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al eliminar el post",
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al eliminar el post");
   }
 };
 
@@ -104,8 +93,6 @@ export const uploadImage = async (file) => {
     });
     return response.data.data.url;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al subir la imagen",
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al subir la imagen");
   }
 };

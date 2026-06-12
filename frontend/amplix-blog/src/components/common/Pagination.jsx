@@ -12,9 +12,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         className="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Página anterior"
       >
-        <span className="material-symbols-outlined text-[20px]">
-          chevron_left
-        </span>
+        <span className="material-symbols-outlined text-[20px]">chevron_left</span>
       </button>
 
       {/* Números de página */}
@@ -41,9 +39,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         className="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Página siguiente"
       >
-        <span className="material-symbols-outlined text-[20px]">
-          chevron_right
-        </span>
+        <span className="material-symbols-outlined text-[20px]">chevron_right</span>
       </button>
     </div>
   );

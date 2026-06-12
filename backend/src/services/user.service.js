@@ -16,7 +16,7 @@ export const getUserPublicProfile = async (id) => {
       name: true,
       bio: true,
       avatarUrl: true,
-      createdAt: true,          // ← necesario para "Miembro desde [fecha]"
+      createdAt: true, // ← necesario para "Miembro desde [fecha]"
       _count: {
         select: {
           posts: { where: { published: true } },

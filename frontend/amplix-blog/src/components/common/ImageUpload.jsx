@@ -108,27 +108,22 @@ export default function ImageUpload({
 
   /* ── Clases según modo ── */
   const dropZoneBase = "relative overflow-hidden border-2 border-dashed transition-all";
-  const dropZoneShape = circlePreview
-    ? "w-24 h-24 rounded-full"
-    : "w-full h-48 rounded-xl";
+  const dropZoneShape = circlePreview ? "w-24 h-24 rounded-full" : "w-full h-48 rounded-xl";
   const dropZoneCursor = preview ? "cursor-default" : "cursor-pointer";
   const dropZoneColors = isDragging
     ? "border-primary bg-primary/5 scale-[1.03]"
     : preview
-    ? "border-transparent"
-    : "border-outline-variant bg-surface-container-low hover:bg-surface-container";
+      ? "border-transparent"
+      : "border-outline-variant bg-surface-container-low hover:bg-surface-container";
 
-  const dropZoneClass = [
-    dropZoneBase,
-    dropZoneShape,
-    dropZoneCursor,
-    dropZoneColors,
-  ].join(" ");
+  const dropZoneClass = [dropZoneBase, dropZoneShape, dropZoneCursor, dropZoneColors].join(" ");
 
   return (
     <div className={`space-y-2 ${circlePreview ? "flex flex-col items-center" : ""}`}>
       {/* Label */}
-      <label className={`block text-sm font-bold text-on-surface ${circlePreview ? "text-center" : ""}`}>
+      <label
+        className={`block text-sm font-bold text-on-surface ${circlePreview ? "text-center" : ""}`}
+      >
         {displayLabel}
         <span className="text-outline font-normal ml-1">(opcional)</span>
       </label>

@@ -5,9 +5,7 @@ export const getStats = async () => {
     const response = await api.get("/admin/stats");
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al obtener estadísticas"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al obtener estadísticas");
   }
 };
 
@@ -16,9 +14,7 @@ export const getUsers = async () => {
     const response = await api.get("/admin/users");
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al obtener usuarios"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al obtener usuarios");
   }
 };
 
@@ -27,9 +23,7 @@ export const createUser = async ({ name, email, password, role }) => {
     const response = await api.post("/admin/users", { name, email, password, role });
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al crear usuario"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al crear usuario");
   }
 };
 
@@ -38,9 +32,7 @@ export const updateUser = async (id, data) => {
     const response = await api.patch(`/admin/users/${id}`, data);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al actualizar usuario"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al actualizar usuario");
   }
 };
 
@@ -49,9 +41,7 @@ export const changeRole = async (id, role) => {
     const response = await api.patch(`/admin/users/${id}/role`, { role });
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al cambiar rol"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al cambiar rol");
   }
 };
 
@@ -60,9 +50,7 @@ export const deleteUser = async (id) => {
     const response = await api.delete(`/admin/users/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al eliminar usuario"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al eliminar usuario");
   }
 };
 
@@ -71,9 +59,7 @@ export const getRecentPosts = async () => {
     const response = await api.get("/admin/posts");
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al obtener posts"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al obtener posts");
   }
 };
 
@@ -82,9 +68,7 @@ export const deletePost = async (id) => {
     const response = await api.delete(`/admin/posts/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al eliminar post"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al eliminar post");
   }
 };
 
@@ -93,9 +77,7 @@ export const getRecentComments = async () => {
     const response = await api.get("/admin/comments");
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al obtener comentarios"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al obtener comentarios");
   }
 };
 
@@ -104,8 +86,6 @@ export const deleteComment = async (id) => {
     const response = await api.delete(`/admin/comments/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al eliminar comentario"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al eliminar comentario");
   }
 };

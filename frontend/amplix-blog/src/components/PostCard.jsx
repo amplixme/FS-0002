@@ -3,7 +3,6 @@
 import { Link } from "react-router-dom";
 import { formatRelativeTime } from "../utils/dateFormatter";
 
-
 export default function PostCard({ post, onClick, onCategoryClick }) {
   const {
     id,
@@ -20,8 +19,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
   } = post;
 
   // Trunca el extracto a ~150 chars
-  const truncatedExcerpt =
-    excerpt && excerpt.length > 150 ? excerpt.slice(0, 150) + "…" : excerpt;
+  const truncatedExcerpt = excerpt && excerpt.length > 150 ? excerpt.slice(0, 150) + "…" : excerpt;
   const visibleCategories = categories.slice(0, 3);
   const extraCategoriesCount = categories.length - 3;
 
@@ -41,9 +39,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
           />
         ) : (
           <div className="w-full h-full bg-surface-container flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-            <span className="material-symbols-outlined text-4xl text-outline">
-              article
-            </span>
+            <span className="material-symbols-outlined text-4xl text-outline">article</span>
           </div>
         )}
       </div>
@@ -89,42 +85,44 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
 
       {/* Extracto */}
       {truncatedExcerpt && (
-        <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">
-          {truncatedExcerpt}
-        </p>
+        <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">{truncatedExcerpt}</p>
       )}
 
       {/* Autor */}
-    <div className="flex items-center justify-between mt-auto">
-  <div className="flex items-center gap-3">
-    {authorAvatar ? (
-      <img src={authorAvatar} alt={author} className="w-8 h-8 rounded-full object-cover" />
-    ) : (
-      <div className="w-8 h-8 bg-surface-container-highest rounded-full flex items-center justify-center">
-        <span className="material-symbols-outlined text-[16px]">person</span>
-      </div>
-    )}
-    <div className="flex flex-col">
-      {authorId ? (
-        <Link to={`/perfil/${authorId}`} onClick={(e) => e.stopPropagation()} className="text-sm text-on-surface font-semibold leading-tight hover:text-primary transition-colors">
-          {author}
-        </Link>
-      ) : (
-        <span className="text-sm text-on-surface font-semibold leading-tight">{author}</span>
-      )}
-      {createdAt && (
-        <span className="text-[11px] font-medium text-slate-500 mt-0.5">
-          {formatRelativeTime(createdAt)}
-        </span>
-      )}
-    </div>
-  </div>
+      <div className="flex items-center justify-between mt-auto">
+        <div className="flex items-center gap-3">
+          {authorAvatar ? (
+            <img src={authorAvatar} alt={author} className="w-8 h-8 rounded-full object-cover" />
+          ) : (
+            <div className="w-8 h-8 bg-surface-container-highest rounded-full flex items-center justify-center">
+              <span className="material-symbols-outlined text-[16px]">person</span>
+            </div>
+          )}
+          <div className="flex flex-col">
+            {authorId ? (
+              <Link
+                to={`/perfil/${authorId}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-sm text-on-surface font-semibold leading-tight hover:text-primary transition-colors"
+              >
+                {author}
+              </Link>
+            ) : (
+              <span className="text-sm text-on-surface font-semibold leading-tight">{author}</span>
+            )}
+            {createdAt && (
+              <span className="text-[11px] font-medium text-slate-500 mt-0.5">
+                {formatRelativeTime(createdAt)}
+              </span>
+            )}
+          </div>
+        </div>
 
-  <div className="flex items-center gap-1 text-slate-400">
-    <span className="material-symbols-outlined text-[16px]">chat</span>
-    <span className="text-xs font-medium">{commentCount}</span>
-  </div>
-</div>
+        <div className="flex items-center gap-1 text-slate-400">
+          <span className="material-symbols-outlined text-[16px]">chat</span>
+          <span className="text-xs font-medium">{commentCount}</span>
+        </div>
+      </div>
     </article>
   );
 }
