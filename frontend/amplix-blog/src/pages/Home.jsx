@@ -39,13 +39,13 @@ export default function Home() {
 
       if (checkIfCancelled()) return;
 
-      const postsData = result.data || [];
+      const postsData = result.data?.data || result.data || [];
 
       if (!postsData.length) {
         setStatus("empty");
       } else {
         setPosts(postsData);
-        setTotalPages(result.totalPages || 1);
+        setTotalPages(result.data?.totalPages || result.totalPages || 1);
         setStatus("success");
       }
     } catch {
