@@ -91,8 +91,7 @@ export default function PostDetail() {
 
             <div className="p-8 sm:p-12">
               <header className="mb-8 border-b border-outline-variant/30 pb-8">
-                <h1 className="text-2xl sm:text-4xl font-extrabold text-on-surface tracking-tight mb-6 leading-tight break-words">
-                  
+                <h1 className="text-4xl font-extrabold text-on-surface tracking-tight mb-6 leading-tight">
                   {post.title}
                 </h1>
 

@@ -9,7 +9,7 @@ export default function ConfirmModal({
   onConfirm,
   onCancel,
   loading = false,
-  error = null,
+  error = null, // ← nueva prop
 }) {
   useEffect(() => {
     if (!isOpen) return;
@@ -45,9 +45,8 @@ export default function ConfirmModal({
         onClick={!loading ? onCancel : undefined}
       />
 
-      {/* p-5 en mobile, p-8 en sm+ */}
-      <div className="relative z-10 bg-surface-container-lowest rounded-2xl ambient-shadow w-full max-w-md p-5 sm:p-8 flex flex-col gap-6">
-        {/* Ícono */}
+      <div className="relative z-10 bg-surface-container-lowest rounded-2xl ambient-shadow w-full max-w-md p-8 flex flex-col gap-6">
+        {/* ── Ícono ── */}
         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-error/10 mx-auto">
           <span className="material-symbols-outlined text-error text-[28px]">warning</span>
         </div>
@@ -57,12 +56,12 @@ export default function ConfirmModal({
           {title}
         </h2>
 
-        {/* Mensaje */}
+        {/* ── Mensaje ── */}
         {message && (
           <p className="text-sm text-on-surface-variant text-center leading-relaxed">{message}</p>
         )}
 
-        {/* Error */}
+        {/* ── Error ── */}
         {error && (
           <div className="flex items-start gap-2 p-3 bg-error/10 border border-error/20 rounded-xl">
             <span className="material-symbols-outlined text-error text-[18px] flex-shrink-0 mt-0.5">
@@ -72,7 +71,7 @@ export default function ConfirmModal({
           </div>
         )}
 
-        {/* Botones */}
+        {/* ── Botones ── */}
         <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
           <button
             onClick={onCancel}
