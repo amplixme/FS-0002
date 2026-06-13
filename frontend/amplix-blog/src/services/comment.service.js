@@ -1,6 +1,6 @@
 import api from "./api";
 
-// Obtener comentarios de un post
+
 export const getByPostId = async (postId) => {
   try {
     const response = await api.get(`/posts/${postId}/comments`);
@@ -10,7 +10,7 @@ export const getByPostId = async (postId) => {
   }
 };
 
-// Crear comentario
+
 export const create = async (postId, content) => {
   try {
     const response = await api.post(`/posts/${postId}/comments`, { content });
@@ -20,7 +20,7 @@ export const create = async (postId, content) => {
   }
 };
 
-// Actualizar comentario (Preparado para el futuro)
+
 export const update = async (id, data) => {
   try {
     const response = await api.put(`/comments/${id}`, data);
@@ -30,7 +30,7 @@ export const update = async (id, data) => {
   }
 };
 
-// Eliminar comentario (Preparado para el futuro)
+
 export const remove = async (id) => {
   try {
     const response = await api.delete(`/comments/${id}`);

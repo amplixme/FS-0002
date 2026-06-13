@@ -8,7 +8,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { Toaster } from "sileo";
 import "./App.css";
 
-// ── Lazy-loaded pages ──────────────────────────────────────────────────────────
+
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -21,7 +21,7 @@ const UserProfile = lazy(() => import("./pages/UserProfile"));
 const Admin = lazy(() => import("./pages/Admin"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-// ── Fallback mientras carga el chunk ─────────────────────────────────────────
+
 function PageLoader() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">

@@ -1,6 +1,6 @@
 import api from "./api";
 
-// Obtener posts con paginación, filtros y ordenamiento
+
 export const getPosts = async ({
   page = 1,
   limit = 6,
@@ -42,7 +42,7 @@ export const createPost = async (data) => {
     const response = await api.post("/posts", data);
     return response.data;
   } catch (error) {
-    console.log("Error completo:", error.response?.data);
+    
     throw new Error(error.response?.data?.error?.message || "Error al crear el post");
   }
 };

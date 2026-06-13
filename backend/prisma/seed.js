@@ -1,4 +1,4 @@
-// Importamos cliente que nos permite comunicarnos con la BD
+
 import { PrismaClient } from "../src/generated/prisma/index.js";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import "dotenv/config";
@@ -9,15 +9,15 @@ const prisma = new PrismaClient({
 }).$extends(withAccelerate());
 
 async function main() {
-  console.log("🌱 Iniciando el proceso de seed optimizado...");
+  
 
-  // 1. Limpiar datos anteriores
+  
   await prisma.comment.deleteMany();
   await prisma.post.deleteMany();
   await prisma.user.deleteMany();
-  console.log("🧹 Base de datos limpiada.");
+  
 
-  // 2. Definición y creación de las 5 categorías
+  
   const categoriesData = [
     { name: "Tecnología", slug: "tecnologia" },
     { name: "Diseño", slug: "diseno" },
@@ -35,13 +35,13 @@ async function main() {
     });
     createdCategories[category.slug] = cat;
   }
-  console.log("🏷️ 5 Categorías listas.");
+  
 
-  // 3. Crear Usuarios (Admin + 3 Miembros del equipo)
+  
   const hashedPassword = await bcrypt.hash("123456", 10);
   const allUsers = [];
 
-  // Creamos al Admin primero
+  
   allUsers.push(
     await prisma.user.create({
       data: {
@@ -53,11 +53,11 @@ async function main() {
     })
   );
 
-  // Creamos a los 3 usuarios requeridos por la Card
+  
   const teamNames = ["Angel Berretta", "Thomas Brets", "Jorge Agustin Aparicio R."];
 
   for (const name of teamNames) {
-    // Normalizamos el primer nombre para usarlo en el email (minúsculas, sin acentos)
+    
     const emailPrefix = name
       .split(" ")[0]
       .toLowerCase()
@@ -71,9 +71,9 @@ async function main() {
       })
     );
   }
-  console.log("👥 4 Usuarios creados dinámicamente (1 ADMIN, 3 USER).");
+  
 
-  // 4. Crear 15 Posts dinámicos con imágenes de Picsum
+  
   const postsData = [
     {
       title: "Arquitectura MERN para proyectos escalables",
@@ -107,7 +107,7 @@ async function main() {
   const createdPosts = [];
   for (let i = 0; i < postsData.length; i++) {
     const data = postsData[i];
-    const author = allUsers[i % allUsers.length]; // Rota los autores del arreglo
+    const author = allUsers[i % allUsers.length]; 
 
     const post = await prisma.post.create({
       data: {
@@ -121,9 +121,8 @@ async function main() {
     });
     createdPosts.push(post);
   }
-  console.log("📝 15 Posts creados con imágenes dinámicas.");
-
-  // 5. Crear 30 Comentarios (2 por post)
+  
+  
   const commentTexts = [
     "¡Excelente artículo! Me sirvió muchísimo.",
     "Tenía esta duda hace semanas, gracias por aclararlo.",
@@ -144,11 +143,9 @@ async function main() {
       commentCount++;
     }
   }
-  console.log(`💬 ${commentCount} Comentarios creados.`);
+  
 
-  console.log(
-    "✅ Seed completado con éxito. ¡Cumple el 100% de los criterios y las indicaciones del SM!"
-  );
+  
 }
 
 main()

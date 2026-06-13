@@ -7,28 +7,28 @@ import PostForm from "../components/common/PostForm.jsx";
 export default function CreatePost() {
   const navigate = useNavigate();
 
-  // Estados del formulario
-  const [coverImage, setCoverImage] = useState(null); // URL de Cloudinary
+  
+  const [coverImage, setCoverImage] = useState(null); 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [published, setPublished] = useState(false);
 
-  // Estados para Categorías
+  
   const [availableCategories, setAvailableCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  // Estados de la petición
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Obtener categorías al cargar la página
+  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const res = await getAll();
         setAvailableCategories(res.data ?? []);
       } catch (err) {
-        console.error("Error al cargar categorías", err);
+        
       }
     };
     fetchCategories();

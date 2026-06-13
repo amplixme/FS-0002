@@ -15,7 +15,7 @@ export default function ProfileEditForm({ profile, onSave, onCancel, saving }) {
     e.preventDefault();
     setError("");
     try {
-      // Convertir strings vacíos a null para que pasen la validación Zod del backend
+      
       await onSave({
         name: form.name,
         bio: form.bio.trim() || null,

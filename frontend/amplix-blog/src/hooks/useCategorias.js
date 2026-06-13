@@ -23,7 +23,7 @@ export function useCategorias() {
 
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState(null); // ← nuevo
+  const [deleteError, setDeleteError] = useState(null); 
 
   const [toast, setToast] = useState(null);
 
@@ -96,21 +96,21 @@ export function useCategorias() {
   async function confirmDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-    setDeleteError(null); // ← limpia error previo antes de reintentar
+    setDeleteError(null); 
     try {
       await deleteCategory(deleteTarget.id);
       setCategories((prev) => prev.filter((c) => c.id !== deleteTarget.id));
       setDeleteTarget(null);
       setToast({ message: "Categoría eliminada correctamente.", type: "success" });
     } catch (err) {
-      setDeleteError(err.message); // ← muestra el error dentro del modal
+      setDeleteError(err.message); 
     } finally {
       setDeleting(false);
     }
   }
 
   function openDeleteModal(cat) {
-    setDeleteError(null); // ← limpia error al abrir un modal nuevo
+    setDeleteError(null); 
     setDeleteTarget(cat);
   }
 
@@ -136,7 +136,7 @@ export function useCategorias() {
     handleUpdate,
     deleteTarget,
     deleting,
-    deleteError, // ← exporta deleteError
+    deleteError, 
     openDeleteModal,
     cancelDelete: () => setDeleteTarget(null),
     confirmDelete,

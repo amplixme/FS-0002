@@ -13,7 +13,7 @@ const EditPost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [published, setPublished] = useState(false);
-  const [coverImage, setCoverImage] = useState(null); // URL de Cloudinary
+  const [coverImage, setCoverImage] = useState(null); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fetching, setFetching] = useState(true);

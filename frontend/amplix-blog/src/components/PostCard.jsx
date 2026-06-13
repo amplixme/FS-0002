@@ -1,4 +1,3 @@
-// PostCard.jsx
 import { Link } from "react-router-dom";
 import { formatRelativeTime } from "../utils/dateFormatter";
 
@@ -17,7 +16,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
     commentCount = 0,
   } = post;
 
-  // Trunca el extracto a ~150 chars
+  
   const truncatedExcerpt = excerpt && excerpt.length > 150 ? excerpt.slice(0, 150) + "…" : excerpt;
   const visibleCategories = categories.slice(0, 3);
   const extraCategoriesCount = categories.length - 3;

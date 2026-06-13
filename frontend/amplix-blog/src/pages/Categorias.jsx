@@ -27,7 +27,7 @@ export default function Categorias() {
     handleUpdate,
     deleteTarget,
     deleting,
-    deleteError, // ← nuevo
+    deleteError, 
     openDeleteModal,
     cancelDelete,
     confirmDelete,
@@ -77,7 +77,7 @@ export default function Categorias() {
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
         loading={deleting}
-        error={deleteError} // ← nuevo
+        error={deleteError} 
       />
 
       {toast && <Toast message={toast.message} type={toast.type} onClose={clearToast} />}

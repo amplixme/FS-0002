@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import PostCard from "../components/PostCard";
 
-// Mockeamos formatRelativeTime para que no dependa del tiempo actual
+
 vi.mock("../utils/dateFormatter", () => ({
   formatRelativeTime: () => "hace 2 días",
 }));
@@ -48,11 +48,11 @@ describe("PostCard", () => {
   });
 
   it("trunca el extracto cuando supera los 150 caracteres", () => {
-    const longExcerpt = "Texto largo ".repeat(20); // ~240 caracteres
+    const longExcerpt = "Texto largo ".repeat(20); 
     renderPostCard({ excerpt: longExcerpt });
 
     const excerptEl = screen.getByText(/Texto largo.*…$/);
-    expect(excerptEl.textContent.length).toBe(151); // 150 chars + "…"
+    expect(excerptEl.textContent.length).toBe(151); 
   });
 
   it("renderiza los badges de categorías del post", () => {

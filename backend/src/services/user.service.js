@@ -16,7 +16,7 @@ export const getUserPublicProfile = async (id) => {
       name: true,
       bio: true,
       avatarUrl: true,
-      createdAt: true, // ← necesario para "Miembro desde [fecha]"
+      createdAt: true, 
       _count: {
         select: {
           posts: { where: { published: true } },
@@ -27,7 +27,7 @@ export const getUserPublicProfile = async (id) => {
 
   if (!user) return null;
 
-  // Aplanar _count para una respuesta más limpia
+  
   const { _count, ...rest } = user;
   return { ...rest, postCount: _count.posts };
 };

@@ -16,7 +16,7 @@ const errorHandler = (err, req, res, next) => {
       },
     });
   }
-  // Errores de validación de Prisma
+  
   if (err.code === "P2002") {
     return res.status(409).json({
       error: {
@@ -35,7 +35,7 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Error genérico
+  
   const status = err.status || err.statusCode || 500;
   const message = err.message || "Error interno del servidor";
 

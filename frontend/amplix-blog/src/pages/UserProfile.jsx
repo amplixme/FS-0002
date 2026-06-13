@@ -55,10 +55,10 @@ export default function UserProfile() {
       const res = await updateProfile(formData);
       const updated = res.data ?? res;
 
-      // Actualizar el perfil local de la página
+      
       setProfile((prev) => ({ ...prev, ...updated }));
 
-      // Actualizar AuthContext (estado global + localStorage) si es el propio perfil
+      
       if (isOwnProfile) {
         updateUser(updated);
       }
@@ -75,7 +75,7 @@ export default function UserProfile() {
     }
   };
 
-  // ── Loading ──
+  
   if (loading) {
     return (
       <div className="min-h-screen bg-background py-10 px-4 sm:px-6 lg:px-8">
@@ -101,7 +101,7 @@ export default function UserProfile() {
     );
   }
 
-  // ── Error ──
+  
   if (error || !profile) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
@@ -114,7 +114,7 @@ export default function UserProfile() {
     );
   }
 
-  // ── Main ──
+  
   return (
     <>
       <div className="min-h-screen bg-background py-10 px-4 sm:px-6 lg:px-8">

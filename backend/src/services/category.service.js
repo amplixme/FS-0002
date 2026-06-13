@@ -6,7 +6,7 @@ export const getAllCategories = async () => {
     orderBy: { name: "asc" },
     include: {
       _count: {
-        select: { posts: true }, // ← agrega { _count: { posts: N } } a cada categoría
+        select: { posts: true }, 
       },
     },
   });

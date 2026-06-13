@@ -1,6 +1,6 @@
 import { generateSlug } from "../../utils/slugify";
 
-// Clase compartida — se puede mover también a utils/styles.js si se reutiliza más
+
 export const INPUT_CLS =
   "px-4 py-2.5 bg-surface-container-low border-transparent rounded-xl text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all";
 

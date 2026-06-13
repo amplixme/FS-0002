@@ -12,7 +12,7 @@ export function useAdminData(showToast) {
   const [loadingPosts, setLoadingPosts] = useState(true);
   const [loadingComments, setLoadingComments] = useState(true);
 
-  // ✅ Guardar showToast en una ref para no usarla como dependencia
+  
   const showToastRef = useRef(showToast);
   useEffect(() => {
     showToastRef.current = showToast;
@@ -28,7 +28,7 @@ export function useAdminData(showToast) {
     } finally {
       setLoadingStats(false);
     }
-  }, []); // ✅ sin dependencias
+  }, []); 
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -40,7 +40,7 @@ export function useAdminData(showToast) {
     } finally {
       setLoadingUsers(false);
     }
-  }, []); // ✅ sin dependencias
+  }, []); 
 
   const fetchPosts = useCallback(async () => {
     try {
@@ -52,7 +52,7 @@ export function useAdminData(showToast) {
     } finally {
       setLoadingPosts(false);
     }
-  }, []); // ✅ sin dependencias
+  }, []); 
 
   const fetchComments = useCallback(async () => {
     try {
@@ -64,7 +64,7 @@ export function useAdminData(showToast) {
     } finally {
       setLoadingComments(false);
     }
-  }, []); // ✅ sin dependencias
+  }, []); 
 
   const refetchAll = useCallback(() => {
     fetchStats();
@@ -75,7 +75,7 @@ export function useAdminData(showToast) {
 
   useEffect(() => {
     refetchAll();
-  }, [refetchAll]); // ✅ solo corre una vez porque refetchAll es estable
+  }, [refetchAll]); 
 
   return {
     stats,
