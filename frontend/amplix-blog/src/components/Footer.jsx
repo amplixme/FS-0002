@@ -27,12 +27,17 @@ const Footer = () => {
           </a>
         </div>
 
-        {/* Íconos */}
         <div className="flex items-center gap-2">
-          <button className="w-8 h-8 rounded-full border border-gray-300 bg-gray-200 flex items-center justify-center text-gray-900 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition">
+          <button
+            className="w-8 h-8 rounded-full border border-gray-300 bg-gray-200 flex items-center justify-center text-gray-900 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition"
+            aria-label="Visitar nuestro sitio web"
+          >
             <TbWorld size={16} />
           </button>
-          <button className="w-8 h-8 rounded-full border border-gray-300 bg-gray-200 flex items-center justify-center text-gray-900 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition">
+          <button
+            className="w-8 h-8 rounded-full border border-gray-300 bg-gray-200 flex items-center justify-center text-gray-900 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition"
+            aria-label="Compartir en redes sociales"
+          >
             <IoShareSocialOutline size={16} />
           </button>
         </div>

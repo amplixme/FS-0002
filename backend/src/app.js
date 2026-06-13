@@ -3,6 +3,8 @@ import express from "express";
 import cors from "cors";
 import prisma from "./config/prisma.js";
 import router from "./routes/index.js";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger.js";
 
 import errorHandler from "./middlewares/error.middleware.js";
 
@@ -35,6 +37,10 @@ prisma
 // routes
 app.use("/api", router);
 
+// Swagger docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// ruta de prueba
 app.get("/", (req, res) => {
   res.send("API funcionando 🚀");
 });
