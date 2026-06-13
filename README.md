@@ -157,6 +157,7 @@ nombre-del-proyecto/
 |---------|-----|
 | **API Backend** | [https://amplix-blog-api.onrender.com](https://amplix-blog-api.onrender.com) |
 | **Health Check** | [https://amplix-blog-api.onrender.com/api/health](https://amplix-blog-api.onrender.com/api/health) |
+| **API Docs (Swagger)** | [https://amplix-blog-api.onrender.com/api-docs](https://amplix-blog-api.onrender.com/api-docs) |
 
 > ⚠️ **Free tier de Render**: el primer request tras inactividad puede tardar ~30s (cold start).
 > 
