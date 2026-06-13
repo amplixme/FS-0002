@@ -3,7 +3,6 @@
 import { Link } from "react-router-dom";
 import { formatRelativeTime } from "../utils/dateFormatter";
 
-
 export default function PostCard({ post, onClick, onCategoryClick }) {
   const {
     id,
@@ -83,9 +82,9 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
       </div>
 
       {/* Título */}
-      <h3 className="text-2xl font-bold leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors">
+      <h2 className="text-2xl font-bold leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors">
         {title}
-      </h3>
+      </h2>
 
       {/* Extracto */}
       {truncatedExcerpt && (
@@ -95,36 +94,48 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
       )}
 
       {/* Autor */}
-    <div className="flex items-center justify-between mt-auto">
-  <div className="flex items-center gap-3">
-    {authorAvatar ? (
-      <img src={authorAvatar} alt={author} className="w-8 h-8 rounded-full object-cover" />
-    ) : (
-      <div className="w-8 h-8 bg-surface-container-highest rounded-full flex items-center justify-center">
-        <span className="material-symbols-outlined text-[16px]">person</span>
-      </div>
-    )}
-    <div className="flex flex-col">
-      {authorId ? (
-        <Link to={`/perfil/${authorId}`} onClick={(e) => e.stopPropagation()} className="text-sm text-on-surface font-semibold leading-tight hover:text-primary transition-colors">
-          {author}
-        </Link>
-      ) : (
-        <span className="text-sm text-on-surface font-semibold leading-tight">{author}</span>
-      )}
-      {createdAt && (
-        <span className="text-[11px] font-medium text-slate-500 mt-0.5">
-          {formatRelativeTime(createdAt)}
-        </span>
-      )}
-    </div>
-  </div>
+      <div className="flex items-center justify-between mt-auto">
+        <div className="flex items-center gap-3">
+          {authorAvatar ? (
+            <img
+              src={authorAvatar}
+              alt={author}
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-8 h-8 bg-surface-container-highest rounded-full flex items-center justify-center">
+              <span className="material-symbols-outlined text-[16px]">
+                person
+              </span>
+            </div>
+          )}
+          <div className="flex flex-col">
+            {authorId ? (
+              <Link
+                to={`/perfil/${authorId}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-sm text-on-surface font-semibold leading-tight hover:text-primary transition-colors"
+              >
+                {author}
+              </Link>
+            ) : (
+              <span className="text-sm text-on-surface font-semibold leading-tight">
+                {author}
+              </span>
+            )}
+            {createdAt && (
+              <span className="text-[11px] font-medium text-slate-500 mt-0.5">
+                {formatRelativeTime(createdAt)}
+              </span>
+            )}
+          </div>
+        </div>
 
-  <div className="flex items-center gap-1 text-slate-400">
-    <span className="material-symbols-outlined text-[16px]">chat</span>
-    <span className="text-xs font-medium">{commentCount}</span>
-  </div>
-</div>
+        <div className="flex items-center gap-1 text-slate-400">
+          <span className="material-symbols-outlined text-[16px]">chat</span>
+          <span className="text-xs font-medium">{commentCount}</span>
+        </div>
+      </div>
     </article>
   );
 }

@@ -145,6 +145,7 @@ export default function Home() {
                 <button
                   onClick={() => setSearchInput("")}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  aria-label="Limpiar búsqueda"
                 >
                   <span className="material-symbols-outlined text-[18px]">
                     close
@@ -158,6 +159,7 @@ export default function Home() {
               <select
                 value={currentSort}
                 onChange={handleSortChange}
+                aria-label="Ordenar publicaciones"
                 className="w-full sm:w-auto appearance-none pl-4 pr-10 py-2.5 bg-surface-container-low rounded-full text-sm font-medium text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer border border-transparent hover:border-outline-variant transition-colors"
               >
                 <option value="newest">Más recientes</option>
