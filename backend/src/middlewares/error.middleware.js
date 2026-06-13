@@ -1,6 +1,5 @@
 const errorHandler = (err, req, res, next) => {
-  
-   if (err.code === "LIMIT_FILE_SIZE") {
+  if (err.code === "LIMIT_FILE_SIZE") {
     return res.status(400).json({
       error: {
         message: "El archivo supera el tamaño máximo de 5MB",
@@ -39,7 +38,6 @@ const errorHandler = (err, req, res, next) => {
   // Error genérico
   const status = err.status || err.statusCode || 500;
   const message = err.message || "Error interno del servidor";
-  
 
   return res.status(status).json({
     error: {

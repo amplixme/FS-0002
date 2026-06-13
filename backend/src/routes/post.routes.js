@@ -18,13 +18,7 @@ import {
 
 const router = Router();
 
-router.post(
-  "/",
-  authMiddleware,
-  upload.single("image"),
-  validateBody(createPostSchema),
-  create,
-);
+router.post("/", authMiddleware, upload.single("image"), validateBody(createPostSchema), create);
 router.put("/:id", authMiddleware, upload.single("image"), updatePost);
 router.delete("/:id", authMiddleware, deletePost);
 
@@ -38,7 +32,7 @@ router.post(
   "/:postId/comments",
   authMiddleware,
   validateBody(createCommentSchema),
-  createCommentController,
+  createCommentController
 );
 
 export default router;

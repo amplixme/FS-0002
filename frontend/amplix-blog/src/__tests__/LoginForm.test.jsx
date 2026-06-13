@@ -16,9 +16,7 @@ const mockAuthLogin = vi.fn();
 const renderLogin = () =>
   render(
     <MemoryRouter>
-      <AuthContext.Provider
-        value={{ login: mockAuthLogin, user: null, token: null }}
-      >
+      <AuthContext.Provider value={{ login: mockAuthLogin, user: null, token: null }}>
         <Login />
       </AuthContext.Provider>
     </MemoryRouter>
@@ -41,9 +39,7 @@ describe("LoginForm", () => {
 
   it("renderiza el botón de submit", () => {
     renderLogin();
-    expect(
-      screen.getByRole("button", { name: /iniciar sesión/i })
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /iniciar sesión/i })).toBeInTheDocument();
   });
 
   it("muestra un mensaje de error cuando el login falla", async () => {
