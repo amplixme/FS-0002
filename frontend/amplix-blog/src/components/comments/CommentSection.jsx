@@ -1,12 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import {
-  getByPostId,
-  create,
-  update,
-  remove,
-} from "../../services/comment.service";
+import { getByPostId, create, update, remove } from "../../services/comment.service";
 import { formatRelativeTime } from "../../utils/dateFormatter";
 import ConfirmModal from "../common/ConfirmModal";
 import { sileo } from "sileo";
@@ -70,9 +65,11 @@ export default function CommentSection({ postId }) {
       setShowDeleteModal(false);
       setDeleteTarget(null);
       await fetchComments();
-      sileo.success({ title: "Comentario eliminado",
+      sileo.success({
+        title: "Comentario eliminado",
         fill: "#171717",
-        styles: { title: "text-white!" }, });
+        styles: { title: "text-white!" },
+      });
     } catch (err) {
       sileo.error({
         title: "No se pudo eliminar el comentario",
@@ -117,9 +114,7 @@ export default function CommentSection({ postId }) {
         ) : (
           comments.map((c) => (
             <div key={c.id} className="p-4 bg-surface-container-low rounded-xl">
-              <p className="font-bold text-sm text-on-surface">
-                {c.author.name}
-              </p>
+              <p className="font-bold text-sm text-on-surface">{c.author.name}</p>
 
               {editingId === c.id ? (
                 // Modo edición
@@ -148,12 +143,8 @@ export default function CommentSection({ postId }) {
               ) : (
                 // Modo normal
                 <>
-                  <p className="text-sm text-on-surface-variant mt-1">
-                    {c.content}
-                  </p>
-                  <p className="text-xs text-outline mt-2">
-                    {formatRelativeTime(c.createdAt)}
-                  </p>
+                  <p className="text-sm text-on-surface-variant mt-1">{c.content}</p>
+                  <p className="text-xs text-outline mt-2">{formatRelativeTime(c.createdAt)}</p>
                   {user?.id === c.authorId && (
                     <div className="flex gap-3 mt-2">
                       <button
@@ -199,10 +190,7 @@ export default function CommentSection({ postId }) {
         </form>
       ) : (
         <p className="text-sm font-medium text-outline">
-          <Link
-            to="/login"
-            className="text-primary hover:underline font-medium"
-          >
+          <Link to="/login" className="text-primary hover:underline font-medium">
             Inicia sesión
           </Link>{" "}
           para comentar

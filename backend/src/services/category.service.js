@@ -6,7 +6,7 @@ export const getAllCategories = async () => {
     orderBy: { name: "asc" },
     include: {
       _count: {
-        select: { posts: true },  // ← agrega { _count: { posts: N } } a cada categoría
+        select: { posts: true }, // ← agrega { _count: { posts: N } } a cada categoría
       },
     },
   });
@@ -40,10 +40,7 @@ export const deleteCategory = async (id) => {
   if (!existing) throw new CustomError("Categoría no encontrada", 404);
 
   if (existing.posts.length > 0) {
-    throw new CustomError(
-      "No se puede eliminar una categoría con posts asociados",
-      409
-    );
+    throw new CustomError("No se puede eliminar una categoría con posts asociados", 409);
   }
 
   await prisma.category.delete({ where: { id } });

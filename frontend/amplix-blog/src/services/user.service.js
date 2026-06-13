@@ -10,9 +10,7 @@ export const getProfile = async (id) => {
     const response = await api.get(`/users/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al obtener el perfil",
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al obtener el perfil");
   }
 };
 
@@ -27,8 +25,7 @@ export const getUserPosts = async (id) => {
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.error?.message ||
-        "Error al obtener los posts del usuario",
+      error.response?.data?.error?.message || "Error al obtener los posts del usuario"
     );
   }
 };
@@ -43,8 +40,6 @@ export const updateProfile = async (data) => {
     const response = await api.put("/users/me", data);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al actualizar el perfil",
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al actualizar el perfil");
   }
 };

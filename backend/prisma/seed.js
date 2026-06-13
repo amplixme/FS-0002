@@ -50,15 +50,11 @@ async function main() {
         password: hashedPassword,
         role: "ADMIN",
       },
-    }),
+    })
   );
 
   // Creamos a los 3 usuarios requeridos por la Card
-  const teamNames = [
-    "Angel Berretta",
-    "Thomas Brets",
-    "Jorge Agustin Aparicio R.",
-  ];
+  const teamNames = ["Angel Berretta", "Thomas Brets", "Jorge Agustin Aparicio R."];
 
   for (const name of teamNames) {
     // Normalizamos el primer nombre para usarlo en el email (minúsculas, sin acentos)
@@ -72,7 +68,7 @@ async function main() {
     allUsers.push(
       await prisma.user.create({
         data: { name, email, password: hashedPassword, role: "USER" },
-      }),
+      })
     );
   }
   console.log("👥 4 Usuarios creados dinámicamente (1 ADMIN, 3 USER).");
@@ -140,8 +136,7 @@ async function main() {
   for (const post of createdPosts) {
     for (let j = 0; j < 2; j++) {
       const randomUser = allUsers[Math.floor(Math.random() * allUsers.length)];
-      const randomText =
-        commentTexts[Math.floor(Math.random() * commentTexts.length)];
+      const randomText = commentTexts[Math.floor(Math.random() * commentTexts.length)];
 
       await prisma.comment.create({
         data: { content: randomText, authorId: randomUser.id, postId: post.id },
@@ -152,7 +147,7 @@ async function main() {
   console.log(`💬 ${commentCount} Comentarios creados.`);
 
   console.log(
-    "✅ Seed completado con éxito. ¡Cumple el 100% de los criterios y las indicaciones del SM!",
+    "✅ Seed completado con éxito. ¡Cumple el 100% de los criterios y las indicaciones del SM!"
   );
 }
 

@@ -4,9 +4,7 @@ export default function StatCard({ icon, label, value, sub, subGreen = false, lo
       <div className="flex items-center justify-between mb-3">
         <p className="text-sm font-medium text-on-surface-variant">{label}</p>
         <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
-          <span className="material-symbols-outlined text-primary text-[20px]">
-            {icon}
-          </span>
+          <span className="material-symbols-outlined text-primary text-[20px]">{icon}</span>
         </div>
       </div>
 
@@ -27,9 +25,7 @@ export default function StatCard({ icon, label, value, sub, subGreen = false, lo
               }`}
             >
               {subGreen && (
-                <span className="material-symbols-outlined text-[14px]">
-                  check_circle
-                </span>
+                <span className="material-symbols-outlined text-[14px]">check_circle</span>
               )}
               {sub}
             </p>

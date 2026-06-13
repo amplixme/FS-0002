@@ -34,7 +34,6 @@ export default function EditProfile() {
     <>
       <div className="min-h-screen bg-background py-10 px-4 sm:px-6 lg:px-8">
         <main className="max-w-xl mx-auto">
-
           {/* Encabezado de página */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-on-surface">Editar Perfil</h1>
@@ -75,19 +74,18 @@ export default function EditProfile() {
               <p style={{ fontSize: "14px", fontWeight: 700, color: "#0369a1", margin: 0 }}>
                 Privacidad del Perfil
               </p>
-              <p style={{ fontSize: "14px", color: "#475569", marginTop: "4px", lineHeight: "1.5" }}>
-                Tu nombre y biografía serán visibles para otros usuarios. No compartas
-                información sensible como direcciones o contraseñas en tu biografía.
+              <p
+                style={{ fontSize: "14px", color: "#475569", marginTop: "4px", lineHeight: "1.5" }}
+              >
+                Tu nombre y biografía serán visibles para otros usuarios. No compartas información
+                sensible como direcciones o contraseñas en tu biografía.
               </p>
             </div>
           </div>
-
         </main>
       </div>
 
-      {toast && (
-        <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
-      )}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </>
   );
 }

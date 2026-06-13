@@ -9,9 +9,7 @@ export const getAll = async () => {
     const response = await api.get("/categories");
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al obtener las categorías"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al obtener las categorías");
   }
 };
 
@@ -25,9 +23,7 @@ export const createCategory = async (data) => {
     const response = await api.post("/categories", data);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al crear la categoría"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al crear la categoría");
   }
 };
 
@@ -42,9 +38,7 @@ export const updateCategory = async (id, data) => {
     const response = await api.put(`/categories/${id}`, data);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al actualizar la categoría"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al actualizar la categoría");
   }
 };
 
@@ -59,8 +53,6 @@ export const deleteCategory = async (id) => {
     const response = await api.delete(`/categories/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al eliminar la categoría"
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al eliminar la categoría");
   }
 };

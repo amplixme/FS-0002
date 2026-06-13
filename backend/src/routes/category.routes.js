@@ -1,12 +1,7 @@
 import { Router } from "express";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { requireRole } from "../middlewares/role.middleware.js";
-import {
-  getCategories,
-  create,
-  update,
-  remove,
-} from "../controllers/category.controller.js";
+import { getCategories, create, update, remove } from "../controllers/category.controller.js";
 
 const router = Router();
 

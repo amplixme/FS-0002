@@ -6,13 +6,33 @@ import { useCategorias } from "../hooks/useCategorias";
 
 export default function Categorias() {
   const {
-    categories, loadingList, listError,
-    newName, setNewName, newSlug, setNewSlug, creating, createError, handleCreate,
-    editingId, editName, setEditName, editSlug, setEditSlug, updating,
-    startEdit, cancelEdit, handleUpdate,
-    deleteTarget, deleting, deleteError,  // ← nuevo
-    openDeleteModal, cancelDelete, confirmDelete,
-    toast, clearToast,
+    categories,
+    loadingList,
+    listError,
+    newName,
+    setNewName,
+    newSlug,
+    setNewSlug,
+    creating,
+    createError,
+    handleCreate,
+    editingId,
+    editName,
+    setEditName,
+    editSlug,
+    setEditSlug,
+    updating,
+    startEdit,
+    cancelEdit,
+    handleUpdate,
+    deleteTarget,
+    deleting,
+    deleteError, // ← nuevo
+    openDeleteModal,
+    cancelDelete,
+    confirmDelete,
+    toast,
+    clearToast,
   } = useCategorias();
 
   return (
@@ -57,12 +77,10 @@ export default function Categorias() {
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
         loading={deleting}
-        error={deleteError}  // ← nuevo
+        error={deleteError} // ← nuevo
       />
 
-      {toast && (
-        <Toast message={toast.message} type={toast.type} onClose={clearToast} />
-      )}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={clearToast} />}
     </>
   );
 }

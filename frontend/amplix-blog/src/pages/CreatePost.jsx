@@ -36,9 +36,7 @@ export default function CreatePost() {
 
   const toggleCategory = (catId) => {
     setSelectedCategories((prev) =>
-      prev.includes(catId)
-        ? prev.filter((id) => id !== catId)
-        : [...prev, catId]
+      prev.includes(catId) ? prev.filter((id) => id !== catId) : [...prev, catId]
     );
   };
 
