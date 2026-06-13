@@ -1,5 +1,4 @@
 // PostCard.jsx
-// Sigue el design system del wireframe: Inter, colores custom Tailwind, cards con imagen 16/9
 import { Link } from "react-router-dom";
 import { formatRelativeTime } from "../utils/dateFormatter";
 
@@ -19,8 +18,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
   } = post;
 
   // Trunca el extracto a ~150 chars
-  const truncatedExcerpt =
-    excerpt && excerpt.length > 150 ? excerpt.slice(0, 150) + "…" : excerpt;
+  const truncatedExcerpt = excerpt && excerpt.length > 150 ? excerpt.slice(0, 150) + "…" : excerpt;
   const visibleCategories = categories.slice(0, 3);
   const extraCategoriesCount = categories.length - 3;
 
@@ -40,16 +38,13 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
           />
         ) : (
           <div className="w-full h-full bg-surface-container flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-            <span className="material-symbols-outlined text-4xl text-outline">
-              article
-            </span>
+            <span className="material-symbols-outlined text-4xl text-outline">article</span>
           </div>
         )}
       </div>
 
-      {/* Meta: Categorías (Badges) + tiempo de lectura */}
+      {/* Meta: Categorías + tiempo de lectura */}
       <div className="flex items-center flex-wrap gap-2 mb-4">
-        {/* Mapeamos solo las primeras 3 categorías */}
         {visibleCategories.map((cat) => (
           <button
             key={cat.id || cat.slug}
@@ -63,14 +58,12 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
           </button>
         ))}
 
-        {/* Si hay más de 3, mostramos el contador extra */}
         {extraCategoriesCount > 0 && (
           <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest rounded-md bg-surface-container-high text-on-surface-variant">
             +{extraCategoriesCount}
           </span>
         )}
 
-        {/* Tiempo de lectura (alineado a la derecha si hay espacio) */}
         {readTime && (
           <div className="flex items-center gap-2 ml-auto">
             <span className="w-1 h-1 bg-slate-300 rounded-full" />
@@ -88,9 +81,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
 
       {/* Extracto */}
       {truncatedExcerpt && (
-        <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">
-          {truncatedExcerpt}
-        </p>
+        <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">{truncatedExcerpt}</p>
       )}
 
       {/* Autor */}
@@ -100,26 +91,24 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
             <img
               src={authorAvatar}
               alt={author}
-              className="w-8 h-8 rounded-full object-cover"
+              className="w-8 h-8 rounded-full object-cover flex-shrink-0"
             />
           ) : (
-            <div className="w-8 h-8 bg-surface-container-highest rounded-full flex items-center justify-center">
-              <span className="material-symbols-outlined text-[16px]">
-                person
-              </span>
+            <div className="w-8 h-8 bg-surface-container-highest rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="material-symbols-outlined text-[16px]">person</span>
             </div>
           )}
-          <div className="flex flex-col">
+          <div className="flex flex-col min-w-0">
             {authorId ? (
               <Link
                 to={`/perfil/${authorId}`}
                 onClick={(e) => e.stopPropagation()}
-                className="text-sm text-on-surface font-semibold leading-tight hover:text-primary transition-colors"
+                className="text-sm text-on-surface font-semibold leading-tight hover:text-primary transition-colors truncate"
               >
                 {author}
               </Link>
             ) : (
-              <span className="text-sm text-on-surface font-semibold leading-tight">
+              <span className="text-sm text-on-surface font-semibold leading-tight truncate">
                 {author}
               </span>
             )}
@@ -131,7 +120,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-1 text-slate-400">
+        <div className="flex items-center gap-1 text-slate-400 flex-shrink-0">
           <span className="material-symbols-outlined text-[16px]">chat</span>
           <span className="text-xs font-medium">{commentCount}</span>
         </div>

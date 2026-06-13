@@ -21,7 +21,7 @@ export const create = async (req, res, next) => {
       authorId,
       coverImage ?? null,
       publishedBool,
-      parsedCategories,
+      parsedCategories
     );
 
     return success(res, newPost, 201);
@@ -35,12 +35,10 @@ export const getPosts = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 6;
     const category = req.query.category;
-    const search = req.query.search?.trim() || null; 
+    const search = req.query.search?.trim() || null;
 
     const VALID_SORTS = ["newest", "oldest", "comments"];
-    const sort = VALID_SORTS.includes(req.query.sort)
-      ? req.query.sort
-      : "newest";
+    const sort = VALID_SORTS.includes(req.query.sort) ? req.query.sort : "newest";
 
     const result = await getAllPosts(page, limit, category, sort, search);
 

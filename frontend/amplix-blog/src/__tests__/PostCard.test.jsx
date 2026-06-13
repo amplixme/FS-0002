@@ -34,9 +34,7 @@ const renderPostCard = (props = {}) =>
 describe("PostCard", () => {
   it("renderiza el título del post", () => {
     renderPostCard();
-    expect(
-      screen.getByText("Introducción a React Testing Library")
-    ).toBeInTheDocument();
+    expect(screen.getByText("Introducción a React Testing Library")).toBeInTheDocument();
   });
 
   it("renderiza el nombre del autor", () => {
@@ -46,9 +44,7 @@ describe("PostCard", () => {
 
   it("renderiza el extracto del post", () => {
     renderPostCard();
-    expect(
-      screen.getByText("Este es el extracto del post de prueba.")
-    ).toBeInTheDocument();
+    expect(screen.getByText("Este es el extracto del post de prueba.")).toBeInTheDocument();
   });
 
   it("trunca el extracto cuando supera los 150 caracteres", () => {

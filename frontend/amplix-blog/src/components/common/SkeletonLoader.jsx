@@ -15,12 +15,11 @@ function SkeletonCard() {
 }
 
 export function SkeletonLoader() {
-  return (    
+  return (
     <div className="space-y-12 mt-4">
-      {[1,2].map((i) => (
+      {[1, 2].map((i) => (
         <SkeletonCard key={i} />
       ))}
     </div>
   );
 }
-

@@ -14,9 +14,7 @@ export default function AdminCommentsSection({ comments, loading, onDelete, form
           ))}
         </div>
       ) : comments.length === 0 ? (
-        <p className="text-sm text-on-surface-variant text-center py-8">
-          No hay comentarios
-        </p>
+        <p className="text-sm text-on-surface-variant text-center py-8">No hay comentarios</p>
       ) : (
         <div className="divide-y divide-outline-variant/40">
           {comments.map((c) => (
@@ -26,9 +24,7 @@ export default function AdminCommentsSection({ comments, loading, onDelete, form
                   <span className="material-symbols-outlined text-on-surface-variant text-[18px]">
                     account_circle
                   </span>
-                  <span className="text-sm font-semibold text-on-surface">
-                    {c.author?.name}
-                  </span>
+                  <span className="text-sm font-semibold text-on-surface">{c.author?.name}</span>
                 </div>
                 <span className="text-xs text-on-surface-variant/60">
                   {formatDate(c.createdAt)}

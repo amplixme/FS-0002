@@ -3,7 +3,6 @@ export default function CategoryRow({ cat, onEdit, onDelete }) {
 
   return (
     <div className="flex flex-col gap-2">
-
       {/* ── Fila 1: ícono + nombre + slug ── */}
       <div className="flex items-start gap-3">
         <span className="material-symbols-outlined text-[20px] text-outline flex-shrink-0 mt-0.5">
@@ -38,7 +37,6 @@ export default function CategoryRow({ cat, onEdit, onDelete }) {
           </button>
         </div>
       </div>
-
     </div>
   );
 }

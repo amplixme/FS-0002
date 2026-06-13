@@ -16,7 +16,7 @@ Además, el blog está organizado por categorías temáticas, lo que facilita la
 |------------|----------------------------------|
 | Frontend   | React + Vite                    |
 | Backend    | Node.js + Express               |
-| Base de datos | PostgreSQL                   |
+| Base de datos | Prisma Postgres (nube) |
 | ORM        | Prisma            |
 | Auth       | JWT (JSON Web Tokens)           |
 | Estilos    | Tailwind CSS / CSS Modules      |
@@ -107,11 +107,14 @@ El frontend estará disponible en: `http://localhost:5173`
 
 ### Backend (`backend/.env`)
 
-| Variable       | Descripción                                         | Ejemplo                                          |
-|----------------|------------------------------------------------------|--------------------------------------------------|
-| `DATABASE_URL` | URL de conexión a PostgreSQL                        | `postgresql://user:password@localhost:5432/dbname` |
-| `JWT_SECRET`   | Clave secreta para firmar los tokens JWT             | `una-clave-super-secreta-larga`                  |
-| `PORT`         | Puerto en el que corre el servidor                   | `3000`                                           |
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `DATABASE_URL` | URL de conexión a Prisma Postgres (nube) | `prisma+postgres://accelerate.prisma-data.net/?api_key=...` |
+| `JWT_SECRET` | Clave secreta para firmar los tokens JWT | `una-clave-super-secreta-larga` |
+| `PORT` | Puerto en el que corre el servidor | `3000` |
+| `CLOUDINARY_CLOUD_NAME` | Nombre del cloud en Cloudinary | `mi-cloud` |
+| `CLOUDINARY_API_KEY` | API Key de Cloudinary | `123456789` |
+| `CLOUDINARY_API_SECRET` | API Secret de Cloudinary | `abc123xyz` |
 
 ### Frontend (`frontend/.env`)
 
@@ -146,11 +149,43 @@ nombre-del-proyecto/
 ---
 
 
+---
+
+## 🌐 Producción
+
+| Entorno | URL |
+|---------|-----|
+| **API Backend** | [https://amplix-blog-api.onrender.com](https://amplix-blog-api.onrender.com) |
+| **Health Check** | [https://amplix-blog-api.onrender.com/api/health](https://amplix-blog-api.onrender.com/api/health) |
+| **API Docs (Swagger)** | [https://amplix-blog-api.onrender.com/api-docs](https://amplix-blog-api.onrender.com/api-docs) |
+
+> ⚠️ **Free tier de Render**: el primer request tras inactividad puede tardar ~30s (cold start).
+> 
+> **Deploy manual**: para actualizar la API, entrar al dashboard de Render y hacer click en "Deploy Latest Commit".
+
+
+## 🗄️ Base de datos
+
+El proyecto utiliza **Prisma Postgres** como base de datos gestionada en la nube
+(free tier). No es necesario tener PostgreSQL instalado localmente.
+
+| Item | Detalle |
+|------|---------|
+| **Proveedor** | Prisma Postgres (`accelerate.prisma-data.net`) |
+| **ORM** | Prisma con Accelerate extension |
+| **Migraciones aplicadas** | 9 migraciones aplicadas |
+
+Para aplicar migraciones en producción:
+```bash
+npx prisma migrate deploy
+```
+
+
 
 ## ❓ Problemas comunes
 
 **Error de conexión a la base de datos:**  
-Verificá que PostgreSQL esté corriendo y que `DATABASE_URL` en el `.env` sea correcta.
+Verificá que `DATABASE_URL` en el `.env` sea correcta y que el servicio de Prisma Postgres esté activo en [console.prisma.io](https://console.prisma.io).
 
 **Puerto en uso:**  
 Cambiá el valor de `PORT` en el `.env` o matá el proceso que está usando ese puerto.

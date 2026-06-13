@@ -79,8 +79,7 @@ export default function ProfileEditForm({ profile, onSave, onCancel, saving }) {
       {/* ── Bio ── */}
       <div className="space-y-1.5">
         <label htmlFor="edit-bio" className="block text-sm font-bold text-on-surface">
-          Bio{" "}
-          <span className="font-normal text-outline">(opcional)</span>
+          Bio <span className="font-normal text-outline">(opcional)</span>
         </label>
         <textarea
           id="edit-bio"
@@ -99,11 +98,7 @@ export default function ProfileEditForm({ profile, onSave, onCancel, saving }) {
         {/* Contador de caracteres */}
         <p
           className={`text-xs text-right font-medium transition-colors ${
-            bioLength >= MAX_BIO
-              ? "text-error"
-              : bioNearLimit
-              ? "text-amber-500"
-              : "text-outline"
+            bioLength >= MAX_BIO ? "text-error" : bioNearLimit ? "text-amber-500" : "text-outline"
           }`}
         >
           {bioLength} / {MAX_BIO}

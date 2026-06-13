@@ -13,7 +13,7 @@ export const createPostSchema = z.object({
     })
     .min(10, "El contenido debe tener al menos 10 caracteres"),
 
-    published: z.string().optional(),
-    coverImage: z.string().optional(),
-    categories: z.array(z.string().uuid()).optional().default([]),
+  published: z.string().optional(),
+  coverImage: z.string().optional(),
+  categories: z.array(z.string().uuid()).optional().default([]),
 });

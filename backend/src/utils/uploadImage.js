@@ -8,12 +8,11 @@ cloudinary.config({
 
 export async function uploadImage(fileBuffer) {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream(
-      { folder: "posts" },
-      (error, result) => {
+    cloudinary.uploader
+      .upload_stream({ folder: "posts" }, (error, result) => {
         if (error) return reject(error);
         resolve(result.secure_url);
-      }
-    ).end(fileBuffer);
+      })
+      .end(fileBuffer);
   });
 }

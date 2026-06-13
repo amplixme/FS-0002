@@ -12,7 +12,6 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Pre-rellenar al abrir en modo edición
   useEffect(() => {
     if (isOpen) {
       setError(null);
@@ -25,7 +24,6 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
     }
   }, [isOpen, editData]);
 
-  // Cerrar con Escape
   useEffect(() => {
     if (!isOpen) return;
     const onKeyDown = (e) => {
@@ -35,10 +33,11 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [isOpen, loading, onClose]);
 
-  // Bloquear scroll
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -52,8 +51,7 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
 
     if (!form.name.trim()) return setError("El nombre es requerido");
     if (!form.email.trim()) return setError("El email es requerido");
-    if (!isEditing && !form.password.trim())
-      return setError("La contraseña es requerida");
+    if (!isEditing && !form.password.trim()) return setError("La contraseña es requerida");
 
     setLoading(true);
     try {
@@ -70,7 +68,7 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4"
       aria-modal="true"
       role="dialog"
     >
@@ -80,8 +78,12 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
         onClick={!loading ? onClose : undefined}
       />
 
-      {/* Modal */}
-      <div className="relative z-10 bg-white rounded-2xl ambient-shadow w-full max-w-md p-8">
+      {/* Bottom-sheet en mobile, modal centrado en sm+ */}
+      <div className="relative z-10 bg-white w-full rounded-t-2xl sm:rounded-2xl sm:max-w-md ambient-shadow p-5 sm:p-8">
+
+        {/* Pill indicador — solo mobile */}
+        <div className="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-5 sm:hidden" />
+
         {/* Header */}
         <div className="flex items-center justify-between mb-7">
           <h2 className="text-xl font-bold text-on-surface">
@@ -163,7 +165,6 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
                   disabled={loading}
                   className="flex items-center gap-2 text-sm font-semibold text-on-surface disabled:opacity-60"
                 >
-                  {/* Radio circle */}
                   <span
                     className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition ${
                       form.role === r
@@ -171,9 +172,7 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
                         : "border-outline-variant bg-transparent"
                     }`}
                   >
-                    {form.role === r && (
-                      <span className="w-2 h-2 rounded-full bg-white block" />
-                    )}
+                    {form.role === r && <span className="w-2 h-2 rounded-full bg-white block" />}
                   </span>
                   {r}
                 </button>
@@ -184,15 +183,13 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
           {/* Error */}
           {error && (
             <div className="flex items-center gap-2 p-3 bg-error/10 border border-error/20 rounded-xl">
-              <span className="material-symbols-outlined text-error text-[18px]">
-                error
-              </span>
+              <span className="material-symbols-outlined text-error text-[18px]">error</span>
               <p className="text-sm text-error font-medium">{error}</p>
             </div>
           )}
         </div>
 
-        {/* Buttons */}
+        {/* Botones */}
         <div className="flex items-center justify-end gap-3 mt-8">
           <button
             onClick={onClose}

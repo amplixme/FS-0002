@@ -53,9 +53,7 @@ function Register() {
         state: { success: "Cuenta creada exitosamente. Iniciá sesión." },
       });
     } catch (error) {
-      setServerError(
-        error.response?.data?.error?.message || "Error al registrarse",
-      );
+      setServerError(error.response?.data?.error?.message || "Error al registrarse");
     } finally {
       setLoading(false);
     }
@@ -69,20 +67,14 @@ function Register() {
 
       {/* Card */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 w-full max-w-md">
-        <h1 className="text-xl font-bold text-gray-900 text-center mb-1">
-          Crear cuenta
-        </h1>
-        <p className="text-gray-500 text-sm text-center mb-6">
-          Únete a la comunidad
-        </p>
+        <h1 className="text-xl font-bold text-gray-900 text-center mb-1">Crear cuenta</h1>
+        <p className="text-gray-500 text-sm text-center mb-6">Únete a la comunidad</p>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {/* Name */}
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
-              Nombre completo
-            </label>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">Nombre completo</label>
             <div className="flex items-center border border-gray-200 rounded-lg focus-within:border-gray-400 px-4 py-3 gap-3">
               <FaUser className="text-gray-400" size={14} />
               <input
@@ -94,9 +86,7 @@ function Register() {
                 className="flex-1 text-sm outline-none bg-transparent"
               />
             </div>
-            {errors.name && (
-              <p className="text-red-500 text-xs mt-1">{errors.name}</p>
-            )}
+            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
 
           {/* Email */}
@@ -115,16 +105,12 @@ function Register() {
                 className="flex-1 text-sm outline-none bg-transparent"
               />
             </div>
-            {errors.email && (
-              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-            )}
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
 
           {/* Contraseña */}
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
-              Contraseña
-            </label>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">Contraseña</label>
             <div className="flex items-center border border-gray-200 rounded-lg px-4 py-3 gap-3 focus-within:border-gray-400">
               <FaLock className="text-gray-400" size={14} />
               <input
@@ -136,9 +122,7 @@ function Register() {
                 className="flex-1 text-sm outline-none bg-transparent"
               />
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-            )}
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
           </div>
 
           {/* Confirmar contraseña */}
@@ -158,16 +142,12 @@ function Register() {
               />
             </div>
             {errors.confirmPassword && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.confirmPassword}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
             )}
           </div>
 
           {/* Error servidor */}
-          {serverError && (
-            <p className="text-red-500 text-sm text-center">{serverError}</p>
-          )}
+          {serverError && <p className="text-red-500 text-sm text-center">{serverError}</p>}
 
           {/* Submit */}
           <button
@@ -181,10 +161,7 @@ function Register() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           ¿Ya tienes cuenta?{" "}
-          <Link
-            to="/login"
-            className="text-blue-600 font-medium hover:underline"
-          >
+          <Link to="/login" className="text-blue-600 font-medium hover:underline">
             Inicia sesión
           </Link>
         </p>

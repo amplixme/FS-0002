@@ -23,10 +23,7 @@ const EditPost = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [postResult, categoriesResult] = await Promise.all([
-          getPostById(id),
-          getAll(),
-        ]);
+        const [postResult, categoriesResult] = await Promise.all([getPostById(id), getAll()]);
 
         const post = postResult.data ? postResult.data : postResult;
 
@@ -57,9 +54,7 @@ const EditPost = () => {
 
   const toggleCategory = (catId) => {
     setSelectedCategories((prev) =>
-      prev.includes(catId)
-        ? prev.filter((id) => id !== catId)
-        : [...prev, catId]
+      prev.includes(catId) ? prev.filter((id) => id !== catId) : [...prev, catId]
     );
   };
 
@@ -104,9 +99,7 @@ const EditPost = () => {
               <h1 className="text-3xl font-extrabold text-on-surface tracking-tight">
                 Editar Artículo
               </h1>
-              <p className="text-on-surface-variant mt-2">
-                Modificá el contenido de tu artículo.
-              </p>
+              <p className="text-on-surface-variant mt-2">Modificá el contenido de tu artículo.</p>
             </header>
 
             <PostForm
