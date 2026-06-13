@@ -195,22 +195,11 @@ export default function Home() {
                     post={{
                       ...post,
                       author: post.author?.name ?? "",
-<<<<<<< HEAD
-                      date: new Date(post.createdAt).toLocaleDateString(
-                        "es-AR",
-                        {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        }
-                      ),
-=======
                       date: new Date(post.createdAt).toLocaleDateString("es-AR", {
                         year: "numeric",
                         month: "short",
                         day: "numeric",
                       }),
->>>>>>> 314e200461219afa050a4e97dfd6d245d03a0bd1
                       excerpt: post.content,
                     }}
                     onClick={() => navigate(`/posts/${post.id}`)}
