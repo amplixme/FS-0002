@@ -44,26 +44,19 @@ export default function Login() {
               <h1 className="text-[28px] font-bold text-on-surface leading-tight tracking-tight mb-2">
                 Iniciar sesión
               </h1>
-              <p className="text-on-surface-variant">
-                Ingresa a tu cuenta para continuar
-              </p>
+              <p className="text-on-surface-variant">Ingresa a tu cuenta para continuar</p>
             </header>
 
             {/* Formulario */}
             <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Campo email */}
               <div className="space-y-2">
-                <label
-                  className="block text-sm font-semibold text-on-surface ml-1"
-                  htmlFor="email"
-                >
+                <label className="block text-sm font-semibold text-on-surface ml-1" htmlFor="email">
                   Correo electrónico
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline group-focus-within:text-primary transition-colors">
-                    <span className="material-symbols-outlined text-[20px]">
-                      mail
-                    </span>
+                    <span className="material-symbols-outlined text-[20px]">mail</span>
                   </div>
                   <input
                     id="email"
@@ -80,10 +73,7 @@ export default function Login() {
               {/* Campo contraseña */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center px-1">
-                  <label
-                    className="block text-sm font-semibold text-on-surface"
-                    htmlFor="password"
-                  >
+                  <label className="block text-sm font-semibold text-on-surface" htmlFor="password">
                     Contraseña
                   </label>
                   <a
@@ -95,9 +85,7 @@ export default function Login() {
                 </div>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline group-focus-within:text-primary transition-colors">
-                    <span className="material-symbols-outlined text-[20px]">
-                      lock
-                    </span>
+                    <span className="material-symbols-outlined text-[20px]">lock</span>
                   </div>
                   <input
                     id="password"
@@ -135,9 +123,7 @@ export default function Login() {
             {/* Separador */}
             <div className="my-8 flex items-center gap-4">
               <div className="flex-1 h-px bg-outline-variant/40"></div>
-              <span className="text-sm font-medium text-outline-variant px-2">
-                o
-              </span>
+              <span className="text-sm font-medium text-outline-variant px-2">o</span>
               <div className="flex-1 h-px bg-outline-variant/40"></div>
             </div>
 

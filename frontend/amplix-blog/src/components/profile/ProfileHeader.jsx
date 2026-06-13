@@ -28,14 +28,10 @@ export default function ProfileHeader({ profile, isOwnProfile, onEdit }) {
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h1 className="text-2xl font-bold text-on-surface leading-tight">
-            {profile.name}
-          </h1>
+          <h1 className="text-2xl font-bold text-on-surface leading-tight">{profile.name}</h1>
 
           {profile.bio && (
-            <p className="text-slate-500 text-sm mt-1.5 leading-relaxed">
-              {profile.bio}
-            </p>
+            <p className="text-slate-500 text-sm mt-1.5 leading-relaxed">{profile.bio}</p>
           )}
 
           <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mt-3 text-sm text-slate-500">
@@ -45,7 +41,9 @@ export default function ProfileHeader({ profile, isOwnProfile, onEdit }) {
             </span>
             <span className="text-outline-variant">·</span>
             <span className="flex items-center gap-1.5">
-              <span className="material-symbols-outlined text-[16px] text-outline">calendar_month</span>
+              <span className="material-symbols-outlined text-[16px] text-outline">
+                calendar_month
+              </span>
               Miembro desde {formatMemberSince(profile.createdAt)}
             </span>
           </div>

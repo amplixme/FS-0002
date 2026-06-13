@@ -1,11 +1,17 @@
 import CardSkeleton from "./CardSkeleton";
-import RoleBadge    from "./RoleBadge";
-import UserCard     from "./UserCard";
+import RoleBadge from "./RoleBadge";
+import UserCard from "./UserCard";
 
 export default function AdminUsersSection({
-  users, loading, currentUser,
-  showAll, onToggleShowAll,
-  onOpenCreate, onEdit, onChangeRole, onDelete,
+  users,
+  loading,
+  currentUser,
+  showAll,
+  onToggleShowAll,
+  onOpenCreate,
+  onEdit,
+  onChangeRole,
+  onDelete,
   formatDate,
 }) {
   const visible = showAll ? users : users.slice(0, 2);
@@ -84,7 +90,7 @@ export default function AdminUsersSection({
                     <th
                       key={h}
                       className={`text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3
-                        ${h === "Email"             ? "hidden md:table-cell" : ""}
+                        ${h === "Email" ? "hidden md:table-cell" : ""}
                         ${h === "Fecha de registro" ? "hidden lg:table-cell" : ""}
                       `}
                     >
@@ -128,9 +134,7 @@ export default function AdminUsersSection({
                               onClick={() => onDelete(u)}
                               className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-error/10 transition text-error flex-shrink-0"
                             >
-                              <span className="material-symbols-outlined text-[18px]">
-                                delete
-                              </span>
+                              <span className="material-symbols-outlined text-[18px]">delete</span>
                             </button>
                           </>
                         )}

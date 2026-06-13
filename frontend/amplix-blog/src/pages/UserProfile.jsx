@@ -31,10 +31,7 @@ export default function UserProfile() {
       setLoading(true);
       setError("");
       try {
-        const [profileRes, postsRes] = await Promise.all([
-          getProfile(id),
-          getUserPosts(id),
-        ]);
+        const [profileRes, postsRes] = await Promise.all([getProfile(id), getUserPosts(id)]);
         if (cancelled) return;
         const profileData = profileRes.data ?? profileRes;
         const postsData = postsRes.data ?? postsRes;
@@ -149,9 +146,7 @@ export default function UserProfile() {
         </main>
       </div>
 
-      {toast && (
-        <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
-      )}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </>
   );
 }

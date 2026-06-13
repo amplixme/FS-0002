@@ -1,10 +1,13 @@
 import CardSkeleton from "./CardSkeleton";
-import PostCard     from "./PostCard";
+import PostCard from "./PostCard";
 
 export default function AdminPostsSection({
-  posts, loading,
-  showAll, onToggleShowAll,
-  onDelete, formatDate,
+  posts,
+  loading,
+  showAll,
+  onToggleShowAll,
+  onDelete,
+  formatDate,
 }) {
   const visible = showAll ? posts : posts.slice(0, 2);
 
@@ -25,20 +28,13 @@ export default function AdminPostsSection({
       {loading ? (
         <CardSkeleton rows={2} />
       ) : posts.length === 0 ? (
-        <p className="text-sm text-on-surface-variant text-center py-8">
-          No hay publicaciones
-        </p>
+        <p className="text-sm text-on-surface-variant text-center py-8">No hay publicaciones</p>
       ) : (
         <>
           {/* Mobile */}
           <div className="sm:hidden space-y-3">
             {visible.map((p) => (
-              <PostCard
-                key={p.id}
-                p={p}
-                onDelete={() => onDelete(p)}
-                formatDate={formatDate}
-              />
+              <PostCard key={p.id} p={p} onDelete={() => onDelete(p)} formatDate={formatDate} />
             ))}
             {posts.length > 2 && (
               <button
@@ -55,11 +51,21 @@ export default function AdminPostsSection({
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-outline-variant">
-                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3">Título</th>
-                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 hidden sm:table-cell">Autor</th>
-                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 hidden md:table-cell">Categorías</th>
-                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 hidden sm:table-cell">Fecha</th>
-                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3">Acciones</th>
+                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3">
+                    Título
+                  </th>
+                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 hidden sm:table-cell">
+                    Autor
+                  </th>
+                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 hidden md:table-cell">
+                    Categorías
+                  </th>
+                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 hidden sm:table-cell">
+                    Fecha
+                  </th>
+                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/40">
@@ -69,12 +75,15 @@ export default function AdminPostsSection({
                       <div className="flex items-center gap-3">
                         {p.coverImage ? (
                           <img
-                            src={p.coverImage} alt=""
+                            src={p.coverImage}
+                            alt=""
                             className="w-10 h-10 rounded-lg object-cover flex-shrink-0"
                           />
                         ) : (
                           <div className="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center flex-shrink-0">
-                            <span className="material-symbols-outlined text-on-surface-variant text-[16px]">image</span>
+                            <span className="material-symbols-outlined text-on-surface-variant text-[16px]">
+                              image
+                            </span>
                           </div>
                         )}
                         <span className="font-medium text-on-surface line-clamp-2 max-w-[180px]">

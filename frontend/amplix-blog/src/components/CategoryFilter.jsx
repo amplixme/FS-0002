@@ -39,15 +39,11 @@ function SidebarFooterButtons() {
   return (
     <div className="mt-8 space-y-1">
       <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
-        <span className="material-symbols-outlined text-[18px] text-slate-400">
-          help
-        </span>
+        <span className="material-symbols-outlined text-[18px] text-slate-400">help</span>
         <span className="text-sm font-medium text-on-surface">Help</span>
       </button>
       <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
-        <span className="material-symbols-outlined text-[18px] text-slate-400">
-          settings
-        </span>
+        <span className="material-symbols-outlined text-[18px] text-slate-400">settings</span>
         <span className="text-sm font-medium text-on-surface">Settings</span>
       </button>
     </div>
@@ -84,9 +80,7 @@ export function CategorySidebar({ categories, activeCategory, onSelect }) {
                     {getIcon(cat.slug)}
                   </span>
                 ) : (
-                  <span className="material-symbols-outlined text-[18px] flex-shrink-0">
-                    apps
-                  </span>
+                  <span className="material-symbols-outlined text-[18px] flex-shrink-0">apps</span>
                 )}
 
                 <span className="flex-1 text-left">{cat.name}</span>

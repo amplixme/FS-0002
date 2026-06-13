@@ -6,9 +6,7 @@ export default function UserCard({ u, currentUserId, onEdit, onChangeRole, onDel
       {/* Avatar + info */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-          <span className="material-symbols-outlined text-primary text-[20px]">
-            person
-          </span>
+          <span className="material-symbols-outlined text-primary text-[20px]">person</span>
         </div>
         <div className="min-w-0">
           <p className="font-semibold text-on-surface text-sm truncate">{u.name}</p>

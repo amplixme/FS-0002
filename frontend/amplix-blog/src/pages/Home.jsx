@@ -145,9 +145,7 @@ export default function Home() {
                   onClick={() => setSearchInput("")}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                 >
-                  <span className="material-symbols-outlined text-[18px]">
-                    close
-                  </span>
+                  <span className="material-symbols-outlined text-[18px]">close</span>
                 </button>
               )}
             </div>
@@ -187,9 +185,7 @@ export default function Home() {
 
             {status === "loading" && <SkeletonLoader />}
             {status === "error" && <ErrorMessage onRetry={handleRetry} />}
-            {status === "empty" && (
-              <EmptyState message="No hay publicaciones todavía" />
-            )}
+            {status === "empty" && <EmptyState message="No hay publicaciones todavía" />}
 
             {status === "success" && posts.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -199,6 +195,7 @@ export default function Home() {
                     post={{
                       ...post,
                       author: post.author?.name ?? "",
+<<<<<<< HEAD
                       date: new Date(post.createdAt).toLocaleDateString(
                         "es-AR",
                         {
@@ -207,6 +204,13 @@ export default function Home() {
                           day: "numeric",
                         }
                       ),
+=======
+                      date: new Date(post.createdAt).toLocaleDateString("es-AR", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      }),
+>>>>>>> 314e200461219afa050a4e97dfd6d245d03a0bd1
                       excerpt: post.content,
                     }}
                     onClick={() => navigate(`/posts/${post.id}`)}

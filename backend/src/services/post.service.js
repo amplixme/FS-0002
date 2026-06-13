@@ -6,7 +6,7 @@ export const createPost = async (
   authorId,
   coverImage,
   published,
-  categories = [],
+  categories = []
 ) => {
   const post = await prisma.post.create({
     data: {
@@ -33,7 +33,7 @@ export const getAllPosts = async (
   limit = 6,
   categorySlug = null,
   sort = "newest",
-  search = null,
+  search = null
 ) => {
   const skip = (page - 1) * limit;
 
@@ -47,9 +47,10 @@ export const getAllPosts = async (
     };
   }
 
-  if (search) { //Conidiconal de búsqueda
+  if (search) {
+    //Conidiconal de búsqueda
     whereClause.OR = [
-      { title:   { contains: search, mode: "insensitive" } },
+      { title: { contains: search, mode: "insensitive" } },
       { content: { contains: search, mode: "insensitive" } },
     ];
   }

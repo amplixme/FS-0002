@@ -49,24 +49,17 @@ export default function ConfirmModal({
       <div className="relative z-10 bg-surface-container-lowest rounded-2xl ambient-shadow w-full max-w-md p-5 sm:p-8 flex flex-col gap-6">
         {/* Ícono */}
         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-error/10 mx-auto">
-          <span className="material-symbols-outlined text-error text-[28px]">
-            warning
-          </span>
+          <span className="material-symbols-outlined text-error text-[28px]">warning</span>
         </div>
 
-        {/* Título */}
-        <h2
-          id="confirm-modal-title"
-          className="text-xl font-extrabold text-on-surface text-center"
-        >
+        {/* ── Título ── */}
+        <h2 id="confirm-modal-title" className="text-xl font-extrabold text-on-surface text-center">
           {title}
         </h2>
 
         {/* Mensaje */}
         {message && (
-          <p className="text-sm text-on-surface-variant text-center leading-relaxed">
-            {message}
-          </p>
+          <p className="text-sm text-on-surface-variant text-center leading-relaxed">{message}</p>
         )}
 
         {/* Error */}

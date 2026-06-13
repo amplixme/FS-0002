@@ -59,9 +59,7 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-3">
           {isAuthenticated ? (
             <>
-              <span className="text-gray-800 font-medium mr-2">
-                Hola, {user?.name}
-              </span>
+              <span className="text-gray-800 font-medium mr-2">Hola, {user?.name}</span>
               <button
                 onClick={handleLogout}
                 className="text-red-600 font-medium hover:text-red-800 transition cursor-pointer"
@@ -129,20 +127,12 @@ const Header = () => {
             Newsletter
           </Link>
           {isAuthenticated && (
-            <Link
-              to="/categorias"
-              onClick={() => setMenuOpen(false)}
-              className="font-semibold"
-            >
+            <Link to="/categorias" onClick={() => setMenuOpen(false)} className="font-semibold">
               Categorías
             </Link>
           )}
           {user?.role === "ADMIN" && (
-            <Link
-              to="/admin"
-              onClick={() => setMenuOpen(false)}
-              className="font-bold text-primary"
-            >
+            <Link to="/admin" onClick={() => setMenuOpen(false)} className="font-bold text-primary">
               Admin
             </Link>
           )}
@@ -151,9 +141,7 @@ const Header = () => {
 
           {isAuthenticated ? (
             <>
-              <span className="text-gray-800 font-medium">
-                Hola, {user?.name}
-              </span>
+              <span className="text-gray-800 font-medium">Hola, {user?.name}</span>
               <button
                 onClick={handleLogout}
                 className="text-left text-red-600 font-medium cursor-pointer"

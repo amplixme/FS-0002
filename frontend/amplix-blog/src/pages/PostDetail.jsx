@@ -17,15 +17,8 @@ export default function PostDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const {
-    showModal,
-    deleting,
-    toast,
-    openModal,
-    cancelModal,
-    confirmDelete,
-    clearToast,
-  } = useDeletePost(id);
+  const { showModal, deleting, toast, openModal, cancelModal, confirmDelete, clearToast } =
+    useDeletePost(id);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -57,9 +50,7 @@ export default function PostDetail() {
   if (error || !post) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
-        <p className="text-error font-bold text-xl">
-          {error || "Artículo no encontrado"}
-        </p>
+        <p className="text-error font-bold text-xl">{error || "Artículo no encontrado"}</p>
         <Link to="/" className="text-primary hover:underline font-medium">
           ← Volver al inicio
         </Link>
@@ -78,9 +69,7 @@ export default function PostDetail() {
               to="/"
               className="inline-flex items-center text-sm font-bold text-primary hover:text-on-primary-fixed-variant transition-colors"
             >
-              <span className="material-symbols-outlined text-[20px] mr-1">
-                arrow_back
-              </span>
+              <span className="material-symbols-outlined text-[20px] mr-1">arrow_back</span>
               Volver a inicio
             </Link>
           </div>
@@ -96,9 +85,7 @@ export default function PostDetail() {
               />
             ) : (
               <div className="w-full aspect-[16/9] bg-surface-container flex items-center justify-center">
-                <span className="material-symbols-outlined text-6xl text-outline">
-                  article
-                </span>
+                <span className="material-symbols-outlined text-6xl text-outline">article</span>
               </div>
             )}
 
@@ -158,18 +145,14 @@ export default function PostDetail() {
                     onClick={() => navigate(`/posts/${id}/edit`)}
                     className="inline-flex items-center gap-1 px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold rounded-full transition-colors text-sm"
                   >
-                    <span className="material-symbols-outlined text-[18px]">
-                      edit
-                    </span>
+                    <span className="material-symbols-outlined text-[18px]">edit</span>
                     Editar
                   </button>
                   <button
                     onClick={openModal}
                     className="inline-flex items-center gap-1 px-4 py-2 bg-error/10 hover:bg-error/20 text-error font-bold rounded-full transition-colors text-sm"
                   >
-                    <span className="material-symbols-outlined text-[18px]">
-                      delete
-                    </span>
+                    <span className="material-symbols-outlined text-[18px]">delete</span>
                     Eliminar
                   </button>
                 </div>
@@ -188,9 +171,7 @@ export default function PostDetail() {
         onCancel={cancelModal}
         loading={deleting}
       />
-      {toast && (
-        <Toast message={toast.message} type={toast.type} onClose={clearToast} />
-      )}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={clearToast} />}
     </>
   );
 }

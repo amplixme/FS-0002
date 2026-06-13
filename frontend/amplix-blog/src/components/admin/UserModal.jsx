@@ -51,8 +51,7 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
 
     if (!form.name.trim()) return setError("El nombre es requerido");
     if (!form.email.trim()) return setError("El email es requerido");
-    if (!isEditing && !form.password.trim())
-      return setError("La contraseña es requerida");
+    if (!isEditing && !form.password.trim()) return setError("La contraseña es requerida");
 
     setLoading(true);
     try {
@@ -173,9 +172,7 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
                         : "border-outline-variant bg-transparent"
                     }`}
                   >
-                    {form.role === r && (
-                      <span className="w-2 h-2 rounded-full bg-white block" />
-                    )}
+                    {form.role === r && <span className="w-2 h-2 rounded-full bg-white block" />}
                   </span>
                   {r}
                 </button>
@@ -186,9 +183,7 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
           {/* Error */}
           {error && (
             <div className="flex items-center gap-2 p-3 bg-error/10 border border-error/20 rounded-xl">
-              <span className="material-symbols-outlined text-error text-[18px]">
-                error
-              </span>
+              <span className="material-symbols-outlined text-error text-[18px]">error</span>
               <p className="text-sm text-error font-medium">{error}</p>
             </div>
           )}

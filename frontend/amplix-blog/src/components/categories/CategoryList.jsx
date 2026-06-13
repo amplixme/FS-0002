@@ -19,13 +19,10 @@ export default function CategoryList({
   return (
     <div className="bg-surface-container-lowest rounded-2xl ambient-shadow overflow-hidden">
       <div className="p-8 sm:p-10">
-
         {/* ── Encabezado ── */}
         <div className="flex items-center gap-3 mb-6 border-b border-outline-variant/30 pb-6">
           <span className="material-symbols-outlined text-primary text-[22px]">label</span>
-          <h2 className="text-xl font-extrabold text-on-surface flex-1">
-            Categorías existentes
-          </h2>
+          <h2 className="text-xl font-extrabold text-on-surface flex-1">Categorías existentes</h2>
           {!loadingList && (
             <span className="text-sm font-semibold text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full">
               {categories.length}
@@ -78,17 +75,12 @@ export default function CategoryList({
                     onCancel={onCancel}
                   />
                 ) : (
-                  <CategoryRow
-                    cat={cat}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
-                  />
+                  <CategoryRow cat={cat} onEdit={onEdit} onDelete={onDelete} />
                 )}
               </li>
             ))}
           </ul>
         )}
-
       </div>
     </div>
   );

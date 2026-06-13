@@ -26,7 +26,6 @@ export default function CategoryForm({
 
         <form onSubmit={onSubmit} className="space-y-5">
           <div className="grid sm:grid-cols-2 gap-4">
-
             <div className="space-y-2">
               <label htmlFor="newName" className="block text-sm font-bold text-on-surface">
                 Nombre
@@ -60,7 +59,6 @@ export default function CategoryForm({
                 className={`block w-full ${INPUT_CLS} font-mono text-sm`}
               />
             </div>
-
           </div>
 
           {createError && (

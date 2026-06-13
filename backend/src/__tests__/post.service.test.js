@@ -52,7 +52,7 @@ describe("PostService Unit Tests", () => {
       10,
       "imagen-ejemplo.jpg",
       true,
-      [1],
+      [1]
     );
 
     expect(prisma.post.create).toHaveBeenCalledOnce();
@@ -62,9 +62,7 @@ describe("PostService Unit Tests", () => {
   // 2. Test para getAllPosts (Paginación y formato)
   it("getAllPosts › debería retornar la estructura paginada correcta con la propiedad data", async () => {
     // Simulamos la respuesta estructurada de Prisma con el mapeo interno de comentarios
-    prisma.post.findMany.mockResolvedValue([
-      { ...MOCK_POST, _count: { comments: 5 } },
-    ]);
+    prisma.post.findMany.mockResolvedValue([{ ...MOCK_POST, _count: { comments: 5 } }]);
     prisma.post.count.mockResolvedValue(1);
 
     const result = await getAllPosts(1, 6);
@@ -88,7 +86,7 @@ describe("PostService Unit Tests", () => {
         where: expect.objectContaining({
           categories: { some: { slug: "desarrollo" } },
         }),
-      }),
+      })
     );
   });
 

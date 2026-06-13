@@ -4,26 +4,21 @@ import { createHash } from "../utils/user-utils.js";
 
 export const getStats = async () => {
   const now = new Date();
-  const startOfWeek = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() - now.getDay()
-  );
+  const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
 
-  const [totalUsers, totalPosts, totalComments, weekPosts, postsByCategory] =
-    await Promise.all([
-      prisma.user.count(),
-      prisma.post.count(),
-      prisma.comment.count(),
-      prisma.post.count({ where: { createdAt: { gte: startOfWeek } } }),
-      prisma.category.findMany({
-        select: {
-          name: true,
-          slug: true,
-          _count: { select: { posts: true } },
-        },
-      }),
-    ]);
+  const [totalUsers, totalPosts, totalComments, weekPosts, postsByCategory] = await Promise.all([
+    prisma.user.count(),
+    prisma.post.count(),
+    prisma.comment.count(),
+    prisma.post.count({ where: { createdAt: { gte: startOfWeek } } }),
+    prisma.category.findMany({
+      select: {
+        name: true,
+        slug: true,
+        _count: { select: { posts: true } },
+      },
+    }),
+  ]);
 
   return {
     totalUsers,

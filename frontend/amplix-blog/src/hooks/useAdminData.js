@@ -2,14 +2,14 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import * as adminService from "../services/admin.service";
 
 export function useAdminData(showToast) {
-  const [stats,    setStats]    = useState(null);
-  const [users,    setUsers]    = useState([]);
-  const [posts,    setPosts]    = useState([]);
+  const [stats, setStats] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
 
-  const [loadingStats,    setLoadingStats]    = useState(true);
-  const [loadingUsers,    setLoadingUsers]    = useState(true);
-  const [loadingPosts,    setLoadingPosts]    = useState(true);
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [loadingPosts, setLoadingPosts] = useState(true);
   const [loadingComments, setLoadingComments] = useState(true);
 
   // ✅ Guardar showToast en una ref para no usarla como dependencia
@@ -78,8 +78,18 @@ export function useAdminData(showToast) {
   }, [refetchAll]); // ✅ solo corre una vez porque refetchAll es estable
 
   return {
-    stats, users, posts, comments,
-    loadingStats, loadingUsers, loadingPosts, loadingComments,
-    fetchStats, fetchUsers, fetchPosts, fetchComments, refetchAll,
+    stats,
+    users,
+    posts,
+    comments,
+    loadingStats,
+    loadingUsers,
+    loadingPosts,
+    loadingComments,
+    fetchStats,
+    fetchUsers,
+    fetchPosts,
+    fetchComments,
+    refetchAll,
   };
 }

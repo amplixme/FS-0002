@@ -17,8 +17,8 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
     commentCount = 0,
   } = post;
 
-  const truncatedExcerpt =
-    excerpt && excerpt.length > 150 ? excerpt.slice(0, 150) + "…" : excerpt;
+  // Trunca el extracto a ~150 chars
+  const truncatedExcerpt = excerpt && excerpt.length > 150 ? excerpt.slice(0, 150) + "…" : excerpt;
   const visibleCategories = categories.slice(0, 3);
   const extraCategoriesCount = categories.length - 3;
 
@@ -38,9 +38,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
           />
         ) : (
           <div className="w-full h-full bg-surface-container flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-            <span className="material-symbols-outlined text-4xl text-outline">
-              article
-            </span>
+            <span className="material-symbols-outlined text-4xl text-outline">article</span>
           </div>
         )}
       </div>
@@ -83,9 +81,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
 
       {/* Extracto */}
       {truncatedExcerpt && (
-        <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-grow line-clamp-3">
-          {truncatedExcerpt}
-        </p>
+        <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">{truncatedExcerpt}</p>
       )}
 
       {/* Autor */}
@@ -114,9 +110,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
                 {author}
               </Link>
             ) : (
-              <span className="text-sm text-on-surface font-semibold leading-tight truncate">
-                {author}
-              </span>
+              <span className="text-sm text-on-surface font-semibold leading-tight">{author}</span>
             )}
             {createdAt && (
               <span className="text-[11px] font-medium text-slate-500 mt-0.5">

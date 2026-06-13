@@ -6,9 +6,7 @@ export const getByPostId = async (postId) => {
     const response = await api.get(`/posts/${postId}/comments`);
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al cargar comentarios",
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al cargar comentarios");
   }
 };
 
@@ -18,9 +16,7 @@ export const create = async (postId, content) => {
     const response = await api.post(`/posts/${postId}/comments`, { content });
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error?.message || "Error al publicar",
-    );
+    throw new Error(error.response?.data?.error?.message || "Error al publicar");
   }
 };
 
