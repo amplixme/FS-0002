@@ -74,10 +74,10 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
         )}
       </div>
 
-      {/* Título — más chico en mobile */}
-      <h3 className="text-lg md:text-2xl font-bold leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors line-clamp-3">
+      {/* Título */}
+      <h2 className="text-2xl font-bold leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors">
         {title}
-      </h3>
+      </h2>
 
       {/* Extracto */}
       {truncatedExcerpt && (
@@ -95,9 +95,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
             />
           ) : (
             <div className="w-8 h-8 bg-surface-container-highest rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="material-symbols-outlined text-[16px]">
-                person
-              </span>
+              <span className="material-symbols-outlined text-[16px]">person</span>
             </div>
           )}
           <div className="flex flex-col min-w-0">
@@ -110,7 +108,9 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
                 {author}
               </Link>
             ) : (
-              <span className="text-sm text-on-surface font-semibold leading-tight">{author}</span>
+              <span className="text-sm text-on-surface font-semibold leading-tight truncate">
+                {author}
+              </span>
             )}
             {createdAt && (
               <span className="text-[11px] font-medium text-slate-500 mt-0.5">
