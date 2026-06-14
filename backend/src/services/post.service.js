@@ -48,14 +48,14 @@ export const getAllPosts = async (
   }
 
   if (search) {
-    //Conidiconal de búsqueda
+    
     whereClause.OR = [
       { title: { contains: search, mode: "insensitive" } },
       { content: { contains: search, mode: "insensitive" } },
     ];
   }
 
-  // Lógica de ordenamiento dinámico
+  
   let orderByClause;
   if (sort === "oldest") {
     orderByClause = { createdAt: "asc" };

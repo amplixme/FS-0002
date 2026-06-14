@@ -1,4 +1,4 @@
-// CategoryFilter.jsx
+
 
 const SLUG_TO_ICON = {
   design: "palette",
@@ -34,7 +34,7 @@ function isActive(activeCategory, slug) {
   return activeCategory === slug;
 }
 
-// ─── Botones inferiores reutilizables ────────────────────────────────────────
+
 function SidebarFooterButtons() {
   return (
     <div className="mt-8 space-y-1">
@@ -50,7 +50,7 @@ function SidebarFooterButtons() {
   );
 }
 
-// ─── Desktop: sidebar lateral ────────────────────────────────────────────────
+
 export function CategorySidebar({ categories, activeCategory, onSelect }) {
   const list = buildList(categories);
 
@@ -108,7 +108,7 @@ export function CategorySidebar({ categories, activeCategory, onSelect }) {
   );
 }
 
-// ─── Mobile: chips horizontales scrolleables ──────────────────────────────────
+
 export function CategoryChips({ categories, activeCategory, onSelect }) {
   const list = buildList(categories);
 

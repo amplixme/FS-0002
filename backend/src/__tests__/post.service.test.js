@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-// Mockeamos el cliente de Prisma de forma completa antes de importar el servicio
+
 vi.mock("../config/prisma.js", () => ({
   default: {
     post: {
@@ -23,7 +23,7 @@ import {
 } from "../services/post.service.js";
 import prisma from "../config/prisma.js";
 
-// Fixture base reutilizable para los posts
+
 const MOCK_POST = {
   id: 1,
   title: "Publicación de Prueba",
@@ -42,7 +42,7 @@ describe("PostService Unit Tests", () => {
     vi.clearAllMocks();
   });
 
-  // 1. Test para createPost
+  
   it("createPost › debería crear un post exitosamente conectando las categorías provistas", async () => {
     prisma.post.create.mockResolvedValue(MOCK_POST);
 
@@ -59,9 +59,9 @@ describe("PostService Unit Tests", () => {
     expect(result).toEqual(MOCK_POST);
   });
 
-  // 2. Test para getAllPosts (Paginación y formato)
+  
   it("getAllPosts › debería retornar la estructura paginada correcta con la propiedad data", async () => {
-    // Simulamos la respuesta estructurada de Prisma con el mapeo interno de comentarios
+    
     prisma.post.findMany.mockResolvedValue([{ ...MOCK_POST, _count: { comments: 5 } }]);
     prisma.post.count.mockResolvedValue(1);
 
@@ -74,7 +74,7 @@ describe("PostService Unit Tests", () => {
     expect(result.data[0].commentCount).toBe(5);
   });
 
-  // 3. Test para getAllPosts con filtro de categoría
+  
   it("getAllPosts › debería estructurar la query de filtrado cuando se provee un categorySlug", async () => {
     prisma.post.findMany.mockResolvedValue([]);
     prisma.post.count.mockResolvedValue(0);
@@ -90,7 +90,7 @@ describe("PostService Unit Tests", () => {
     );
   });
 
-  // 4. Test para getPostById exitoso
+  
   it("getPostById › debería retornar el objeto del post si el ID existe en el sistema", async () => {
     prisma.post.findUnique.mockResolvedValue(MOCK_POST);
 
@@ -100,7 +100,7 @@ describe("PostService Unit Tests", () => {
     expect(result).toEqual(MOCK_POST);
   });
 
-  // 5. Test para getPostById fallido (ID inválido - NaN)
+  
   it("getPostById › debería retornar null de forma temprana si el ID no es numérico (NaN)", async () => {
     const result = await getPostById("id-invalido");
 
@@ -108,7 +108,7 @@ describe("PostService Unit Tests", () => {
     expect(result).toBeNull();
   });
 
-  // 6. Test para getPostById no encontrado (Base para el error 404)
+  
   it("getPostById › debería retornar null si el ID es numérico pero no existe en la base de datos", async () => {
     prisma.post.findUnique.mockResolvedValue(null);
 
@@ -118,7 +118,7 @@ describe("PostService Unit Tests", () => {
     expect(result).toBeNull();
   });
 
-  // 7. Test para updatePostService
+  
   it("updatePostService › debería actualizar y retornar el post modificado llamando a la BD", async () => {
     prisma.post.update.mockResolvedValue({
       ...MOCK_POST,
@@ -134,7 +134,7 @@ describe("PostService Unit Tests", () => {
     expect(result.title).toBe("Título Modificado");
   });
 
-  // 8. Test para deletePostService
+  
   it("deletePostService › debería invocar el borrado físico en Prisma y retornar true", async () => {
     prisma.post.delete.mockResolvedValue(MOCK_POST);
 

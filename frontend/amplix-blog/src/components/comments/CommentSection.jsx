@@ -23,7 +23,7 @@ export default function CommentSection({ postId }) {
       const data = await getByPostId(postId);
       setComments(data.data || data || []);
     } catch (error) {
-      console.error(error);
+      
     } finally {
       setLoading(false);
     }
@@ -94,7 +94,7 @@ export default function CommentSection({ postId }) {
       setNewComment("");
       await fetchComments();
     } catch (err) {
-      console.error("Error al publicar:", err);
+      
     } finally {
       setSubmitting(false);
     }
@@ -117,7 +117,7 @@ export default function CommentSection({ postId }) {
               <p className="font-bold text-sm text-on-surface">{c.author.name}</p>
 
               {editingId === c.id ? (
-                // Modo edición
+                
                 <div className="mt-2 space-y-2">
                   <textarea
                     value={editContent}
@@ -141,7 +141,7 @@ export default function CommentSection({ postId }) {
                   </div>
                 </div>
               ) : (
-                // Modo normal
+                
                 <>
                   <p className="text-sm text-on-surface-variant mt-1">{c.content}</p>
                   <p className="text-xs text-outline mt-2">{formatRelativeTime(c.createdAt)}</p>

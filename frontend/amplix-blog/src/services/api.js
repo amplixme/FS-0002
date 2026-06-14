@@ -4,7 +4,7 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
-// Interceptor de request: adjunta el token JWT si existe
+
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -16,7 +16,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Interceptor de response: ante 401, limpia sesión y redirige a /login
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {

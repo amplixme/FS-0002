@@ -5,7 +5,7 @@ import * as adminController from "../controllers/admin.controller.js";
 
 const router = Router();
 
-// Todos los endpoints requieren auth + rol ADMIN
+
 router.use(authMiddleware, requireRole("ADMIN"));
 
 /**

@@ -21,7 +21,7 @@
   --color-inverse-primary: #b6c4ff;
 }
 
-/* Y las clases custom */
+
 .ambient-shadow {
   box-shadow: 0 20px 40px rgba(17, 24, 39, 0.05);
 }

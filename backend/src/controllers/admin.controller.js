@@ -75,7 +75,7 @@ export const deletePost = async (req, res, next) => {
 
 export const deleteComment = async (req, res, next) => {
   try {
-    const commentId = req.params.id; // UUID string
+    const commentId = req.params.id; 
     const data = await adminService.deleteCommentAdmin(commentId);
     return success(res, data);
   } catch (e) {

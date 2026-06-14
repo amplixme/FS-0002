@@ -23,11 +23,11 @@ const formatDate = (date) =>
 export default function Admin() {
   const { user } = useContext(AuthContext);
 
-  // ── Toast ─────────────────────────────────────────────────────────────────
+  
   const [toast, setToast] = useState(null);
   const showToast = (message, type = "success") => setToast({ message, type });
 
-  // ── Data ──────────────────────────────────────────────────────────────────
+  
   const {
     stats,
     users,
@@ -43,11 +43,11 @@ export default function Admin() {
     fetchComments,
   } = useAdminData(showToast);
 
-  // ── Ver todos ─────────────────────────────────────────────────────────────
+  
   const [showAllUsers, setShowAllUsers] = useState(false);
   const [showAllPosts, setShowAllPosts] = useState(false);
 
-  // ── Modals ────────────────────────────────────────────────────────────────
+  
   const [userModal, setUserModal] = useState({ open: false, editData: null });
   const [confirmModal, setConfirmModal] = useState({
     open: false,
@@ -59,7 +59,7 @@ export default function Admin() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmError, setConfirmError] = useState(null);
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
+  
   const openConfirm = (type, id, title, message) => {
     setConfirmError(null);
     setConfirmModal({ open: true, type, id, title, message });
@@ -68,7 +68,7 @@ export default function Admin() {
   const closeConfirm = () =>
     setConfirmModal({ open: false, type: null, id: null, title: "", message: "" });
 
-  // ── User actions ──────────────────────────────────────────────────────────
+  
   const handleCreateUser = async (data) => {
     await adminService.createUser(data);
     showToast("Usuario creado correctamente");
@@ -92,7 +92,7 @@ export default function Admin() {
     }
   };
 
-  // ── Confirm delete ────────────────────────────────────────────────────────
+  
   const handleConfirmDelete = async () => {
     setConfirmLoading(true);
     setConfirmError(null);
@@ -123,7 +123,7 @@ export default function Admin() {
     }
   };
 
-  // ── Render ────────────────────────────────────────────────────────────────
+  
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 pb-16 space-y-8">

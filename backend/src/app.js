@@ -34,13 +34,13 @@ prisma
   .then(() => console.log("✅ Conectado a PostgreSQL"))
   .catch((err) => console.error("❌ Error conectando a PostgreSQL", err));
 
-// routes
+
 app.use("/api", router);
 
-// Swagger docs
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// ruta de prueba
+
 app.get("/", (req, res) => {
   res.send("API funcionando 🚀");
 });

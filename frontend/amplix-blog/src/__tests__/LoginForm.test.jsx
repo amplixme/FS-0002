@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Login from "../pages/Login";
 
-// Mockeamos el servicio de login para no hacer llamadas HTTP reales
+
 vi.mock("../services/auth.services", () => ({
   login: vi.fn(),
 }));

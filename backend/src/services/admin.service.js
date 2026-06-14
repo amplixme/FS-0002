@@ -137,11 +137,11 @@ export const deleteUser = async (targetId, requesterId) => {
   const user = await prisma.user.findUnique({ where: { id: targetId } });
   if (!user) throw new CustomError("Usuario no encontrado", 404);
 
-  // 1. Eliminar comentarios escritos por este usuario
+  
   await prisma.comment.deleteMany({ where: { authorId: targetId } });
-  // 2. Eliminar posts del usuario (la DB cascadea los comentarios de OTROS usuarios en esos posts)
+  
   await prisma.post.deleteMany({ where: { authorId: targetId } });
-  // 3. Eliminar el usuario
+  
   await prisma.user.delete({ where: { id: targetId } });
 
   return { message: "Usuario eliminado correctamente" };

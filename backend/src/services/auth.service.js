@@ -17,7 +17,7 @@ export const register = async ({ name, email, password }) => {
       name,
       email,
       password: hashedPassword,
-      role: "USER", // siempre USER, nunca se permite definir el rol desde el body
+      role: "USER", 
     },
   });
 
@@ -29,7 +29,7 @@ export const login = async ({ email, password }) => {
     where: { email },
   });
 
-  // No revelar si el error es de email o contraseña
+  
   if (!user) throw new CustomError("Credenciales inválidas", 401);
 
   const passwordMatch = await isValid(password, user.password);

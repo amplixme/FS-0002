@@ -28,7 +28,7 @@ export default function ImageUpload({
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef(null);
 
-  // Label por defecto según el modo
+  
   const displayLabel = label ?? (circlePreview ? "Foto de perfil" : "Imagen de portada");
 
   useEffect(() => {
