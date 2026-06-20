@@ -39,7 +39,7 @@ export default function CategoryEditRow({
         <button
           onClick={() => onSave(id)}
           disabled={updating || !editName.trim() || !editSlug.trim()}
-          className="inline-flex items-center gap-1 px-4 py-2 bg-primary hover:bg-on-primary-fixed-variant text-on-primary font-bold rounded-full transition-colors text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+          className="inline-flex cursor-pointer items-center gap-1 px-4 py-2 bg-primary hover:bg-on-primary-fixed-variant text-on-primary font-bold rounded-full transition-colors text-sm disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {updating ? (
             <span className="material-symbols-outlined animate-spin text-[16px]">
@@ -53,7 +53,7 @@ export default function CategoryEditRow({
         <button
           onClick={onCancel}
           disabled={updating}
-          className="inline-flex items-center gap-1 px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold rounded-full transition-colors text-sm"
+          className="inline-flex cursor-pointer items-center gap-1 px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold rounded-full transition-colors text-sm"
         >
           Cancelar
         </button>

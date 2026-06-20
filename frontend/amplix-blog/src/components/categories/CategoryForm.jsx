@@ -71,7 +71,7 @@ export default function CategoryForm({
             <button
               type="submit"
               disabled={creating}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm bg-primary hover:bg-on-primary-fixed-variant text-on-primary transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              className="inline-flex cursor-pointer items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm bg-primary hover:bg-on-primary-fixed-variant text-on-primary transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {creating ? (
                 <>

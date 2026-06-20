@@ -3,33 +3,28 @@ import { useNavigate } from "react-router-dom";
 import { createPost } from "../services/post.service";
 import { getAll } from "../services/category.service";
 import PostForm from "../components/common/PostForm.jsx";
+import { sileo } from "sileo";
 
 export default function CreatePost() {
   const navigate = useNavigate();
 
-  
-  const [coverImage, setCoverImage] = useState(null); 
+  const [coverImage, setCoverImage] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [published, setPublished] = useState(false);
 
-  
   const [availableCategories, setAvailableCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const res = await getAll();
         setAvailableCategories(res.data ?? []);
-      } catch (err) {
-        
-      }
+      } catch (err) {}
     };
     fetchCategories();
   }, []);
@@ -53,9 +48,16 @@ export default function CreatePost() {
         ...(coverImage && { coverImage }),
         categories: selectedCategories,
       });
+      sileo.success({
+        title: "Artículo creado correctamente",
+      });
       navigate("/");
     } catch (err) {
       setError(err.message || "Error al crear el artículo");
+      sileo.error({
+        title: "Error al crear el artículo",
+        description: err.message || "Intentá de nuevo más tarde.",
+      });
     } finally {
       setLoading(false);
     }

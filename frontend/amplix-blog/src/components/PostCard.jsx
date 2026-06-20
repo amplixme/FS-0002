@@ -50,7 +50,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
               e.stopPropagation();
               if (onCategoryClick) onCategoryClick(cat.slug);
             }}
-            className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest rounded-md bg-secondary-container/30 text-on-secondary-container hover:bg-primary hover:text-on-primary transition-colors"
+            className="px-2.5 py-1 cursor-pointer text-[10px] font-bold uppercase tracking-widest rounded-md bg-secondary-container/30 text-on-secondary-container hover:bg-primary hover:text-on-primary transition-colors"
           >
             {cat.name}
           </button>
@@ -81,7 +81,9 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
 
       {/* Extracto — slate-600 → on-surface-variant */}
       {truncatedExcerpt && (
-        <p className="text-on-surface-variant text-sm leading-relaxed mb-6 flex-grow">{truncatedExcerpt}</p>
+        <p className="text-on-surface-variant text-sm leading-relaxed mb-6 flex-grow">
+          {truncatedExcerpt}
+        </p>
       )}
 
       {/* Autor */}
@@ -95,7 +97,9 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
             />
           ) : (
             <div className="w-8 h-8 bg-surface-container-highest rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="material-symbols-outlined text-[16px] text-on-surface-variant">person</span>
+              <span className="material-symbols-outlined text-[16px] text-on-surface-variant">
+                person
+              </span>
             </div>
           )}
           <div className="flex flex-col min-w-0">

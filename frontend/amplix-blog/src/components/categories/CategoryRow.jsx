@@ -23,14 +23,14 @@ export default function CategoryRow({ cat, onEdit, onDelete }) {
         <div className="flex gap-2 ml-auto">
           <button
             onClick={() => onEdit(cat)}
-            className="inline-flex items-center gap-1 px-3 py-1.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold rounded-full transition-colors text-xs"
+            className="inline-flex items-center cursor-pointer gap-1 px-3 py-1.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold rounded-full transition-colors text-xs"
           >
             <span className="material-symbols-outlined text-[15px]">edit</span>
             Editar
           </button>
           <button
             onClick={() => onDelete(cat)}
-            className="inline-flex items-center gap-1 px-3 py-1.5 bg-error/10 hover:bg-error/20 text-error font-bold rounded-full transition-colors text-xs"
+            className="inline-flex items-center cursor-pointer gap-1 px-3 py-1.5 bg-error/10 hover:bg-error/20 text-error font-bold rounded-full transition-colors text-xs"
           >
             <span className="material-symbols-outlined text-[15px]">delete</span>
             Eliminar

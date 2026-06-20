@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import api from "../services/api.js";
+import { sileo } from "sileo";
 
 function Register() {
   const navigate = useNavigate();
@@ -49,11 +50,18 @@ function Register() {
         email: formData.email,
         password: formData.password,
       });
+      sileo.success({
+        title: "Usuario creado correctamente",
+      });
       navigate("/login", {
         state: { success: "Cuenta creada exitosamente. Iniciá sesión." },
       });
     } catch (error) {
       setServerError(error.response?.data?.error?.message || "Error al registrarse");
+      sileo.error({
+        title: "Error al crear usuario",
+        description: error.message || "Intentá de nuevo más tarde.",
+      });
     } finally {
       setLoading(false);
     }

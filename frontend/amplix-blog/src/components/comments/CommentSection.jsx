@@ -23,7 +23,6 @@ export default function CommentSection({ postId }) {
       const data = await getByPostId(postId);
       setComments(data.data || data || []);
     } catch (error) {
-      
     } finally {
       setLoading(false);
     }
@@ -46,15 +45,11 @@ export default function CommentSection({ postId }) {
       await fetchComments();
       sileo.success({
         title: "Comentario actualizado",
-        fill: "#171717",
-        styles: { title: "text-white!" },
       });
     } catch (err) {
       sileo.error({
         title: "No se pudo actualizar el comentario",
         description: err.message || "Intentá de nuevo más tarde.",
-        fill: "#171717",
-        styles: { title: "text-white!", description: "text-white/75!" },
       });
     }
   };
@@ -67,15 +62,11 @@ export default function CommentSection({ postId }) {
       await fetchComments();
       sileo.success({
         title: "Comentario eliminado",
-        fill: "#171717",
-        styles: { title: "text-white!" },
       });
     } catch (err) {
       sileo.error({
         title: "No se pudo eliminar el comentario",
         description: err.message || "Intentá de nuevo más tarde.",
-        fill: "#171717",
-        styles: { title: "text-white!", description: "text-white/75!" },
       });
     }
   };
@@ -92,9 +83,15 @@ export default function CommentSection({ postId }) {
     try {
       await create(postId, newComment);
       setNewComment("");
+      sileo.success({
+        title: "Comentario creado correctamente",
+      });
       await fetchComments();
     } catch (err) {
-      
+      sileo.error({
+        title: "Error al crear comentario",
+        description: err.message || "Intentá de nuevo más tarde.",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -117,7 +114,6 @@ export default function CommentSection({ postId }) {
               <p className="font-bold text-sm text-on-surface">{c.author.name}</p>
 
               {editingId === c.id ? (
-                
                 <div className="mt-2 space-y-2">
                   <textarea
                     value={editContent}
@@ -141,7 +137,6 @@ export default function CommentSection({ postId }) {
                   </div>
                 </div>
               ) : (
-                
                 <>
                   <p className="text-sm text-on-surface-variant mt-1">{c.content}</p>
                   <p className="text-xs text-outline mt-2">{formatRelativeTime(c.createdAt)}</p>

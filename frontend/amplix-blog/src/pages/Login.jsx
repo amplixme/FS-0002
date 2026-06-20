@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { login } from "../services/auth.services";
+import { sileo } from "sileo";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -19,7 +20,14 @@ export default function Login() {
       const data = await login({ email, password });
       authLogin(data.data.token, data.data.user);
       navigate("/");
+       sileo.success({
+        title: "Login exitoso",
+      });
     } catch (error) {
+      sileo.error({
+       title: "Error al loguearse",
+       description: error.message || "Intentá de nuevo más tarde.",
+     });
       setError(error.message);
     }
   };
