@@ -4,12 +4,12 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-12 pt-8 border-t border-outline-variant/30">
+    <div className="flex justify-center  items-center gap-2 mt-12 pt-8 border-t border-outline-variant/30">
       {/* Botón Anterior */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-10 h-10 cursor-pointer flex items-center justify-center rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Página anterior"
       >
         <span className="material-symbols-outlined text-[20px]">chevron_left</span>
@@ -21,7 +21,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-bold transition-colors ${
+            className={`w-10 h-10 cursor-pointer flex items-center justify-center rounded-full text-sm font-bold transition-colors ${
               currentPage === page
                 ? "bg-primary text-white"
                 : "border border-outline-variant text-on-surface hover:bg-surface-container"
@@ -36,7 +36,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-10 h-10 flex cursor-pointer items-center justify-center rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Página siguiente"
       >
         <span className="material-symbols-outlined text-[20px]">chevron_right</span>

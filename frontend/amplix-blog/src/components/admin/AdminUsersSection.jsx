@@ -31,7 +31,7 @@ export default function AdminUsersSection({
 
         <button
           onClick={onOpenCreate}
-          className="flex items-center gap-1.5 bg-primary text-white text-sm font-bold px-4 py-2 rounded-full hover:bg-primary/90 transition"
+          className="flex items-center cursor-pointer gap-1.5 bg-primary text-white text-sm font-bold px-4 py-2 rounded-full hover:bg-primary/90 transition"
         >
           <span className="material-symbols-outlined text-[18px]">add</span>
           <span className="hidden sm:inline">Crear usuario</span>
@@ -40,7 +40,7 @@ export default function AdminUsersSection({
         {!loading && users.length > 2 ? (
           <button
             onClick={onToggleShowAll}
-            className="hidden sm:block text-sm text-primary font-semibold hover:underline"
+            className="hidden cursor-pointer sm:block text-sm text-primary font-semibold hover:underline"
           >
             {showAll ? "Ver menos" : "Ver todos"}
           </button>
@@ -118,7 +118,7 @@ export default function AdminUsersSection({
                       <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => onEdit(u)}
-                          className="text-xs font-semibold text-on-surface border border-outline-variant px-3 py-1.5 rounded-full hover:bg-surface-container transition whitespace-nowrap"
+                          className="text-xs cursor-pointer font-semibold text-on-surface border border-outline-variant px-3 py-1.5 rounded-full hover:bg-surface-container transition whitespace-nowrap"
                         >
                           Editar
                         </button>
@@ -126,7 +126,7 @@ export default function AdminUsersSection({
                           <>
                             <button
                               onClick={() => onChangeRole(u.id, u.role)}
-                              className="text-xs font-semibold text-on-surface border border-outline-variant px-3 py-1.5 rounded-full hover:bg-surface-container transition whitespace-nowrap"
+                              className="text-xs cursor-pointer font-semibold text-on-surface border border-outline-variant px-3 py-1.5 rounded-full hover:bg-surface-container transition whitespace-nowrap"
                             >
                               Cambiar rol
                             </button>

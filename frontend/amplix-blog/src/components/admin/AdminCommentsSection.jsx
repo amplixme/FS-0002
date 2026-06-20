@@ -42,7 +42,7 @@ export default function AdminCommentsSection({ comments, loading, onDelete, form
               <div className="flex justify-end">
                 <button
                   onClick={() => onDelete(c)}
-                  className="text-xs font-semibold text-error hover:underline"
+                  className="text-xs cursor-pointer font-semibold text-error hover:underline"
                 >
                   Eliminar
                 </button>

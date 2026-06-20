@@ -38,11 +38,11 @@ function isActive(activeCategory, slug) {
 function SidebarFooterButtons() {
   return (
     <div className="mt-8 space-y-1">
-      <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
+      <button className="w-full cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
         <span className="material-symbols-outlined text-[18px] text-slate-400">help</span>
         <span className="text-sm font-medium text-on-surface">Help</span>
       </button>
-      <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
+      <button className="w-full flex items-center cursor-pointer gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
         <span className="material-symbols-outlined text-[18px] text-slate-400">settings</span>
         <span className="text-sm font-medium text-on-surface">Settings</span>
       </button>
@@ -69,7 +69,7 @@ export function CategorySidebar({ categories, activeCategory, onSelect }) {
             <li key={cat.id}>
               <button
                 onClick={() => onSelect(cat.slug)}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`w-full cursor-pointer flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   active
                     ? "bg-primary text-on-primary"
                     : "text-on-surface hover:bg-surface-container"

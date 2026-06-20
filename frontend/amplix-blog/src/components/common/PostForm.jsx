@@ -69,7 +69,7 @@ const PostForm = ({
                   key={cat.id}
                   type="button"
                   onClick={() => toggleCategory(cat.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-all ${
+                  className={`px-4 py-2 cursor-pointer rounded-full text-sm font-bold border-2 transition-all ${
                     isSelected
                       ? "bg-primary border-primary text-white"
                       : "bg-surface-container-low border-outline-variant text-on-surface-variant hover:border-primary/50"
@@ -97,7 +97,7 @@ const PostForm = ({
           role="switch"
           aria-checked={published}
           onClick={() => setPublished(!published)}
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 ${
+          className={`relative inline-flex cursor-pointer h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 ${
             published ? "bg-primary" : "bg-outline-variant"
           }`}
         >
@@ -125,14 +125,14 @@ const PostForm = ({
           type="button"
           onClick={onCancel}
           disabled={loading}
-          className="px-6 py-3 rounded-full font-bold text-on-surface bg-surface-container-high hover:bg-surface-container-highest transition-colors"
+          className="px-6 py-3 cursor-pointer rounded-full font-bold text-on-surface bg-surface-container-high hover:bg-surface-container-highest transition-colors"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 px-6 py-3 rounded-full font-bold text-on-primary bg-primary hover:bg-on-primary-fixed-variant transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+          className="flex-1 cursor-pointer px-6 py-3 rounded-full font-bold text-on-primary bg-primary hover:bg-on-primary-fixed-variant transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
         >
           {loading ? (
             <>
