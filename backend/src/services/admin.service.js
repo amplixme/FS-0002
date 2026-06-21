@@ -5,8 +5,22 @@ import { createHash } from "../utils/user-utils.js";
 export const getStats = async () => {
   const now = new Date();
   const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+  const startOfLastWeek = new Date(startOfWeek.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-  const [totalUsers, totalPosts, totalComments, weekPosts, postsByCategory] = await Promise.all([
+  const [
+    totalUsers,
+    totalPosts,
+    totalComments,
+    weekPosts,
+    postsByCategory,
+    usersThisMonth,
+    usersLastMonth,
+    lastWeekPosts,
+    lastComment
+  ] = await Promise.all([
     prisma.user.count(),
     prisma.post.count(),
     prisma.comment.count(),
@@ -18,13 +32,66 @@ export const getStats = async () => {
         _count: { select: { posts: true } },
       },
     }),
+    // Usuarios creados este mes
+    prisma.user.count({ 
+      where: { 
+        createdAt: { gte: startOfMonth } 
+      } 
+    }),
+    // Usuarios creados el mes pasado
+    prisma.user.count({ 
+      where: { 
+        createdAt: { 
+          gte: startOfLastMonth,
+          lt: startOfMonth 
+        } 
+      } 
+    }),
+    // Posts de la semana anterior
+    prisma.post.count({ 
+      where: { 
+        createdAt: { 
+          gte: startOfLastWeek,
+          lt: startOfWeek 
+        } 
+      } 
+    }),
+    // Último comentario
+    prisma.comment.findFirst({
+      orderBy: { createdAt: "desc" },
+      select: { createdAt: true },
+    }),
   ]);
+
+  // Calcular crecimiento de usuarios comparando con mes pasado
+  const userGrowth = usersLastMonth > 0 
+    ? (((usersThisMonth - usersLastMonth) / usersLastMonth) * 100).toFixed(1)
+    : usersThisMonth > 0 
+      ? 100 
+      : 0;
+
+  // Calcular minutos desde el último comentario
+  const lastCommentMinutes = lastComment
+    ? Math.floor((now.getTime() - new Date(lastComment.createdAt).getTime()) / 60000)
+    : null;
+
+  // Calcular crecimiento de posts vs semana anterior
+  const weekGrowth = lastWeekPosts > 0 
+    ? ((weekPosts - lastWeekPosts) / lastWeekPosts * 100).toFixed(1)
+    : weekPosts > 0 ? 100 : 0;
+
+  // Objetivo semanal
+  const weekGoal = 5;
 
   return {
     totalUsers,
     totalPosts,
     totalComments,
     weekPosts,
+    userGrowth,
+    lastCommentMinutes,
+    weekGrowth,
+    weekGoal,
     postsByCategory: postsByCategory.map((c) => ({
       name: c.name,
       slug: c.slug,

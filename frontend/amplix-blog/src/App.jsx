@@ -1,13 +1,13 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { Toaster } from "sileo";
 import "./App.css";
-
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -21,7 +21,6 @@ const UserProfile = lazy(() => import("./pages/UserProfile"));
 const Admin = lazy(() => import("./pages/Admin"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-
 function PageLoader() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
@@ -30,7 +29,10 @@ function PageLoader() {
   );
 }
 
-function App() {
+/* Separado para poder usar useTheme() dentro del provider */
+function AppContent() {
+  const { theme } = useTheme();
+
   return (
     <ErrorBoundary>
       <AuthProvider>
@@ -129,8 +131,16 @@ function App() {
           </Suspense>
         </BrowserRouter>
       </AuthProvider>
-      <Toaster position="top-center" theme="dark" />
+      <Toaster position="top-center" theme={theme} />
     </ErrorBoundary>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 

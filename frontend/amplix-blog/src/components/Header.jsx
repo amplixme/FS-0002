@@ -1,11 +1,14 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
 import { AuthContext } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const { user, isAuthenticated, logout } = useContext(AuthContext);
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -15,32 +18,32 @@ const Header = () => {
   };
 
   return (
-    <header className="border-b border-gray-200 px-6 py-4 bg-white">
+    <header className="border-b border-outline-variant px-6 py-4 bg-surface-container-lowest">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
 
-        {/* Logo — siempre visible */}
-        <Link to="/" className="text-2xl font-bold text-gray-900">
+        {/* Logo */}
+        <Link to="/" className="text-2xl font-bold text-on-surface">
           Amplix
         </Link>
 
         {/* Nav desktop */}
-        <nav className="hidden md:flex items-center gap-6 text-md text-gray-600 font-medium">
+        <nav className="hidden md:flex items-center gap-6 text-md text-on-surface-variant font-medium">
           <Link
             to="/"
-            className="border-b-2 border-blue-700 text-blue-700 pb-0.5"
+            className="border-b-2 border-primary text-primary pb-0.5"
           >
             Latest
           </Link>
-          <Link to="/popular" className="hover:text-gray-900 transition">
+          <Link to="/popular" className="hover:text-on-surface transition">
             Popular
           </Link>
-          <Link to="/newsletter" className="hover:text-gray-900 transition">
+          <Link to="/newsletter" className="hover:text-on-surface transition">
             Newsletter
           </Link>
           {isAuthenticated && (
             <Link
               to="/categorias"
-              className="hover:text-gray-900 transition font-semibold"
+              className="hover:text-on-surface transition font-semibold"
             >
               Categorías
             </Link>
@@ -48,7 +51,7 @@ const Header = () => {
           {user?.role === "ADMIN" && (
             <Link
               to="/admin"
-              className="hover:text-gray-900 transition font-bold text-primary"
+              className="hover:text-on-surface transition font-bold text-primary"
             >
               Admin
             </Link>
@@ -57,27 +60,36 @@ const Header = () => {
 
         {/* Botones derecha — desktop */}
         <div className="hidden md:flex items-center gap-3">
+          {/* Toggle light/dark */}
+          <button
+            onClick={toggleTheme}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors cursor-pointer"
+            aria-label={theme === "light" ? "Activar modo oscuro" : "Activar modo claro"}
+          >
+            {theme === "light" ? <IoMoonOutline size={18} /> : <IoSunnyOutline size={18} />}
+          </button>
+
           {isAuthenticated ? (
             <>
-              <span className="text-gray-800 font-medium mr-2">Hola, {user?.name}</span>
+              <span className="text-on-surface font-medium mr-2">Hola, {user?.name}</span>
               <button
                 onClick={handleLogout}
-                className="text-red-600 font-medium hover:text-red-800 transition cursor-pointer"
+                className="text-error font-medium hover:opacity-80 transition cursor-pointer"
               >
                 Log Out
               </button>
-              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-sm text-blue-700 font-bold uppercase">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm text-primary font-bold uppercase">
                 {user?.name ? user.name.charAt(0) : "U"}
               </div>
             </>
           ) : (
             <>
-              <Link to="/login" className="text-gray-600 font-medium">
+              <Link to="/login" className="text-on-surface-variant font-medium">
                 Log In
               </Link>
               <Link
                 to="/register"
-                className="text-white bg-blue-700 py-2 px-6 rounded-3xl font-black hover:bg-blue-800 transition"
+                className="text-on-primary bg-primary py-2 px-6 rounded-3xl font-black hover:opacity-90 transition"
               >
                 Subscribe
               </Link>
@@ -86,37 +98,48 @@ const Header = () => {
         </div>
 
         {/* Botón hamburguesa — solo mobile */}
-        <button
-          className="md:hidden flex flex-col gap-1.5 p-2 -mr-2"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Abrir menú"
-          aria-expanded={menuOpen}
-        >
-          <span
-            className={`w-6 h-0.5 bg-gray-900 block transition-all duration-200 ${
-              menuOpen ? "rotate-45 translate-y-2" : ""
-            }`}
-          />
-          <span
-            className={`w-6 h-0.5 bg-gray-900 block transition-all duration-200 ${
-              menuOpen ? "opacity-0" : ""
-            }`}
-          />
-          <span
-            className={`w-6 h-0.5 bg-gray-900 block transition-all duration-200 ${
-              menuOpen ? "-rotate-45 -translate-y-2" : ""
-            }`}
-          />
-        </button>
+        <div className="md:hidden flex items-center gap-2">
+          {/* Toggle también visible en mobile */}
+          <button
+            onClick={toggleTheme}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer"
+            aria-label={theme === "light" ? "Activar modo oscuro" : "Activar modo claro"}
+          >
+            {theme === "light" ? <IoMoonOutline size={18} /> : <IoSunnyOutline size={18} />}
+          </button>
+
+          <button
+            className="flex flex-col gap-1.5 p-2 -mr-2"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Abrir menú"
+            aria-expanded={menuOpen}
+          >
+            <span
+              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${
+                menuOpen ? "rotate-45 translate-y-2" : ""
+              }`}
+            />
+            <span
+              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${
+                menuOpen ? "opacity-0" : ""
+              }`}
+            />
+            <span
+              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${
+                menuOpen ? "-rotate-45 -translate-y-2" : ""
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       {/* Menú mobile */}
       {menuOpen && (
-        <div className="md:hidden flex flex-col gap-4 mt-4 px-4 text-sm text-gray-600 font-medium pb-4 border-t border-gray-100 pt-4">
+        <div className="md:hidden flex flex-col gap-4 mt-4 px-4 text-sm text-on-surface-variant font-medium pb-4 border-t border-outline-variant pt-4">
           <Link
             to="/"
             onClick={() => setMenuOpen(false)}
-            className="text-blue-700 font-semibold"
+            className="text-primary font-semibold"
           >
             Latest
           </Link>
@@ -137,14 +160,14 @@ const Header = () => {
             </Link>
           )}
 
-          <hr className="border-gray-200" />
+          <hr className="border-outline-variant" />
 
           {isAuthenticated ? (
             <>
-              <span className="text-gray-800 font-medium">Hola, {user?.name}</span>
+              <span className="text-on-surface font-medium">Hola, {user?.name}</span>
               <button
                 onClick={handleLogout}
-                className="text-left text-red-600 font-medium cursor-pointer"
+                className="text-left text-error font-medium cursor-pointer"
               >
                 Log Out
               </button>
@@ -157,7 +180,7 @@ const Header = () => {
               <Link
                 to="/register"
                 onClick={() => setMenuOpen(false)}
-                className="text-blue-700 font-bold"
+                className="text-primary font-bold"
               >
                 Subscribe
               </Link>

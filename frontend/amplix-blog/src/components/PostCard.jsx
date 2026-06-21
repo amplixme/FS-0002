@@ -16,7 +16,6 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
     commentCount = 0,
   } = post;
 
-  
   const truncatedExcerpt = excerpt && excerpt.length > 150 ? excerpt.slice(0, 150) + "…" : excerpt;
   const visibleCategories = categories.slice(0, 3);
   const extraCategoriesCount = categories.length - 3;
@@ -51,7 +50,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
               e.stopPropagation();
               if (onCategoryClick) onCategoryClick(cat.slug);
             }}
-            className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest rounded-md bg-secondary-container/30 text-on-secondary-container hover:bg-primary hover:text-white transition-colors"
+            className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest rounded-md bg-secondary-container/30 text-on-secondary-container hover:bg-primary hover:text-on-primary transition-colors"
           >
             {cat.name}
           </button>
@@ -65,8 +64,10 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
 
         {readTime && (
           <div className="flex items-center gap-2 ml-auto">
-            <span className="w-1 h-1 bg-slate-300 rounded-full" />
-            <span className="text-[10px] font-medium text-slate-500 uppercase tracking-widest">
+            {/* slate-300 → outline-variant */}
+            <span className="w-1 h-1 bg-outline-variant rounded-full" />
+            {/* slate-500 → outline */}
+            <span className="text-[10px] font-medium text-outline uppercase tracking-widest">
               {readTime} min lectura
             </span>
           </div>
@@ -74,13 +75,13 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
       </div>
 
       {/* Título */}
-      <h2 className="text-2xl font-bold leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors">
+      <h2 className="text-2xl font-bold leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors text-on-surface">
         {title}
       </h2>
 
-      {/* Extracto */}
+      {/* Extracto — slate-600 → on-surface-variant */}
       {truncatedExcerpt && (
-        <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">{truncatedExcerpt}</p>
+        <p className="text-on-surface-variant text-sm leading-relaxed mb-6 flex-grow">{truncatedExcerpt}</p>
       )}
 
       {/* Autor */}
@@ -94,7 +95,7 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
             />
           ) : (
             <div className="w-8 h-8 bg-surface-container-highest rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="material-symbols-outlined text-[16px]">person</span>
+              <span className="material-symbols-outlined text-[16px] text-on-surface-variant">person</span>
             </div>
           )}
           <div className="flex flex-col min-w-0">
@@ -111,15 +112,17 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
                 {author}
               </span>
             )}
+            {/* slate-500 → outline */}
             {createdAt && (
-              <span className="text-[11px] font-medium text-slate-500 mt-0.5">
+              <span className="text-[11px] font-medium text-outline mt-0.5">
                 {formatRelativeTime(createdAt)}
               </span>
             )}
           </div>
         </div>
 
-        <div className="flex items-center gap-1 text-slate-400 flex-shrink-0">
+        {/* slate-400 → outline */}
+        <div className="flex items-center gap-1 text-outline flex-shrink-0">
           <span className="material-symbols-outlined text-[16px]">chat</span>
           <span className="text-xs font-medium">{commentCount}</span>
         </div>

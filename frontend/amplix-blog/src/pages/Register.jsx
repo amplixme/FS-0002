@@ -58,128 +58,133 @@ function Register() {
       setLoading(false);
     }
   };
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
       {/* Logo */}
-      <Link to="/" className="text-3xl font-bold text-gray-900 my-6">
+      <Link to="/" className="text-3xl font-bold text-on-surface my-6">
         Amplix
       </Link>
 
       {/* Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 w-full max-w-md">
-        <h1 className="text-xl font-bold text-gray-900 text-center mb-1">Crear cuenta</h1>
-        <p className="text-gray-500 text-sm text-center mb-6">Únete a la comunidad</p>
+      <div className="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant p-8 w-full max-w-md">
+        <h1 className="text-xl font-bold text-on-surface text-center mb-1">Crear cuenta</h1>
+        <p className="text-outline text-sm text-center mb-6">Únete a la comunidad</p>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {/* Name */}
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">Nombre completo</label>
-            <div className="flex items-center border border-gray-200 rounded-lg focus-within:border-gray-400 px-4 py-3 gap-3">
-              <FaUser className="text-gray-400" size={14} />
+            <label className="text-sm font-medium text-on-surface-variant mb-1 block">
+              Nombre completo
+            </label>
+            <div className="flex items-center border border-outline-variant rounded-lg focus-within:border-outline px-4 py-3 gap-3 transition-colors">
+              <FaUser className="text-outline flex-shrink-0" size={14} />
               <input
                 type="text"
                 name="name"
                 placeholder="Ej. Juan Pérez"
                 value={formData.name}
                 onChange={handleChange}
-                className="flex-1 text-sm outline-none bg-transparent"
+                className="flex-1 text-sm outline-none bg-transparent text-on-surface placeholder:text-outline"
               />
             </div>
-            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+            {errors.name && <p className="text-error text-xs mt-1">{errors.name}</p>}
           </div>
 
           {/* Email */}
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
+            <label className="text-sm font-medium text-on-surface-variant mb-1 block">
               Correo electrónico
             </label>
-            <div className="flex items-center border border-gray-200 rounded-lg focus-within:border-gray-400 px-4 py-3 gap-3">
-              <FaEnvelope className="text-gray-400" size={14} />
+            <div className="flex items-center border border-outline-variant rounded-lg focus-within:border-outline px-4 py-3 gap-3 transition-colors">
+              <FaEnvelope className="text-outline flex-shrink-0" size={14} />
               <input
                 type="email"
                 name="email"
                 placeholder="nombre@ejemplo.com"
                 value={formData.email}
                 onChange={handleChange}
-                className="flex-1 text-sm outline-none bg-transparent"
+                className="flex-1 text-sm outline-none bg-transparent text-on-surface placeholder:text-outline"
               />
             </div>
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+            {errors.email && <p className="text-error text-xs mt-1">{errors.email}</p>}
           </div>
 
           {/* Contraseña */}
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">Contraseña</label>
-            <div className="flex items-center border border-gray-200 rounded-lg px-4 py-3 gap-3 focus-within:border-gray-400">
-              <FaLock className="text-gray-400" size={14} />
+            <label className="text-sm font-medium text-on-surface-variant mb-1 block">
+              Contraseña
+            </label>
+            <div className="flex items-center border border-outline-variant rounded-lg focus-within:border-outline px-4 py-3 gap-3 transition-colors">
+              <FaLock className="text-outline flex-shrink-0" size={14} />
               <input
                 type="password"
                 name="password"
                 placeholder="Mínimo 8 caracteres"
                 value={formData.password}
                 onChange={handleChange}
-                className="flex-1 text-sm outline-none bg-transparent"
+                className="flex-1 text-sm outline-none bg-transparent text-on-surface placeholder:text-outline"
               />
             </div>
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+            {errors.password && <p className="text-error text-xs mt-1">{errors.password}</p>}
           </div>
 
           {/* Confirmar contraseña */}
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
+            <label className="text-sm font-medium text-on-surface-variant mb-1 block">
               Confirmar contraseña
             </label>
-            <div className="flex items-center border border-gray-200 rounded-lg px-4 py-3 gap-3 focus-within:border-gray-400">
-              <FaLock className="text-gray-400" size={14} />
+            <div className="flex items-center border border-outline-variant rounded-lg focus-within:border-outline px-4 py-3 gap-3 transition-colors">
+              <FaLock className="text-outline flex-shrink-0" size={14} />
               <input
                 type="password"
                 name="confirmPassword"
                 placeholder="Repetí tu contraseña"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="flex-1 text-sm outline-none bg-transparent"
+                className="flex-1 text-sm outline-none bg-transparent text-on-surface placeholder:text-outline"
               />
             </div>
             {errors.confirmPassword && (
-              <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
+              <p className="text-error text-xs mt-1">{errors.confirmPassword}</p>
             )}
           </div>
 
           {/* Error servidor */}
-          {serverError && <p className="text-red-500 text-sm text-center">{serverError}</p>}
+          {serverError && <p className="text-error text-sm text-center">{serverError}</p>}
 
           {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-700 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-full transition mt-2 cursor-pointer"
+            className="w-full bg-primary hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-on-primary font-semibold py-3 rounded-full transition mt-2 cursor-pointer"
           >
             {loading ? "Creando cuenta..." : "Crear cuenta"}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-outline mt-6">
           ¿Ya tienes cuenta?{" "}
-          <Link to="/login" className="text-blue-600 font-medium hover:underline">
+          <Link to="/login" className="text-primary font-medium hover:underline">
             Inicia sesión
           </Link>
         </p>
       </div>
 
       {/* Footer simple */}
-      <div className="my-8 flex flex-col items-center gap-3 text-sm text-gray-400">
+      <div className="my-8 flex flex-col items-center gap-3 text-sm text-outline">
         <div className="flex gap-6">
-          <a href="#" className="hover:text-gray-600">
+          <a href="#" className="hover:text-on-surface-variant transition-colors">
             Sobre nosotros
           </a>
-          <a href="#" className="hover:text-gray-600">
+          <a href="#" className="hover:text-on-surface-variant transition-colors">
             Ayuda
           </a>
-          <a href="#" className="hover:text-gray-600">
+          <a href="#" className="hover:text-on-surface-variant transition-colors">
             Blog
           </a>
-          <a href="#" className="hover:text-gray-600">
+          <a href="#" className="hover:text-on-surface-variant transition-colors">
             Contacto
           </a>
         </div>

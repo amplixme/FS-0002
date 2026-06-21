@@ -79,7 +79,7 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
       />
 
       {/* Bottom-sheet en mobile, modal centrado en sm+ */}
-      <div className="relative z-10 bg-white w-full rounded-t-2xl sm:rounded-2xl sm:max-w-md ambient-shadow p-5 sm:p-8">
+      <div className="relative z-10 bg-surface-container-lowest w-full rounded-t-2xl sm:rounded-2xl sm:max-w-md ambient-shadow p-5 sm:p-8">
 
         {/* Pill indicador — solo mobile */}
         <div className="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-5 sm:hidden" />
@@ -172,7 +172,7 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
                         : "border-outline-variant bg-transparent"
                     }`}
                   >
-                    {form.role === r && <span className="w-2 h-2 rounded-full bg-white block" />}
+                    {form.role === r && <span className="w-2 h-2 rounded-full bg-on-primary block" />}
                   </span>
                   {r}
                 </button>

@@ -1,35 +1,89 @@
 @import "tailwindcss";
 
+/* Clase-based dark mode: activa dark: cuando <html> tiene la clase "dark" */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
+  /* ── Light theme (default) ───────────────────────── */
   --color-primary: #024ce2;
   --color-secondary: #006877;
   --color-secondary-container: #3fe1fd;
+  --color-on-secondary-container: #001f24;
+
   --color-background: #f7f9fb;
   --color-surface: #f7f9fb;
   --color-surface-container-lowest: #ffffff;
   --color-surface-container-low: #f2f4f6;
   --color-surface-container: #eceef0;
   --color-surface-container-high: #e6e8ea;
+  --color-surface-container-highest: #d8dade;
+
   --color-on-surface: #191c1e;
   --color-on-surface-variant: #434655;
   --color-on-primary: #ffffff;
   --color-on-primary-fixed-variant: #003ab2;
+
   --color-outline: #737687;
   --color-outline-variant: #c3c5d8;
+
   --color-error: #ba1a1a;
   --color-primary-container: #3668fc;
   --color-inverse-primary: #b6c4ff;
 }
 
+/* ── Dark theme ──────────────────────────────────────
+   Paleta ajustada: azul vibrante en lugar de lavanda
+   para que botones y links se vean naturales.         */
+.dark {
+  color-scheme: dark;
+
+  /* Azul brillante que se lee bien sobre fondos oscuros */
+  --color-primary: #5b8dee;
+  --color-secondary: #3db5c8;
+  --color-secondary-container: #003d47;
+  --color-on-secondary-container: #a2eeff;
+
+  /* Fondos neutros muy oscuros con tinte azul suave */
+  --color-background: #111418;
+  --color-surface: #111418;
+  --color-surface-container-lowest: #0a0e12;
+  --color-surface-container-low: #181c20;
+  --color-surface-container: #1c2025;
+  --color-surface-container-high: #262b30;
+  --color-surface-container-highest: #313639;
+
+  /* Textos: blancos suaves, nunca puro #fff */
+  --color-on-surface: #e2e5eb;
+  --color-on-surface-variant: #bfc3d0;
+  --color-on-primary: #ffffff;
+  --color-on-primary-fixed-variant: #82a9f7;
+
+  /* Bordes y outline */
+  --color-outline: #8e92a4;
+  --color-outline-variant: #3d404e;
+
+  --color-error: #ff8a8a;
+  --color-primary-container: #1f3e8f;
+  --color-inverse-primary: #024ce2;
+}
+
+/* ── Utilidades globales ─────────────────────────── */
+html {
+  background-color: var(--color-background);
+}
 
 .ambient-shadow {
   box-shadow: 0 20px 40px rgba(17, 24, 39, 0.05);
 }
+.dark .ambient-shadow {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
 
+/* Usa la variable de tema en lugar de un hex fijo */
 .no-line-separator::before,
 .no-line-separator::after {
   content: "";
   flex: 1;
   height: 1px;
-  background: #e0e3e5;
+  background: var(--color-outline-variant);
 }
