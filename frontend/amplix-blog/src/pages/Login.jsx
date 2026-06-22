@@ -97,7 +97,7 @@ export default function Login() {
                     required
                   />
                   <button
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-outline hover:text-on-surface transition-colors"
+                    className="absolute cursor-pointer inset-y-0 right-0 pr-4 flex items-center text-outline hover:text-on-surface transition-colors"
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                   >
@@ -113,7 +113,7 @@ export default function Login() {
 
               {/* Botón submit */}
               <button
-                className="w-full bg-primary text-on-primary font-bold py-4 px-6 rounded-full hover:bg-on-primary-fixed-variant active:scale-[0.98] transition-all text-base"
+                className="w-full bg-primary cursor-pointer text-on-primary font-bold py-4 px-6 rounded-full hover:bg-on-primary-fixed-variant active:scale-[0.98] transition-all text-base"
                 type="submit"
               >
                 Iniciar sesión
@@ -129,7 +129,7 @@ export default function Login() {
 
             {/* Botón Google */}
             <div className="grid grid-cols-1 gap-4">
-              <button className="flex items-center justify-center gap-3 w-full py-3 px-6 bg-surface-container-low border border-outline-variant/10 rounded-full hover:bg-surface-container-high transition-colors text-on-surface font-medium">
+              <button className="flex cursor-pointer items-center justify-center gap-3 w-full py-3 px-6 bg-surface-container-low border border-outline-variant/10 rounded-full hover:bg-surface-container-high transition-colors text-on-surface font-medium">
                 <img
                   alt="Google Logo"
                   className="w-5 h-5"

@@ -18,7 +18,7 @@ export default function AdminPostsSection({
         {!loading && posts.length > 2 && (
           <button
             onClick={onToggleShowAll}
-            className="hidden sm:block text-sm text-primary font-semibold hover:underline"
+            className="hidden cursor-pointer sm:block text-sm text-primary font-semibold hover:underline"
           >
             {showAll ? "Ver menos" : "Ver todos"}
           </button>
@@ -39,7 +39,7 @@ export default function AdminPostsSection({
             {posts.length > 2 && (
               <button
                 onClick={onToggleShowAll}
-                className="w-full text-sm text-primary font-semibold py-2 hover:underline"
+                className="w-full text-sm cursor-pointer text-primary font-semibold py-2 hover:underline"
               >
                 {showAll ? "Ver menos" : `Ver todos los posts (${posts.length})`}
               </button>
@@ -112,7 +112,7 @@ export default function AdminPostsSection({
                     <td className="py-3">
                       <button
                         onClick={() => onDelete(p)}
-                        className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-error/10 transition text-error"
+                        className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-error/10 transition text-error"
                       >
                         <span className="material-symbols-outlined text-[18px]">delete</span>
                       </button>
