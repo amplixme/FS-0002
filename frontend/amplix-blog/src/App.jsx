@@ -8,7 +8,6 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { Toaster } from "sileo";
 import "./App.css";
 
-
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -20,7 +19,7 @@ const EditProfile = lazy(() => import("./pages/EditProfile"));
 const UserProfile = lazy(() => import("./pages/UserProfile"));
 const Admin = lazy(() => import("./pages/Admin"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-
+const Nosotros = lazy(() => import("./pages/Nosotros"));
 
 function PageLoader() {
   return (
@@ -90,8 +89,6 @@ function App() {
                 }
               />
 
-              {/* ── Edición de perfil — va ANTES de /perfil/:id
-                  para que React Router no resuelva "editar" como un :id ── */}
               <Route
                 path="/perfil/editar"
                 element={
@@ -123,6 +120,8 @@ function App() {
                   </ProtectedAdminRoute>
                 }
               />
+
+              <Route path="/nosotros" element={<Nosotros />} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>
