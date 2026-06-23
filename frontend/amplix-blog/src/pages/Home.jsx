@@ -123,9 +123,7 @@ export default function Home() {
       <main className="max-w-7xl mx-auto px-4 pb-12">
         {/* Header de página */}
         <div className="py-8 border-b border-slate-100 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <h1 className="text-3xl font-extrabold tracking-tight">
-            Últimas publicaciones
-          </h1>
+          <h1 className="text-3xl font-extrabold tracking-tight">Últimas publicaciones</h1>
 
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             {/* Buscador */}
@@ -161,7 +159,6 @@ export default function Home() {
               >
                 <option value="newest">Más recientes</option>
                 <option value="oldest">Más antiguos</option>
-                <option value="comments">Más comentados</option>
               </select>
               <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[20px]">
                 expand_more

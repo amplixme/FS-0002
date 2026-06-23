@@ -7,23 +7,23 @@ const Footer = () => {
     <footer className="border-t border-gray-200 bg-white px-6 py-8 mt-auto">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         {/* izquierda */}
-        <div className="">
-          <p className="font-black   text-gray-900 text-xl"> The Curated Canvas</p>
-          <p className="text-md text-gray-500 font-semibold">
-            © {new Date().getFullYear()} Amplix. High-end editorial experience.
+        <div>
+          <p className="font-black text-on-surface text-xl">Amplix Editorial</p>
+          <p className="text-md text-outline font-semibold">
+            © {new Date().getFullYear()} Amplix. Experiencia editorial de primer nivel.
           </p>
         </div>
 
         {/* derecha */}
-        <div className="flex items-center gap-6 text-md text-gray-500 font-medium">
-          <a href="#" className="hover:text-blue-700 transition">
-            Privacy Policy
+        <div className="flex items-center gap-6 text-md text-on-surface-variant font-medium">
+          <a href="#" className="hover:text-primary transition">
+            Política de Privacidad
           </a>
-          <a href="#" className="hover:text-blue-700 transition">
-            Terms of Service
+          <a href="#" className="hover:text-primary transition">
+            Términos de Servicio
           </a>
-          <a href="#" className="hover:text-blue-700 transition">
-            RSS Feed
+          <a href="#" className="hover:text-primary transition">
+            Feed RSS
           </a>
         </div>
 
