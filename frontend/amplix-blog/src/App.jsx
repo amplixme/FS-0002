@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
@@ -18,8 +19,8 @@ const PostDetail = lazy(() => import("./pages/PostDetail"));
 const EditProfile = lazy(() => import("./pages/EditProfile"));
 const UserProfile = lazy(() => import("./pages/UserProfile"));
 const Admin = lazy(() => import("./pages/Admin"));
-const NotFound = lazy(() => import("./pages/NotFound"));
 const Nosotros = lazy(() => import("./pages/Nosotros"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function PageLoader() {
   return (
@@ -29,7 +30,9 @@ function PageLoader() {
   );
 }
 
-function App() {
+function AppContent() {
+  const { theme } = useTheme();
+
   return (
     <ErrorBoundary>
       <AuthProvider>
@@ -46,7 +49,6 @@ function App() {
               />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-
               <Route
                 path="/create-post"
                 element={
@@ -57,7 +59,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-
               <Route
                 path="/categorias"
                 element={
@@ -68,7 +69,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-
               <Route
                 path="/posts/:id/edit"
                 element={
@@ -79,7 +79,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-
               <Route
                 path="/posts/:id"
                 element={
@@ -88,7 +87,6 @@ function App() {
                   </Layout>
                 }
               />
-
               <Route
                 path="/perfil/editar"
                 element={
@@ -99,8 +97,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-
-              {/* ── Perfil público ── */}
               <Route
                 path="/perfil/:id"
                 element={
@@ -109,7 +105,6 @@ function App() {
                   </Layout>
                 }
               />
-
               <Route
                 path="/admin"
                 element={
@@ -120,16 +115,29 @@ function App() {
                   </ProtectedAdminRoute>
                 }
               />
-
-              <Route path="/nosotros" element={<Nosotros />} />
-
+              <Route
+                path="/nosotros"
+                element={
+                  <Layout>
+                    <Nosotros />
+                  </Layout>
+                }
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </BrowserRouter>
       </AuthProvider>
-      <Toaster position="top-center" theme="dark" />
+      <Toaster position="top-center" theme={theme} />
     </ErrorBoundary>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 
