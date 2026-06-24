@@ -13,22 +13,48 @@ const EditPost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [published, setPublished] = useState(false);
-  const [coverImage, setCoverImage] = useState(null); 
+  const [coverImage, setCoverImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fetching, setFetching] = useState(true);
   const [availableCategories, setAvailableCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
+  // ADMIN y COLLABORATOR pueden cambiar el estado de publicación
+  const canPublish = user?.role === "ADMIN" || user?.role === "COLLABORATOR";
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [postResult, categoriesResult] = await Promise.all([getPostById(id), getAll()]);
+        const [postResult, categoriesResult] = await Promise.all([
+          getPostById(id),
+          getAll(),
+        ]);
 
         const post = postResult.data ? postResult.data : postResult;
 
-        if (user.id !== post.authorId) {
+        /* ── Verificación de permisos ──
+         * - ADMIN: puede editar cualquier post
+         * - COLLABORATOR: sus propios posts + borradores de USER
+         * - USER: solo sus propios borradores (no publicados)
+         */
+        const isAuthor = user.id === post.authorId;
+        const isAdmin = user.role === "ADMIN";
+        const isCollaboratorOnUserDraft =
+          user.role === "COLLABORATOR" &&
+          post.author?.role === "USER" &&
+          !post.published;
+        const isUserOnOwnDraft =
+          user.role === "USER" && isAuthor && !post.published;
+
+        if (!isAdmin && !isAuthor && !isCollaboratorOnUserDraft) {
           navigate("/");
+          return;
+        }
+
+        // USER no puede editar posts ya publicados
+        if (user.role === "USER" && isAuthor && post.published) {
+          navigate(`/posts/${id}`);
           return;
         }
 
@@ -38,8 +64,7 @@ const EditPost = () => {
         if (post.coverImage) setCoverImage(post.coverImage);
 
         setAvailableCategories(categoriesResult.data ?? []);
-
-        if (post.categories && post.categories.length > 0) {
+        if (post.categories?.length > 0) {
           setSelectedCategories(post.categories.map((cat) => cat.id));
         }
       } catch (error) {
@@ -50,7 +75,7 @@ const EditPost = () => {
     };
 
     fetchData();
-  }, [id, user.id, navigate]);
+  }, [id, user.id, user.role, navigate]);
 
   const toggleCategory = (catId) => {
     setSelectedCategories((prev) =>
@@ -99,7 +124,11 @@ const EditPost = () => {
               <h1 className="text-3xl font-extrabold text-on-surface tracking-tight">
                 Editar Artículo
               </h1>
-              <p className="text-on-surface-variant mt-2">Modificá el contenido de tu artículo.</p>
+              <p className="text-on-surface-variant mt-2">
+                {canPublish
+                  ? "Modificá y publicá el artículo cuando esté listo."
+                  : "Modificá el contenido de tu artículo en borrador."}
+              </p>
             </header>
 
             <PostForm
@@ -119,6 +148,7 @@ const EditPost = () => {
               error={error}
               submitLabel="Guardar Cambios"
               onCancel={() => navigate(`/posts/${id}`)}
+              canPublish={canPublish}
             />
           </div>
         </div>

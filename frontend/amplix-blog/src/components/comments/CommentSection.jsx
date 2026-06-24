@@ -17,6 +17,9 @@ export default function CommentSection({ postId }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
+  /** Roles con capacidad de moderar (borrar cualquier comentario) */
+  const isModerator = user?.role === "ADMIN" || user?.role === "COLLABORATOR";
+
   const fetchComments = async () => {
     try {
       setLoading(true);
@@ -111,7 +114,15 @@ export default function CommentSection({ postId }) {
         ) : (
           comments.map((c) => (
             <div key={c.id} className="p-4 bg-surface-container-low rounded-xl">
-              <p className="font-bold text-sm text-on-surface">{c.author.name}</p>
+              <div className="flex items-center justify-between mb-1">
+                <p className="font-bold text-sm text-on-surface">{c.author.name}</p>
+                {/* Badge de moderación — solo visible para ADMIN/COLLABORATOR sobre comentarios ajenos */}
+                {isModerator && user?.id !== c.authorId && (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container">
+                    moderación
+                  </span>
+                )}
+              </div>
 
               {editingId === c.id ? (
                 <div className="mt-2 space-y-2">
@@ -140,14 +151,19 @@ export default function CommentSection({ postId }) {
                 <>
                   <p className="text-sm text-on-surface-variant mt-1">{c.content}</p>
                   <p className="text-xs text-outline mt-2">{formatRelativeTime(c.createdAt)}</p>
-                  {user?.id === c.authorId && (
-                    <div className="flex gap-3 mt-2">
+
+                  <div className="flex gap-3 mt-2">
+                    {/* Editar: solo el propio autor */}
+                    {user?.id === c.authorId && (
                       <button
                         onClick={() => startEdit(c)}
                         className="text-xs font-bold cursor-pointer text-primary hover:underline"
                       >
                         Editar
                       </button>
+                    )}
+                    {/* Eliminar: autor del comentario + moderadores (ADMIN / COLLABORATOR) */}
+                    {(user?.id === c.authorId || isModerator) && (
                       <button
                         onClick={() => {
                           setDeleteTarget(c);
@@ -157,8 +173,8 @@ export default function CommentSection({ postId }) {
                       >
                         Eliminar
                       </button>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </>
               )}
             </div>

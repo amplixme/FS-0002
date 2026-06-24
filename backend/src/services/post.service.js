@@ -20,7 +20,7 @@ export const createPost = async (
       },
     },
     include: {
-      author: { select: { name: true, email: true } },
+      author: { select: { name: true, email: true, role: true } },
       categories: true,
     },
   });
@@ -48,14 +48,12 @@ export const getAllPosts = async (
   }
 
   if (search) {
-    
     whereClause.OR = [
       { title: { contains: search, mode: "insensitive" } },
       { content: { contains: search, mode: "insensitive" } },
     ];
   }
 
-  
   let orderByClause;
   if (sort === "oldest") {
     orderByClause = { createdAt: "asc" };
@@ -96,6 +94,7 @@ export const getAllPosts = async (
     currentPage: page,
   };
 };
+
 export const getPostById = async (id) => {
   const numericId = parseInt(id);
 
@@ -105,7 +104,8 @@ export const getPostById = async (id) => {
     where: { id: numericId },
     include: {
       author: {
-        select: { name: true, email: true },
+        // role incluido para que controllers y frontend puedan verificar permisos
+        select: { name: true, email: true, role: true },
       },
       categories: true,
     },
@@ -129,7 +129,7 @@ export const updatePostService = async (id, data) => {
     },
     include: {
       author: {
-        select: { name: true, email: true },
+        select: { name: true, email: true, role: true },
       },
       categories: true,
     },

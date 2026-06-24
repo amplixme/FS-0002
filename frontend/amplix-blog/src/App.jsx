@@ -5,6 +5,7 @@ import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
+import ProtectedCollaboratorRoute from "./components/ProtectedCollaboratorRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { Toaster } from "sileo";
 import "./App.css";
@@ -19,6 +20,7 @@ const PostDetail = lazy(() => import("./pages/PostDetail"));
 const EditProfile = lazy(() => import("./pages/EditProfile"));
 const UserProfile = lazy(() => import("./pages/UserProfile"));
 const Admin = lazy(() => import("./pages/Admin"));
+const Collaborator = lazy(() => import("./pages/Collaborator"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function PageLoader() {
@@ -29,7 +31,6 @@ function PageLoader() {
   );
 }
 
-/* Separado para poder usar useTheme() dentro del provider */
 function AppContent() {
   const { theme } = useTheme();
 
@@ -92,8 +93,7 @@ function AppContent() {
                 }
               />
 
-              {/* ── Edición de perfil — va ANTES de /perfil/:id
-                  para que React Router no resuelva "editar" como un :id ── */}
+              {/* ── Edición de perfil — va ANTES de /perfil/:id ── */}
               <Route
                 path="/perfil/editar"
                 element={
@@ -115,6 +115,19 @@ function AppContent() {
                 }
               />
 
+              {/* ── Panel de colaboración (COLLABORATOR + ADMIN) ── */}
+              <Route
+                path="/collaborator"
+                element={
+                  <ProtectedCollaboratorRoute>
+                    <Layout>
+                      <Collaborator />
+                    </Layout>
+                  </ProtectedCollaboratorRoute>
+                }
+              />
+
+              {/* ── Panel de administración (solo ADMIN) ── */}
               <Route
                 path="/admin"
                 element={

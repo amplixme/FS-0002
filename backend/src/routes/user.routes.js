@@ -6,6 +6,7 @@ import {
   getPublicProfile,
   getPublicProfilePosts,
   updateProfile,
+  getMyDrafts,
 } from "../controllers/user.controller.js";
 
 const router = Router();
@@ -18,49 +19,37 @@ const router = Router();
  */
 
 /**
+ * PUT /api/users/me — actualizar perfil propio
+ * IMPORTANTE: debe ir antes de /:id para que "me" no se interprete como un ID.
+ */
+router.put("/me", authMiddleware, validateBody(updateProfileSchema), updateProfile);
+
+/**
+ * GET /api/users/me/drafts — borradores propios (autenticado)
+ * IMPORTANTE: debe ir antes de /:id/posts por la misma razón.
+ *
  * @swagger
- * /api/users/me:
- *   put:
- *     summary: Actualizar perfil propio (autenticado)
+ * /api/users/me/drafts:
+ *   get:
+ *     summary: Borradores del usuario autenticado
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               bio:
- *                 type: string
- *               avatarUrl:
- *                 type: string
- *           example:
- *             name: "Thomas Bretschneider"
- *             bio: "Desarrollador Full Stack"
- *             avatarUrl: "https://res.cloudinary.com/dafcbbhf9/image/upload/v1/avatar.jpg"
  *     responses:
  *       200:
- *         description: Perfil actualizado
+ *         description: Lista de borradores propios
  *         content:
  *           application/json:
  *             example:
  *               data:
- *                 id: 9
- *                 name: "Thomas Bretschneider"
- *                 bio: "Desarrollador Full Stack"
- *                 avatarUrl: "https://res.cloudinary.com/dafcbbhf9/image/upload/v1/avatar.jpg"
- *                 email: "thomas@gmail.com"
- *                 role: "USER"
+ *                 - id: 5
+ *                   title: "Mi borrador"
+ *                   published: false
+ *                   categories: []
  *       401:
  *         description: No autenticado
- *       400:
- *         description: Datos inválidos
  */
-router.put("/me", authMiddleware, validateBody(updateProfileSchema), updateProfile);
+router.get("/me/drafts", authMiddleware, getMyDrafts);
 
 /**
  * @swagger
@@ -68,26 +57,6 @@ router.put("/me", authMiddleware, validateBody(updateProfileSchema), updateProfi
  *   get:
  *     summary: Posts publicados de un usuario
  *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         example: 9
- *     responses:
- *       200:
- *         description: Lista de posts del usuario
- *         content:
- *           application/json:
- *             example:
- *               data:
- *                 - id: 17
- *                   title: "Edit Post 3"
- *                   published: true
- *                   author:
- *                     name: "Thomas Brets"
- *                   categories: []
  */
 router.get("/:id/posts", getPublicProfilePosts);
 
@@ -97,29 +66,8 @@ router.get("/:id/posts", getPublicProfilePosts);
  *   get:
  *     summary: Perfil público de un usuario
  *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         example: 9
- *     responses:
- *       200:
- *         description: Perfil público del usuario
- *         content:
- *           application/json:
- *             example:
- *               data:
- *                 id: 9
- *                 name: "Thomas Brets"
- *                 bio: "Desarrollador Full Stack"
- *                 avatarUrl: null
- *                 createdAt: "2026-06-01T00:00:00.000Z"
- *                 postCount: 3
- *       404:
- *         description: Usuario no encontrado
  */
 router.get("/:id", getPublicProfile);
 
 export default router;
+

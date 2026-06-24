@@ -1,12 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { getProfile, getUserPosts, updateProfile } from "../services/user.service";
+import { getProfile, getUserPosts, updateProfile, getMyDrafts } from "../services/user.service";
 import ProfileSkeleton from "../components/profile/ProfileSkeleton";
 import ProfileHeader from "../components/profile/ProfileHeader";
 import ProfileEditForm from "../components/profile/ProfileEditForm";
 import ProfileTabs from "../components/profile/ProfileTabs";
 import UserPostsGrid from "../components/profile/UserPostsGrid";
+import UserDraftsGrid from "../components/profile/UserDraftsGrid";
 import { EmptyState } from "../components/common/EmptyState";
 import Toast from "../components/common/Toast";
 
@@ -16,6 +17,7 @@ export default function UserProfile() {
 
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [drafts, setDrafts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("publicaciones");
@@ -27,55 +29,50 @@ export default function UserProfile() {
 
   useEffect(() => {
     let cancelled = false;
+
     const fetchData = async () => {
       setLoading(true);
       setError("");
       try {
-        const [profileRes, postsRes] = await Promise.all([getProfile(id), getUserPosts(id)]);
+        // Si es el propio perfil y está autenticado, cargamos también los borradores
+        const requests = [getProfile(id), getUserPosts(id)];
+        if (isOwnProfile) requests.push(getMyDrafts());
+
+        const results = await Promise.all(requests);
         if (cancelled) return;
-        const profileData = profileRes.data ?? profileRes;
-        const postsData = postsRes.data ?? postsRes;
-        setProfile(profileData);
-        setPosts(Array.isArray(postsData) ? postsData : []);
+
+        setProfile(results[0].data ?? results[0]);
+        setPosts(Array.isArray(results[1].data ?? results[1]) ? (results[1].data ?? results[1]) : []);
+        if (isOwnProfile && results[2]) {
+          setDrafts(Array.isArray(results[2].data ?? results[2]) ? (results[2].data ?? results[2]) : []);
+        }
       } catch (err) {
         if (!cancelled) setError(err.message || "Error al cargar el perfil");
       } finally {
         if (!cancelled) setLoading(false);
       }
     };
+
     fetchData();
-    return () => {
-      cancelled = true;
-    };
-  }, [id]);
+    return () => { cancelled = true; };
+  }, [id, isOwnProfile]);
 
   const handleSave = async (formData) => {
     setSaving(true);
     try {
       const res = await updateProfile(formData);
       const updated = res.data ?? res;
-
-      
       setProfile((prev) => ({ ...prev, ...updated }));
-
-      
-      if (isOwnProfile) {
-        updateUser(updated);
-      }
-
+      if (isOwnProfile) updateUser(updated);
       setIsEditing(false);
       setToast({ message: "Perfil actualizado correctamente", type: "success" });
     } catch (err) {
-      setToast({
-        message: err.message || "Error al guardar los cambios",
-        type: "error",
-      });
+      setToast({ message: err.message || "Error al guardar los cambios", type: "error" });
     } finally {
       setSaving(false);
     }
   };
 
-  
   if (loading) {
     return (
       <div className="min-h-screen bg-background py-10 px-4 sm:px-6 lg:px-8">
@@ -101,7 +98,6 @@ export default function UserProfile() {
     );
   }
 
-  
   if (error || !profile) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
@@ -114,7 +110,6 @@ export default function UserProfile() {
     );
   }
 
-  
   return (
     <>
       <div className="min-h-screen bg-background py-10 px-4 sm:px-6 lg:px-8">
@@ -136,9 +131,18 @@ export default function UserProfile() {
             />
           )}
 
-          <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />
+          <ProfileTabs
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            showDraftsTab={isOwnProfile}
+            draftsCount={drafts.length}
+          />
 
           {activeTab === "publicaciones" && <UserPostsGrid posts={posts} />}
+
+          {activeTab === "borradores" && isOwnProfile && (
+            <UserDraftsGrid drafts={drafts} />
+          )}
 
           {activeTab === "comentarios" && (
             <EmptyState message="Los comentarios del usuario estarán disponibles próximamente." />
