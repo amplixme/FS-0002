@@ -37,11 +37,11 @@ function SidebarFooterButtons() {
     <div className="mt-8 space-y-1">
       <button className="w-full cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
         <span className="material-symbols-outlined text-[18px] text-outline">help</span>
-        <span className="text-sm font-medium text-on-surface">Help</span>
+        <span className="text-sm font-medium text-on-surface">Ayuda</span>
       </button>
       <button className="w-full cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
         <span className="material-symbols-outlined text-[18px] text-outline">settings</span>
-        <span className="text-sm font-medium text-on-surface">Settings</span>
+        <span className="text-sm font-medium text-on-surface">Configuración</span>
       </button>
     </div>
   );
@@ -52,10 +52,7 @@ export function CategorySidebar({ categories, activeCategory, onSelect }) {
 
   return (
     <aside className="hidden lg:block w-52 flex-shrink-0">
-      {/* slate-400 → outline */}
-      <h2 className="text-xs font-bold uppercase tracking-widest text-outline mb-3">
-        Categorías
-      </h2>
+      <h2 className="text-xs font-bold uppercase tracking-widest text-outline mb-3">Categorías</h2>
 
       <ul className="space-y-0.5">
         {list.map((cat) => {
@@ -114,7 +111,7 @@ export function CategoryChips({ categories, activeCategory, onSelect }) {
         <button
           key={cat.id}
           onClick={() => onSelect(cat.slug)}
-          className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+          className={`flex-shrink-0 cursor-pointer px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
             isActive(activeCategory, cat.slug)
               ? "bg-primary text-on-primary"
               : "bg-surface-container text-on-surface hover:bg-surface-container-high"

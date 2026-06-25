@@ -36,8 +36,7 @@ const Header = () => {
   return (
     <header className="border-b border-outline-variant px-6 py-4 bg-surface-container-lowest">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
-
-        {/* ── Logo ── */}
+        {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-on-surface">
           Amplix
         </Link>
@@ -45,13 +44,10 @@ const Header = () => {
         {/* ── Nav desktop ── */}
         <nav className="hidden md:flex items-center gap-6 text-md text-on-surface-variant font-medium">
           <Link to="/" className="border-b-2 border-primary text-primary pb-0.5">
-            Latest
+            Inicio
           </Link>
-          <Link to="/popular" className="hover:text-on-surface transition">
-            Popular
-          </Link>
-          <Link to="/newsletter" className="hover:text-on-surface transition">
-            Newsletter
+          <Link to="/nosotros" className="hover:text-on-surface transition font-medium">
+            Nosotros
           </Link>
 
           {isAuthenticated && (
@@ -79,8 +75,6 @@ const Header = () => {
 
         {/* ── Botones derecha — desktop ── */}
         <div className="hidden md:flex items-center gap-3">
-
-          {/* Toggle light/dark */}
           <button
             onClick={toggleTheme}
             className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors cursor-pointer"
@@ -125,7 +119,6 @@ const Header = () => {
 
                     {/* Opciones */}
                     <div className="py-1">
-
                       {/* Ver Perfil */}
                       <Link
                         to={`/perfil/${user?.id}`}
@@ -139,7 +132,7 @@ const Header = () => {
 
                       <hr className="border-outline-variant my-1" />
 
-                      {/* Log Out — ahora dentro del dropdown */}
+                      {/* Log Out */}
                       <button
                         onClick={handleLogout}
                         role="menuitem"
@@ -148,7 +141,6 @@ const Header = () => {
                         <span className="material-symbols-outlined text-[18px]">logout</span>
                         Log Out
                       </button>
-
                     </div>
                   </div>
                 )}
@@ -157,13 +149,13 @@ const Header = () => {
           ) : (
             <>
               <Link to="/login" className="text-on-surface-variant font-medium">
-                Log In
+                Iniciar Sesión
               </Link>
               <Link
                 to="/register"
                 className="text-on-primary bg-primary py-2 px-6 rounded-3xl font-black hover:opacity-90 transition"
               >
-                Subscribe
+                Registrarse
               </Link>
             </>
           )}
@@ -178,16 +170,21 @@ const Header = () => {
           >
             {theme === "light" ? <IoMoonOutline size={18} /> : <IoSunnyOutline size={18} />}
           </button>
-
           <button
             className="flex flex-col gap-1.5 p-2 -mr-2"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Abrir menú"
             aria-expanded={menuOpen}
           >
-            <span className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-            <span className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "opacity-0" : ""}`} />
-            <span className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+            <span
+              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}
+            />
+            <span
+              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "opacity-0" : ""}`}
+            />
+            <span
+              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}
+            />
           </button>
         </div>
       </div>
@@ -196,11 +193,15 @@ const Header = () => {
       {menuOpen && (
         <div className="md:hidden flex flex-col gap-4 mt-4 px-4 text-sm text-on-surface-variant font-medium pb-4 border-t border-outline-variant pt-4">
           <Link to="/" onClick={() => setMenuOpen(false)} className="text-primary font-semibold">
-            Latest
+            Inicio
           </Link>
-          <Link to="/popular" onClick={() => setMenuOpen(false)}>Popular</Link>
-          <Link to="/newsletter" onClick={() => setMenuOpen(false)}>Newsletter</Link>
-
+          <Link
+            to="/nosotros"
+            onClick={() => setMenuOpen(false)}
+            className="hover:text-on-surface transition font-medium"
+          >
+            Nosotros
+          </Link>
           {isAuthenticated && (
             <Link to="/categorias" onClick={() => setMenuOpen(false)} className="font-semibold">
               Categorías
@@ -257,9 +258,15 @@ const Header = () => {
             </>
           ) : (
             <>
-              <Link to="/login" onClick={() => setMenuOpen(false)}>Log In</Link>
-              <Link to="/register" onClick={() => setMenuOpen(false)} className="text-primary font-bold">
-                Subscribe
+              <Link to="/login" onClick={() => setMenuOpen(false)}>
+                Iniciar Sesión
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setMenuOpen(false)}
+                className="text-primary font-bold"
+              >
+                Registrarse
               </Link>
             </>
           )}
