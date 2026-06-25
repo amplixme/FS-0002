@@ -6,6 +6,7 @@ import uploadRoutes from "./upload.routes.js";
 import adminRoutes from "./admin.routes.js";
 import userRoutes from "./user.routes.js";
 import commentRoutes from "./comment.routes.js";
+import collaboratorRoutes from "./collaborator.routes.js";
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use("/upload", uploadRoutes);
 router.use("/admin", adminRoutes);
 router.use("/users", userRoutes);
 router.use("/comments", commentRoutes);
+router.use("/collaborator", collaboratorRoutes);
 
 export default router;

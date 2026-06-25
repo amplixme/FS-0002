@@ -8,11 +8,22 @@ import {
 } from "../services/post.service.js";
 import CustomError from "../utils/custom-error.js";
 
+/**
+ * Roles que pueden publicar directamente.
+ * USER siempre queda en borrador.
+ */
+const CAN_PUBLISH_ROLES = ["ADMIN", "COLLABORATOR"];
+
 export const create = async (req, res, next) => {
   try {
     const { title, content, published, coverImage, categories } = req.body;
     const authorId = req.user.id;
-    const publishedBool = published === "true";
+    const userRole = req.user.role;
+
+    // USER: siempre borrador, sin importar lo que mande el cliente
+    const canPublish = CAN_PUBLISH_ROLES.includes(userRole);
+    const publishedBool = canPublish ? published === "true" : false;
+
     const parsedCategories = categories ?? [];
 
     const newPost = await createPost(
@@ -65,15 +76,43 @@ export const updatePost = async (req, res, next) => {
     const { title, content, published, coverImage, categories } = req.body;
     const userId = req.user.id;
     const userRole = req.user.role;
-    const publishedBool = published === "true";
     const parsedCategories = categories ? JSON.parse(categories) : [];
 
     const post = await getPostByIdService(id);
     if (!post) throw new CustomError("Post no encontrado", 404);
 
-    if (post.authorId !== userId && userRole !== "ADMIN") {
-      throw new CustomError("No tienes permiso para modificar este post", 403);
+    const isAuthor = post.authorId === userId;
+    const isAdmin = userRole === "ADMIN";
+    const isCollaborator = userRole === "COLLABORATOR";
+    const isUser = userRole === "USER";
+
+    /**
+     * Matriz de permisos para edición:
+     * - ADMIN:        puede editar cualquier post
+     * - Autor USER:   solo sus propios borradores (no publicados)
+     * - Autor COLLABORATOR: sus propios posts (cualquier estado)
+     * - COLLABORATOR (no autor): borradores de usuarios USER únicamente
+     */
+    if (!isAdmin) {
+      if (isAuthor) {
+        // USER no puede editar posts ya publicados
+        if (isUser && post.published) {
+          throw new CustomError(
+            "No podés editar un post que ya fue publicado. Contactá a un colaborador.",
+            403
+          );
+        }
+        // COLLABORATOR y USER pueden editar sus propios borradores
+        // COLLABORATOR además puede editar sus propios posts publicados
+      } else if (isCollaborator && post.author?.role === "USER" && !post.published) {
+        // COLLABORATOR puede editar borradores de USER para corregir antes de publicar
+      } else {
+        throw new CustomError("No tienes permiso para modificar este post", 403);
+      }
     }
+
+    const canPublish = CAN_PUBLISH_ROLES.includes(userRole);
+    const publishedBool = canPublish ? published === "true" : post.published;
 
     const updatedPost = await updatePostService(id, {
       title,
@@ -97,8 +136,24 @@ export const deletePost = async (req, res, next) => {
     const post = await getPostByIdService(id);
     if (!post) throw new CustomError("Post no encontrado", 404);
 
-    if (post.authorId !== userId && userRole !== "ADMIN") {
-      throw new CustomError("No tienes permiso para eliminar este post", 403);
+    const isAuthor = post.authorId === userId;
+    const isAdmin = userRole === "ADMIN";
+    const isCollaborator = userRole === "COLLABORATOR";
+
+    /**
+     * Matriz de permisos para eliminación:
+     * - ADMIN:        puede eliminar cualquier post
+     * - Autor:        puede eliminar sus propios posts (cualquier estado)
+     * - COLLABORATOR (no autor): puede rechazar/eliminar borradores de USER
+     */
+    if (!isAdmin) {
+      if (isAuthor) {
+        // El autor siempre puede eliminar sus propios posts
+      } else if (isCollaborator && post.author?.role === "USER" && !post.published) {
+        // COLLABORATOR puede rechazar (eliminar) borradores pendientes de USER
+      } else {
+        throw new CustomError("No tienes permiso para eliminar este post", 403);
+      }
     }
 
     await deletePostService(id);

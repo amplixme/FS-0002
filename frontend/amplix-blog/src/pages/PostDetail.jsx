@@ -58,7 +58,38 @@ export default function PostDetail() {
     );
   }
 
+  /* ── Matriz de permisos ── */
   const isAuthor = user?.id === post.authorId;
+  const isAdmin = user?.role === "ADMIN";
+  const isCollaborator = user?.role === "COLLABORATOR";
+  const isUser = user?.role === "USER";
+
+  // Post pertenece a un USER y está en borrador → COLLABORATOR puede gestionarlo
+  const isUserDraft = post.author?.role === "USER" && !post.published;
+
+  /**
+   * canEdit:
+   * - ADMIN: cualquier post
+   * - COLLABORATOR: sus propios posts + borradores de USER
+   * - USER: solo sus propios borradores (no publicados)
+   */
+  const canEdit =
+    isAdmin ||
+    (isCollaborator && (isAuthor || isUserDraft)) ||
+    (isUser && isAuthor && !post.published);
+
+  /**
+   * canDelete:
+   * - ADMIN: cualquier post
+   * - COLLABORATOR: sus propios posts + borradores de USER
+   * - USER: solo sus propios posts (cualquier estado)
+   */
+  const canDelete =
+    isAdmin ||
+    (isCollaborator && (isAuthor || isUserDraft)) ||
+    (isUser && isAuthor);
+
+  const hasAnyAction = canEdit || canDelete;
 
   return (
     <>
@@ -91,13 +122,19 @@ export default function PostDetail() {
 
             <div className="p-8 sm:p-12">
               <header className="mb-8 border-b border-outline-variant/30 pb-8">
+                {/* Badge borrador — visible para quien puede gestionar el post */}
+                {!post.published && hasAnyAction && (
+                  <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant border border-outline-variant/40 mb-4">
+                    <span className="material-symbols-outlined text-[14px]">draft</span>
+                    Borrador — no publicado
+                  </span>
+                )}
+
                 <h1 className="text-2xl sm:text-4xl font-extrabold text-on-surface tracking-tight mb-6 leading-tight break-words">
-                  
                   {post.title}
                 </h1>
 
                 <div className="flex items-center gap-3">
-                  {/* Avatar del autor */}
                   {post.author?.avatarUrl ? (
                     <img
                       src={post.author.avatarUrl}
@@ -111,7 +148,6 @@ export default function PostDetail() {
                   )}
 
                   <div>
-                    {/* Nombre del autor → enlaza al perfil público */}
                     {post.authorId ? (
                       <Link
                         to={`/perfil/${post.authorId}`}
@@ -139,22 +175,27 @@ export default function PostDetail() {
                 ))}
               </div>
 
-              {isAuthor && (
+              {/* Acciones — solo si el usuario tiene algún permiso */}
+              {hasAnyAction && (
                 <div className="flex items-center justify-center gap-3 mt-10 pt-8 border-t border-outline-variant/30">
-                  <button
-                    onClick={() => navigate(`/posts/${id}/edit`)}
-                    className="inline-flex items-center gap-1 px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold rounded-full transition-colors text-sm"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">edit</span>
-                    Editar
-                  </button>
-                  <button
-                    onClick={openModal}
-                    className="inline-flex items-center gap-1 px-4 py-2 bg-error/10 hover:bg-error/20 text-error font-bold rounded-full transition-colors text-sm"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">delete</span>
-                    Eliminar
-                  </button>
+                  {canEdit && (
+                    <button
+                      onClick={() => navigate(`/posts/${id}/edit`)}
+                      className="inline-flex items-center gap-1 px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold rounded-full transition-colors text-sm"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">edit</span>
+                      Editar
+                    </button>
+                  )}
+                  {canDelete && (
+                    <button
+                      onClick={openModal}
+                      className="inline-flex items-center gap-1 px-4 py-2 bg-error/10 hover:bg-error/20 text-error font-bold rounded-full transition-colors text-sm"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">delete</span>
+                      Eliminar
+                    </button>
+                  )}
                 </div>
               )}
             </div>

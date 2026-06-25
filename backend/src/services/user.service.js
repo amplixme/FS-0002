@@ -74,3 +74,18 @@ export const updateUserProfile = async (id, data) => {
 
   return user;
 };
+
+/**
+ * Devuelve todos los borradores del usuario autenticado (published: false).
+ * Solo para uso propio — nunca exponer a otros usuarios.
+ */
+export const getUserOwnDrafts = async (userId) => {
+  return prisma.post.findMany({
+    where: { authorId: userId, published: false },
+    orderBy: { createdAt: "desc" },
+    include: {
+      categories: true,
+      _count: { select: { comments: true } },
+    },
+  });
+};

@@ -1,13 +1,23 @@
 export default function RoleBadge({ role }) {
+  const styles = {
+    ADMIN: "bg-primary text-white",
+    COLLABORATOR: "bg-secondary-container text-on-secondary-container",
+    USER: "bg-surface-container-high text-on-surface-variant",
+  };
+
+  const labels = {
+    ADMIN: "Admin",
+    COLLABORATOR: "Colaborador",
+    USER: "Usuario",
+  };
+
   return (
     <span
       className={`inline-block text-xs font-bold px-2.5 py-1 rounded-full ${
-        role === "ADMIN"
-          ? "bg-primary text-white"
-          : "bg-surface-container-high text-on-surface-variant"
+        styles[role] ?? styles.USER
       }`}
     >
-      {role}
+      {labels[role] ?? role}
     </span>
   );
 }

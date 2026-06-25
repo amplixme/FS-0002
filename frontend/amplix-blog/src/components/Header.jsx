@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
 import { AuthContext } from "../context/AuthContext";
@@ -6,61 +6,75 @@ import { useTheme } from "../context/ThemeContext";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const { user, isAuthenticated, logout } = useContext(AuthContext);
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleLogout = () => {
     logout();
     setMenuOpen(false);
+    setDropdownOpen(false);
     navigate("/login");
   };
+
+  const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
   return (
     <header className="border-b border-outline-variant px-6 py-4 bg-surface-container-lowest">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
-
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-on-surface">
           Amplix
         </Link>
 
-        {/* Nav desktop */}
+        {/* ── Nav desktop ── */}
         <nav className="hidden md:flex items-center gap-6 text-md text-on-surface-variant font-medium">
-          <Link
-            to="/"
-            className="border-b-2 border-primary text-primary pb-0.5"
-          >
-            Latest
+          <Link to="/" className="border-b-2 border-primary text-primary pb-0.5">
+            Inicio
           </Link>
-          <Link to="/popular" className="hover:text-on-surface transition">
-            Popular
+          <Link to="/nosotros" className="hover:text-on-surface transition font-medium">
+            Nosotros
           </Link>
-          <Link to="/newsletter" className="hover:text-on-surface transition">
-            Newsletter
-          </Link>
+
           {isAuthenticated && (
-            <Link
-              to="/categorias"
-              className="hover:text-on-surface transition font-semibold"
-            >
+            <Link to="/categorias" className="hover:text-on-surface transition font-semibold">
               Categorías
             </Link>
           )}
+
           {user?.role === "ADMIN" && (
-            <Link
-              to="/admin"
-              className="hover:text-on-surface transition font-bold text-primary"
-            >
+            <Link to="/admin" className="hover:text-on-surface transition font-bold text-primary">
               Admin
+            </Link>
+          )}
+
+          {user?.role === "COLLABORATOR" && (
+            <Link
+              to="/collaborator"
+              className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container hover:opacity-80 transition"
+            >
+              <span className="material-symbols-outlined text-[14px]">rate_review</span>
+              Panel Colaborador
             </Link>
           )}
         </nav>
 
-        {/* Botones derecha — desktop */}
+        {/* ── Botones derecha — desktop ── */}
         <div className="hidden md:flex items-center gap-3">
-          {/* Toggle light/dark */}
           <button
             onClick={toggleTheme}
             className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors cursor-pointer"
@@ -71,35 +85,84 @@ const Header = () => {
 
           {isAuthenticated ? (
             <>
-              <span className="text-on-surface font-medium mr-2">Hola, {user?.name}</span>
-              <button
-                onClick={handleLogout}
-                className="text-error font-medium hover:opacity-80 transition cursor-pointer"
-              >
-                Log Out
-              </button>
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm text-primary font-bold uppercase">
-                {user?.name ? user.name.charAt(0) : "U"}
+              {/* Saludo */}
+              <span className="text-on-surface font-medium">
+                Hola, {user?.name}
+              </span>
+
+              {/* ── Avatar con dropdown ── */}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setDropdownOpen((prev) => !prev)}
+                  className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm text-primary font-bold uppercase hover:bg-primary/20 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  aria-label="Menú de usuario"
+                  aria-expanded={dropdownOpen}
+                  aria-haspopup="true"
+                >
+                  {userInitial}
+                </button>
+
+                {/* ── Panel desplegable ── */}
+                {dropdownOpen && (
+                  <div
+                    className="absolute right-0 mt-2 w-52 rounded-xl bg-surface-container-lowest border border-outline-variant ambient-shadow z-50 overflow-hidden"
+                    role="menu"
+                    aria-label="Opciones de usuario"
+                  >
+                    {/* Cabecera */}
+                    <div className="px-4 py-3 border-b border-outline-variant bg-surface-container-low">
+                      <p className="text-xs text-on-surface-variant">Conectado como</p>
+                      <p className="text-sm font-semibold text-on-surface truncate">
+                        {user?.name}
+                      </p>
+                    </div>
+
+                    {/* Opciones */}
+                    <div className="py-1">
+                      {/* Ver Perfil */}
+                      <Link
+                        to={`/perfil/${user?.id}`}
+                        onClick={() => setDropdownOpen(false)}
+                        role="menuitem"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">person</span>
+                        Ver perfil
+                      </Link>
+
+                      <hr className="border-outline-variant my-1" />
+
+                      {/* Log Out */}
+                      <button
+                        onClick={handleLogout}
+                        role="menuitem"
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-error hover:bg-surface-container transition-colors cursor-pointer"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">logout</span>
+                        Log Out
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </>
           ) : (
             <>
               <Link to="/login" className="text-on-surface-variant font-medium">
-                Log In
+                Iniciar Sesión
               </Link>
               <Link
                 to="/register"
                 className="text-on-primary bg-primary py-2 px-6 rounded-3xl font-black hover:opacity-90 transition"
               >
-                Subscribe
+                Registrarse
               </Link>
             </>
           )}
         </div>
 
-        {/* Botón hamburguesa — solo mobile */}
+        {/* ── Botón hamburguesa — solo mobile ── */}
         <div className="md:hidden flex items-center gap-2">
-          {/* Toggle también visible en mobile */}
           <button
             onClick={toggleTheme}
             className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer"
@@ -107,7 +170,6 @@ const Header = () => {
           >
             {theme === "light" ? <IoMoonOutline size={18} /> : <IoSunnyOutline size={18} />}
           </button>
-
           <button
             className="flex flex-col gap-1.5 p-2 -mr-2"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -115,48 +177,51 @@ const Header = () => {
             aria-expanded={menuOpen}
           >
             <span
-              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${
-                menuOpen ? "rotate-45 translate-y-2" : ""
-              }`}
+              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}
             />
             <span
-              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${
-                menuOpen ? "opacity-0" : ""
-              }`}
+              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "opacity-0" : ""}`}
             />
             <span
-              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${
-                menuOpen ? "-rotate-45 -translate-y-2" : ""
-              }`}
+              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}
             />
           </button>
         </div>
       </div>
 
-      {/* Menú mobile */}
+      {/* ── Menú mobile ── */}
       {menuOpen && (
         <div className="md:hidden flex flex-col gap-4 mt-4 px-4 text-sm text-on-surface-variant font-medium pb-4 border-t border-outline-variant pt-4">
+          <Link to="/" onClick={() => setMenuOpen(false)} className="text-primary font-semibold">
+            Inicio
+          </Link>
           <Link
-            to="/"
+            to="/nosotros"
             onClick={() => setMenuOpen(false)}
-            className="text-primary font-semibold"
+            className="hover:text-on-surface transition font-medium"
           >
-            Latest
-          </Link>
-          <Link to="/popular" onClick={() => setMenuOpen(false)}>
-            Popular
-          </Link>
-          <Link to="/newsletter" onClick={() => setMenuOpen(false)}>
-            Newsletter
+            Nosotros
           </Link>
           {isAuthenticated && (
             <Link to="/categorias" onClick={() => setMenuOpen(false)} className="font-semibold">
               Categorías
             </Link>
           )}
+
           {user?.role === "ADMIN" && (
             <Link to="/admin" onClick={() => setMenuOpen(false)} className="font-bold text-primary">
               Admin
+            </Link>
+          )}
+
+          {user?.role === "COLLABORATOR" && (
+            <Link
+              to="/collaborator"
+              onClick={() => setMenuOpen(false)}
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container w-fit"
+            >
+              <span className="material-symbols-outlined text-[14px]">rate_review</span>
+              Panel Colaborador
             </Link>
           )}
 
@@ -164,25 +229,44 @@ const Header = () => {
 
           {isAuthenticated ? (
             <>
-              <span className="text-on-surface font-medium">Hola, {user?.name}</span>
+              {/* Info usuario mobile */}
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm text-primary font-bold uppercase flex-shrink-0">
+                  {userInitial}
+                </div>
+                <span className="text-on-surface font-medium truncate">{user?.name}</span>
+              </div>
+
+              {/* Ver Perfil mobile */}
+              <Link
+                to={`/perfil/${user?.id}`}
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition"
+              >
+                <span className="material-symbols-outlined text-[16px]">person</span>
+                Ver perfil
+              </Link>
+
+              {/* Log Out mobile */}
               <button
                 onClick={handleLogout}
-                className="text-left text-error font-medium cursor-pointer"
+                className="flex items-center gap-2 text-left text-error font-medium cursor-pointer"
               >
+                <span className="material-symbols-outlined text-[16px]">logout</span>
                 Log Out
               </button>
             </>
           ) : (
             <>
               <Link to="/login" onClick={() => setMenuOpen(false)}>
-                Log In
+                Iniciar Sesión
               </Link>
               <Link
                 to="/register"
                 onClick={() => setMenuOpen(false)}
                 className="text-primary font-bold"
               >
-                Subscribe
+                Registrarse
               </Link>
             </>
           )}

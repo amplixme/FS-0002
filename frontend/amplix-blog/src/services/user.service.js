@@ -43,3 +43,18 @@ export const updateProfile = async (data) => {
     throw new Error(error.response?.data?.error?.message || "Error al actualizar el perfil");
   }
 };
+
+/**
+ * Obtiene los borradores propios del usuario autenticado.
+ * Requiere token — solo devuelve los del usuario logueado.
+ */
+export const getMyDrafts = async () => {
+  try {
+    const response = await api.get("/users/me/drafts");
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.error?.message || "Error al obtener tus borradores"
+    );
+  }
+};

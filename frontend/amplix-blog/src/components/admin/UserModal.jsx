@@ -157,7 +157,7 @@ export default function UserModal({ isOpen, editData, onClose, onSubmit }) {
               Selector de rol
             </label>
             <div className="flex items-center gap-6">
-              {["USER", "ADMIN"].map((r) => (
+              {["USER", "COLLABORATOR", "ADMIN"].map((r) => (
                 <button
                   key={r}
                   type="button"

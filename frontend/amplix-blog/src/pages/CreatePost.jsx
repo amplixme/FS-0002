@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import { createPost } from "../services/post.service";
 import { getAll } from "../services/category.service";
 import PostForm from "../components/common/PostForm.jsx";
@@ -7,6 +8,7 @@ import { sileo } from "sileo";
 
 export default function CreatePost() {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   const [coverImage, setCoverImage] = useState(null);
   const [title, setTitle] = useState("");
@@ -19,12 +21,17 @@ export default function CreatePost() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Solo ADMIN y COLLABORATOR pueden publicar directamente
+  const canPublish = user?.role === "ADMIN" || user?.role === "COLLABORATOR";
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const res = await getAll();
         setAvailableCategories(res.data ?? []);
-      } catch (err) {}
+      } catch (err) {
+        // silencioso
+      }
     };
     fetchCategories();
   }, []);
@@ -44,7 +51,8 @@ export default function CreatePost() {
       await createPost({
         title,
         content,
-        published: String(published),
+        // Si el usuario no puede publicar, el backend igualmente fuerza false
+        published: String(canPublish ? published : false),
         ...(coverImage && { coverImage }),
         categories: selectedCategories,
       });
@@ -76,7 +84,9 @@ export default function CreatePost() {
                 Crear Nuevo Artículo
               </h1>
               <p className="text-on-surface-variant mt-2">
-                Escribe y comparte tus ideas con la comunidad.
+                {canPublish
+                  ? "Escribe y comparte tus ideas con la comunidad."
+                  : "Escribe tu artículo. Quedará en borrador hasta ser publicado."}
               </p>
             </header>
 
@@ -96,6 +106,7 @@ export default function CreatePost() {
               error={error}
               submitLabel="Guardar Artículo"
               onCancel={() => navigate("/")}
+              canPublish={canPublish}
             />
           </div>
         </div>

@@ -18,6 +18,8 @@ const PostForm = ({
   error,
   submitLabel = "Guardar Artículo",
   onCancel,
+  /** Solo ADMIN y COLLABORATOR pueden publicar directamente */
+  canPublish = true,
 }) => {
   return (
     <form onSubmit={onSubmit} className="space-y-6">
@@ -90,27 +92,38 @@ const PostForm = ({
         onRemove={() => onImageUpload(null)}
       />
 
-      {/* Toggle publicar */}
-      <div className="flex items-center gap-3 pt-2">
-        <button
-          type="button"
-          role="switch"
-          aria-checked={published}
-          onClick={() => setPublished(!published)}
-          className={`relative inline-flex cursor-pointer h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 ${
-            published ? "bg-primary" : "bg-outline-variant"
-          }`}
-        >
-          <span
-            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-              published ? "translate-x-6" : "translate-x-1"
+      {/* Toggle publicar — solo para ADMIN y COLLABORATOR */}
+      {canPublish ? (
+        <div className="flex items-center gap-3 pt-2">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={published}
+            onClick={() => setPublished(!published)}
+            className={`relative inline-flex cursor-pointer h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 ${
+              published ? "bg-primary" : "bg-outline-variant"
             }`}
-          />
-        </button>
-        <span className="text-sm font-medium text-on-surface">
-          {published ? "Publicar inmediatamente" : "Guardar como borrador"}
-        </span>
-      </div>
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                published ? "translate-x-6" : "translate-x-1"
+              }`}
+            />
+          </button>
+          <span className="text-sm font-medium text-on-surface">
+            {published ? "Publicar inmediatamente" : "Guardar como borrador"}
+          </span>
+        </div>
+      ) : (
+        /* USER: siempre borrador, sin opción de publicar */
+        <div className="flex items-center gap-3 pt-2 px-4 py-3 bg-surface-container-low rounded-xl border border-outline-variant/40">
+          <span className="material-symbols-outlined text-outline text-[20px]">lock</span>
+          <span className="text-sm font-medium text-on-surface-variant">
+            Tu artículo se guardará como{" "}
+            <span className="font-bold text-on-surface">borrador</span> para revisión.
+          </span>
+        </div>
+      )}
 
       {/* Error */}
       {error && (
