@@ -1,5 +1,3 @@
-
-
 const SLUG_TO_ICON = {
   design: "palette",
   diseno: "palette",
@@ -34,31 +32,27 @@ function isActive(activeCategory, slug) {
   return activeCategory === slug;
 }
 
-
 function SidebarFooterButtons() {
   return (
     <div className="mt-8 space-y-1">
-      <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
-        <span className="material-symbols-outlined text-[18px] text-slate-400">help</span>
-        <span className="text-sm font-medium text-on-surface">Help</span>
+      <button className="w-full cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
+        <span className="material-symbols-outlined text-[18px] text-outline">help</span>
+        <span className="text-sm font-medium text-on-surface">Ayuda</span>
       </button>
-      <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
-        <span className="material-symbols-outlined text-[18px] text-slate-400">settings</span>
-        <span className="text-sm font-medium text-on-surface">Settings</span>
+      <button className="w-full cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container transition-colors">
+        <span className="material-symbols-outlined text-[18px] text-outline">settings</span>
+        <span className="text-sm font-medium text-on-surface">Configuración</span>
       </button>
     </div>
   );
 }
-
 
 export function CategorySidebar({ categories, activeCategory, onSelect }) {
   const list = buildList(categories);
 
   return (
     <aside className="hidden lg:block w-52 flex-shrink-0">
-      <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
-        Categorías
-      </h2>
+      <h2 className="text-xs font-bold uppercase tracking-widest text-outline mb-3">Categorías</h2>
 
       <ul className="space-y-0.5">
         {list.map((cat) => {
@@ -69,7 +63,7 @@ export function CategorySidebar({ categories, activeCategory, onSelect }) {
             <li key={cat.id}>
               <button
                 onClick={() => onSelect(cat.slug)}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`w-full cursor-pointer flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   active
                     ? "bg-primary text-on-primary"
                     : "text-on-surface hover:bg-surface-container"
@@ -108,7 +102,6 @@ export function CategorySidebar({ categories, activeCategory, onSelect }) {
   );
 }
 
-
 export function CategoryChips({ categories, activeCategory, onSelect }) {
   const list = buildList(categories);
 
@@ -118,7 +111,7 @@ export function CategoryChips({ categories, activeCategory, onSelect }) {
         <button
           key={cat.id}
           onClick={() => onSelect(cat.slug)}
-          className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+          className={`flex-shrink-0 cursor-pointer px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
             isActive(activeCategory, cat.slug)
               ? "bg-primary text-on-primary"
               : "bg-surface-container text-on-surface hover:bg-surface-container-high"
