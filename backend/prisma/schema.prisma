@@ -1,5 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 
 generator client {
   provider = "prisma-client-js"
@@ -8,5 +7,55 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
 
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(USER)
+  bio       String?  
+  avatarUrl String?  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  posts     Post[]
+  comments  Comment[]
+}
+
+model Post {
+  id         Int        @id @default(autoincrement())
+  title      String
+  content    String
+  published  Boolean    @default(false)
+  authorId   Int
+  author     User       @relation(fields: [authorId], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  categories Category[] @relation("PostCategories")
+  coverImage String?
+  comments Comment[]
+}
+
+model Category {
+  id    String @id @default(uuid())
+  name  String @unique
+  slug  String @unique
+  posts Post[] @relation("PostCategories")
+}
+
+model Comment {
+  id String @id @default(uuid())
+  content String
+  postId Int
+  post Post @relation(fields: [postId],references: [id], onDelete: Cascade)
+  authorId Int
+  author User @relation(fields: [authorId], references: [id])  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
