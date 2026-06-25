@@ -19,43 +19,68 @@ export const getStats = async () => {
     usersThisMonth,
     usersLastMonth,
     lastWeekPosts,
-    lastComment
+    lastComment,
   ] = await Promise.all([
     prisma.user.count(),
-    prisma.post.count(),
+
+    // solo posts publicados
+    prisma.post.count({
+      where: { published: true },
+    }),
+
     prisma.comment.count(),
-    prisma.post.count({ where: { createdAt: { gte: startOfWeek } } }),
+
+    // solo posts publicados esta semana
+    prisma.post.count({
+      where: {
+        published: true,
+        createdAt: { gte: startOfWeek },
+      },
+    }),
+
+    // postsByCategory solo publicados
     prisma.category.findMany({
       select: {
         name: true,
         slug: true,
-        _count: { select: { posts: true } },
+        _count: {
+          select: {
+            posts: {
+              where: { published: true },
+            },
+          },
+        },
       },
     }),
+
     // Usuarios creados este mes
-    prisma.user.count({ 
-      where: { 
-        createdAt: { gte: startOfMonth } 
-      } 
+    prisma.user.count({
+      where: {
+        createdAt: { gte: startOfMonth },
+      },
     }),
+
     // Usuarios creados el mes pasado
-    prisma.user.count({ 
-      where: { 
-        createdAt: { 
+    prisma.user.count({
+      where: {
+        createdAt: {
           gte: startOfLastMonth,
-          lt: startOfMonth 
-        } 
-      } 
+          lt: startOfMonth,
+        },
+      },
     }),
-    // Posts de la semana anterior
-    prisma.post.count({ 
-      where: { 
-        createdAt: { 
+
+    // solo posts publicados semana anterior
+    prisma.post.count({
+      where: {
+        published: true,
+        createdAt: {
           gte: startOfLastWeek,
-          lt: startOfWeek 
-        } 
-      } 
+          lt: startOfWeek,
+        },
+      },
     }),
+
     // Último comentario
     prisma.comment.findFirst({
       orderBy: { createdAt: "desc" },
@@ -64,11 +89,12 @@ export const getStats = async () => {
   ]);
 
   // Calcular crecimiento de usuarios comparando con mes pasado
-  const userGrowth = usersLastMonth > 0 
-    ? (((usersThisMonth - usersLastMonth) / usersLastMonth) * 100).toFixed(1)
-    : usersThisMonth > 0 
-      ? 100 
-      : 0;
+  const userGrowth =
+    usersLastMonth > 0
+      ? (((usersThisMonth - usersLastMonth) / usersLastMonth) * 100).toFixed(1)
+      : usersThisMonth > 0
+        ? 100
+        : 0;
 
   // Calcular minutos desde el último comentario
   const lastCommentMinutes = lastComment
@@ -76,9 +102,12 @@ export const getStats = async () => {
     : null;
 
   // Calcular crecimiento de posts vs semana anterior
-  const weekGrowth = lastWeekPosts > 0 
-    ? ((weekPosts - lastWeekPosts) / lastWeekPosts * 100).toFixed(1)
-    : weekPosts > 0 ? 100 : 0;
+  const weekGrowth =
+    lastWeekPosts > 0
+      ? ((weekPosts - lastWeekPosts) / lastWeekPosts * 100).toFixed(1)
+      : weekPosts > 0
+        ? 100
+        : 0;
 
   // Objetivo semanal
   const weekGoal = 5;
@@ -204,11 +233,8 @@ export const deleteUser = async (targetId, requesterId) => {
   const user = await prisma.user.findUnique({ where: { id: targetId } });
   if (!user) throw new CustomError("Usuario no encontrado", 404);
 
-  
   await prisma.comment.deleteMany({ where: { authorId: targetId } });
-  
   await prisma.post.deleteMany({ where: { authorId: targetId } });
-  
   await prisma.user.delete({ where: { id: targetId } });
 
   return { message: "Usuario eliminado correctamente" };
@@ -230,8 +256,10 @@ export const deleteCommentAdmin = async (commentId) => {
   return { message: "Comentario eliminado correctamente" };
 };
 
+// getRecentPosts solo muestra posts publicados
 export const getRecentPosts = async () => {
   return prisma.post.findMany({
+    where: { published: true },
     take: 10,
     orderBy: { createdAt: "desc" },
     include: {
