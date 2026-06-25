@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState, useEffect, useRef, useContext } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import Pagination from "../components/common/Pagination";
 import { CategorySidebar, CategoryChips } from "../components/CategoryFilter";
@@ -8,6 +8,7 @@ import { ErrorMessage } from "../components/common/ErrorMessage";
 import { EmptyState } from "../components/common/EmptyState";
 import { getPosts } from "../services/post.service";
 import { getAll as getCategories } from "../services/category.service";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,6 +25,8 @@ export default function Home() {
 
   const [searchInput, setSearchInput] = useState(currentSearch);
   const isFirstRender = useRef(true);
+
+  const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     getCategories()
@@ -124,7 +127,15 @@ export default function Home() {
         {/* Header de página */}
         <div className="py-8 border-b border-slate-100 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <h1 className="text-3xl font-extrabold tracking-tight">Últimas publicaciones</h1>
-
+          {isAuthenticated && (
+            <Link
+              to="/create-post"
+              className="flex items-center gap-1.5 px-4 py-2 bg-primary text-on-primary rounded-full text-sm font-bold hover:opacity-90 hover:scale-110 transition cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[18px]">add</span>
+              Nuevo artículo
+            </Link>
+          )}
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             {/* Buscador */}
             <div className="relative flex-1 sm:w-64">
