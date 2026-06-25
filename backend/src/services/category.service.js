@@ -6,7 +6,11 @@ export const getAllCategories = async () => {
     orderBy: { name: "asc" },
     include: {
       _count: {
-        select: { posts: true }, 
+        select: { 
+          posts: {
+            where: { published: true }  // ← Solo posts publicados
+          } 
+        },
       },
     },
   });
