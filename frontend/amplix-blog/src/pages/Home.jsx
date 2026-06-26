@@ -205,6 +205,7 @@ export default function Home() {
                     post={{
                       ...post,
                       author: post.author?.name ?? "",
+                      authorAvatar: post.author?.avatarUrl ?? null,
                       date: new Date(post.createdAt).toLocaleDateString("es-AR", {
                         year: "numeric",
                         month: "short",

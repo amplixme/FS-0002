@@ -1,13 +1,15 @@
+// frontend/amplix-blog/src/components/admin/UserCard.jsx
+
 import RoleBadge from "./RoleBadge";
+import Avatar from "../common/Avatar";
 
 export default function UserCard({ u, currentUserId, onEdit, onChangeRole, onDelete }) {
   return (
     <div className="border border-outline-variant/40 rounded-xl p-4 space-y-3">
-      {/* Avatar + info */}
+
+      {/* ✅ Avatar + info */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-          <span className="material-symbols-outlined text-primary text-[20px]">person</span>
-        </div>
+        <Avatar src={u.avatarUrl} name={u.name} size="lg" />
         <div className="min-w-0">
           <p className="font-semibold text-on-surface text-sm truncate">{u.name}</p>
           <p className="text-xs text-on-surface-variant truncate">{u.email}</p>

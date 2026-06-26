@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { formatRelativeTime } from "../utils/dateFormatter";
+import Avatar from "./common/Avatar";
+
 
 export default function PostCard({ post, onClick, onCategoryClick }) {
   const {
@@ -89,19 +91,10 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
       {/* Autor */}
       <div className="flex items-center justify-between mt-auto">
         <div className="flex items-center gap-3">
-          {authorAvatar ? (
-            <img
-              src={authorAvatar}
-              alt={author}
-              className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-            />
-          ) : (
-            <div className="w-8 h-8 bg-surface-container-highest rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="material-symbols-outlined text-[16px] text-on-surface-variant">
-                person
-              </span>
-            </div>
-          )}
+
+          {/* ✅ Avatar reutilizable — foto o inicial */}
+          <Avatar src={authorAvatar} name={author} size="md" />
+
           <div className="flex flex-col min-w-0">
             {authorId ? (
               <Link
@@ -116,7 +109,6 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
                 {author}
               </span>
             )}
-            {/* slate-500 → outline */}
             {createdAt && (
               <span className="text-[11px] font-medium text-outline mt-0.5">
                 {formatRelativeTime(createdAt)}
@@ -125,7 +117,6 @@ export default function PostCard({ post, onClick, onCategoryClick }) {
           </div>
         </div>
 
-        {/* slate-400 → outline */}
         <div className="flex items-center gap-1 text-outline flex-shrink-0">
           <span className="material-symbols-outlined text-[16px]">chat</span>
           <span className="text-xs font-medium">{commentCount}</span>

@@ -1,8 +1,11 @@
+// frontend/amplix-blog/src/components/Header.jsx
+
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
 import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
+import Avatar from "./common/Avatar";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -31,12 +34,11 @@ const Header = () => {
     navigate("/login");
   };
 
-  const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
-
   return (
     <header className="border-b border-outline-variant px-6 py-4 bg-surface-container-lowest">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
-        {/* Logo */}
+
+        {/* ── Logo ── */}
         <Link to="/" className="text-2xl font-bold text-on-surface">
           Amplix
         </Link>
@@ -50,7 +52,7 @@ const Header = () => {
             Nosotros
           </Link>
 
-          {isAuthenticated && (
+          {user?.role === "ADMIN" && (
             <Link to="/categorias" className="hover:text-on-surface transition font-semibold">
               Categorías
             </Link>
@@ -75,6 +77,8 @@ const Header = () => {
 
         {/* ── Botones derecha — desktop ── */}
         <div className="hidden md:flex items-center gap-3">
+
+          {/* Toggle light/dark */}
           <button
             onClick={toggleTheme}
             className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors cursor-pointer"
@@ -94,31 +98,37 @@ const Header = () => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen((prev) => !prev)}
-                  className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm text-primary font-bold uppercase hover:bg-primary/20 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  className="rounded-full hover:opacity-80 transition-opacity cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   aria-label="Menú de usuario"
                   aria-expanded={dropdownOpen}
                   aria-haspopup="true"
                 >
-                  {userInitial}
+                  {/* ✅ Avatar con foto o inicial */}
+                  <Avatar src={user?.avatarUrl} name={user?.name} size="md" />
                 </button>
 
                 {/* ── Panel desplegable ── */}
                 {dropdownOpen && (
                   <div
-                    className="absolute right-0 mt-2 w-52 rounded-xl bg-surface-container-lowest border border-outline-variant ambient-shadow z-50 overflow-hidden"
+                    className="absolute right-0 mt-2 w-56 rounded-xl bg-surface-container-lowest border border-outline-variant ambient-shadow z-50 overflow-hidden"
                     role="menu"
                     aria-label="Opciones de usuario"
                   >
-                    {/* Cabecera */}
-                    <div className="px-4 py-3 border-b border-outline-variant bg-surface-container-low">
-                      <p className="text-xs text-on-surface-variant">Conectado como</p>
-                      <p className="text-sm font-semibold text-on-surface truncate">
-                        {user?.name}
-                      </p>
+                    {/* Cabecera con avatar */}
+                    <div className="px-4 py-3 border-b border-outline-variant bg-surface-container-low flex items-center gap-3">
+                      {/* ✅ Avatar en la cabecera del dropdown */}
+                      <Avatar src={user?.avatarUrl} name={user?.name} size="md" />
+                      <div className="min-w-0">
+                        <p className="text-xs text-on-surface-variant">Conectado como</p>
+                        <p className="text-sm font-semibold text-on-surface truncate">
+                          {user?.name}
+                        </p>
+                      </div>
                     </div>
 
                     {/* Opciones */}
                     <div className="py-1">
+
                       {/* Ver Perfil */}
                       <Link
                         to={`/perfil/${user?.id}`}
@@ -141,6 +151,7 @@ const Header = () => {
                         <span className="material-symbols-outlined text-[18px]">logout</span>
                         Log Out
                       </button>
+
                     </div>
                   </div>
                 )}
@@ -176,15 +187,9 @@ const Header = () => {
             aria-label="Abrir menú"
             aria-expanded={menuOpen}
           >
-            <span
-              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}
-            />
-            <span
-              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "opacity-0" : ""}`}
-            />
-            <span
-              className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}
-            />
+            <span className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+            <span className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "opacity-0" : ""}`} />
+            <span className={`w-6 h-0.5 bg-on-surface block transition-all duration-200 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
           </button>
         </div>
       </div>
@@ -195,14 +200,11 @@ const Header = () => {
           <Link to="/" onClick={() => setMenuOpen(false)} className="text-primary font-semibold">
             Inicio
           </Link>
-          <Link
-            to="/nosotros"
-            onClick={() => setMenuOpen(false)}
-            className="hover:text-on-surface transition font-medium"
-          >
+          <Link to="/nosotros" onClick={() => setMenuOpen(false)} className="hover:text-on-surface transition font-medium">
             Nosotros
           </Link>
-          {isAuthenticated && (
+
+          {user?.role === "ADMIN" && (
             <Link to="/categorias" onClick={() => setMenuOpen(false)} className="font-semibold">
               Categorías
             </Link>
@@ -229,11 +231,9 @@ const Header = () => {
 
           {isAuthenticated ? (
             <>
-              {/* Info usuario mobile */}
+              {/* Info usuario mobile — ✅ con Avatar */}
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm text-primary font-bold uppercase flex-shrink-0">
-                  {userInitial}
-                </div>
+                <Avatar src={user?.avatarUrl} name={user?.name} size="md" />
                 <span className="text-on-surface font-medium truncate">{user?.name}</span>
               </div>
 
@@ -258,14 +258,8 @@ const Header = () => {
             </>
           ) : (
             <>
-              <Link to="/login" onClick={() => setMenuOpen(false)}>
-                Iniciar Sesión
-              </Link>
-              <Link
-                to="/register"
-                onClick={() => setMenuOpen(false)}
-                className="text-primary font-bold"
-              >
+              <Link to="/login" onClick={() => setMenuOpen(false)}>Iniciar Sesión</Link>
+              <Link to="/register" onClick={() => setMenuOpen(false)} className="text-primary font-bold">
                 Registrarse
               </Link>
             </>

@@ -1,3 +1,5 @@
+// backend/src/services/post.service.js
+
 import prisma from "../config/prisma.js";
 
 export const createPost = async (
@@ -20,7 +22,8 @@ export const createPost = async (
       },
     },
     include: {
-      author: { select: { name: true, email: true, role: true } },
+      // ✅ Fix: agregado id y avatarUrl
+      author: { select: { id: true, name: true, email: true, role: true, avatarUrl: true } },
       categories: true,
     },
   });
@@ -70,8 +73,9 @@ export const getAllPosts = async (
       skip,
       take: limit,
       include: {
+        // ✅ Fix: agregado id y avatarUrl
         author: {
-          select: { name: true },
+          select: { id: true, name: true, avatarUrl: true },
         },
         categories: true,
         _count: { select: { comments: true } },
@@ -103,9 +107,9 @@ export const getPostById = async (id) => {
   const post = await prisma.post.findUnique({
     where: { id: numericId },
     include: {
+      // ✅ Fix: agregado id y avatarUrl
       author: {
-        // role incluido para que controllers y frontend puedan verificar permisos
-        select: { name: true, email: true, role: true },
+        select: { id: true, name: true, email: true, role: true, avatarUrl: true },
       },
       categories: true,
     },
@@ -128,8 +132,9 @@ export const updatePostService = async (id, data) => {
       }),
     },
     include: {
+      // ✅ Fix: agregado id y avatarUrl
       author: {
-        select: { name: true, email: true, role: true },
+        select: { id: true, name: true, email: true, role: true, avatarUrl: true },
       },
       categories: true,
     },

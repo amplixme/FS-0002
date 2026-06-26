@@ -5,6 +5,7 @@ import { getByPostId, create, update, remove } from "../../services/comment.serv
 import { formatRelativeTime } from "../../utils/dateFormatter";
 import ConfirmModal from "../common/ConfirmModal";
 import { sileo } from "sileo";
+import Avatar from "../common/Avatar";
 
 export default function CommentSection({ postId }) {
   const { isAuthenticated, user } = useContext(AuthContext);
@@ -26,6 +27,11 @@ export default function CommentSection({ postId }) {
       const data = await getByPostId(postId);
       setComments(data.data || data || []);
     } catch (error) {
+      // ✅ Corregido: Al menos notificar al usuario si falla la carga
+      sileo.error({
+        title: "Error al cargar comentarios",
+        description: "No se pudieron obtener los comentarios.",
+      });
     } finally {
       setLoading(false);
     }
@@ -114,70 +120,76 @@ export default function CommentSection({ postId }) {
         ) : (
           comments.map((c) => (
             <div key={c.id} className="p-4 bg-surface-container-low rounded-xl">
-              <div className="flex items-center justify-between mb-1">
-                <p className="font-bold text-sm text-on-surface">{c.author.name}</p>
-                {/* Badge de moderación — solo visible para ADMIN/COLLABORATOR sobre comentarios ajenos */}
-                {isModerator && user?.id !== c.authorId && (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container">
-                    moderación
-                  </span>
-                )}
-              </div>
+              <div className="flex items-start gap-3 mb-1">
+                {/* ✅ Avatar del autor del comentario */}
+                <Avatar src={c.author?.avatarUrl} name={c.author?.name} size="sm" />
 
-              {editingId === c.id ? (
-                <div className="mt-2 space-y-2">
-                  <textarea
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    className="w-full p-3 bg-surface-container border border-outline-variant/40 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm"
-                    rows={3}
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleUpdate(c.id)}
-                      className="px-4 py-1.5 bg-primary text-white rounded-full text-sm font-bold"
-                    >
-                      Guardar
-                    </button>
-                    <button
-                      onClick={cancelEdit}
-                      className="px-4 py-1.5 bg-surface-container-high text-on-surface rounded-full text-sm font-bold"
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <p className="text-sm text-on-surface-variant mt-1">{c.content}</p>
-                  <p className="text-xs text-outline mt-2">{formatRelativeTime(c.createdAt)}</p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <p className="font-bold text-sm text-on-surface">{c.author?.name}</p>
+                    {isModerator && user?.id !== c.authorId && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container">
+                        moderación
+                      </span>
+                    )}
+                  </div> {/* ✅ Cierre del flex items-center original que faltaba */}
 
-                  <div className="flex gap-3 mt-2">
-                    {/* Editar: solo el propio autor */}
-                    {user?.id === c.authorId && (
-                      <button
-                        onClick={() => startEdit(c)}
-                        className="text-xs font-bold cursor-pointer text-primary hover:underline"
-                      >
-                        Editar
-                      </button>
-                    )}
-                    {/* Eliminar: autor del comentario + moderadores (ADMIN / COLLABORATOR) */}
-                    {(user?.id === c.authorId || isModerator) && (
-                      <button
-                        onClick={() => {
-                          setDeleteTarget(c);
-                          setShowDeleteModal(true);
-                        }}
-                        className="text-xs font-bold cursor-pointer text-error hover:underline"
-                      >
-                        Eliminar
-                      </button>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
+                  {editingId === c.id ? (
+                    <div className="mt-2 space-y-2">
+                      <textarea
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        className="w-full p-3 bg-surface-container border border-outline-variant/40 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                        rows={3}
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleUpdate(c.id)}
+                          className="px-4 py-1.5 bg-primary text-white rounded-full text-sm font-bold"
+                        >
+                          Guardar
+                        </button>
+                        <button
+                          onClick={cancelEdit}
+                          className="px-4 py-1.5 bg-surface-container-high text-on-surface rounded-full text-sm font-bold"
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-sm text-on-surface-variant mt-1">{c.content}</p>
+                      <p className="text-xs text-outline mt-2">{formatRelativeTime(c.createdAt)}</p>
+
+                      <div className="flex gap-3 mt-2">
+                        {/* Editar: solo el propio autor */}
+                        {user?.id === c.authorId && (
+                          <button
+                            onClick={() => startEdit(c)}
+                            className="text-xs font-bold cursor-pointer text-primary hover:underline"
+                          >
+                            Editar
+                          </button>
+                        )}
+                        {/* Eliminar: autor del comentario + moderadores (ADMIN / COLLABORATOR) */}
+                        {(user?.id === c.authorId || isModerator) && (
+                          <button
+                            onClick={() => {
+                              setDeleteTarget(c);
+                              setShowDeleteModal(true);
+                            }}
+                            className="text-xs font-bold cursor-pointer text-error hover:underline"
+                          >
+                            Eliminar
+                          </button>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div> {/* ✅ Cierre de flex-1 min-w-0 */}
+              </div> {/* ✅ Cierre de flex items-start */}
+            </div> /* ✅ Cierre del contenedor del comentario del .map() */
           ))
         )}
       </div>
