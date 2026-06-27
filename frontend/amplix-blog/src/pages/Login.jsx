@@ -20,15 +20,17 @@ export default function Login() {
       const data = await login({ email, password });
       authLogin(data.data.token, data.data.user);
       navigate("/");
-       sileo.success({
+      sileo.success({
         title: "Login exitoso",
+        duration: 3000,
       });
     } catch (error) {
-      sileo.error({
-       title: "Error al loguearse",
-       description: error.message || "Intentá de nuevo más tarde.",
-     });
       setError(error.message);
+      sileo.error({
+        title: "Error al loguearse",
+        description: error.message || "Intentá de nuevo más tarde.",
+        duration: 3000,
+      });
     }
   };
 

@@ -54,11 +54,13 @@ export default function CommentSection({ postId }) {
       await fetchComments();
       sileo.success({
         title: "Comentario actualizado",
+        duration: 3000,
       });
     } catch (err) {
       sileo.error({
         title: "No se pudo actualizar el comentario",
         description: err.message || "Intentá de nuevo más tarde.",
+        duration: 3000,
       });
     }
   };
@@ -71,11 +73,13 @@ export default function CommentSection({ postId }) {
       await fetchComments();
       sileo.success({
         title: "Comentario eliminado",
+        duration: 3000,
       });
     } catch (err) {
       sileo.error({
         title: "No se pudo eliminar el comentario",
         description: err.message || "Intentá de nuevo más tarde.",
+        duration: 3000,
       });
     }
   };
