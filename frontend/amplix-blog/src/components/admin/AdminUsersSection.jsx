@@ -1,6 +1,9 @@
+// frontend/amplix-blog/src/components/admin/AdminUsersSection.jsx
+
 import CardSkeleton from "./CardSkeleton";
 import RoleBadge from "./RoleBadge";
 import UserCard from "./UserCard";
+import Avatar from "../common/Avatar";
 
 export default function AdminUsersSection({
   users,
@@ -18,7 +21,7 @@ export default function AdminUsersSection({
 
   return (
     <section className="bg-surface-container-lowest rounded-2xl ambient-shadow p-6">
-      {/* Header */}
+      {/* ── Header ── */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
           <h2 className="text-lg font-bold text-on-surface">Usuarios Recientes</h2>
@@ -49,7 +52,7 @@ export default function AdminUsersSection({
         )}
       </div>
 
-      {/* Content */}
+      {/* ── Content ── */}
       {loading ? (
         <CardSkeleton rows={2} />
       ) : users.length === 0 ? (
@@ -58,7 +61,7 @@ export default function AdminUsersSection({
         </p>
       ) : (
         <>
-          {/* Mobile */}
+          {/* ── Mobile ── */}
           <div className="sm:hidden space-y-3">
             {visible.map((u) => (
               <UserCard
@@ -81,58 +84,97 @@ export default function AdminUsersSection({
             )}
           </div>
 
-          {/* Desktop */}
-          <div className="hidden sm:block overflow-x-auto">
-            <table className="w-full text-sm">
+          {/* ── Desktop ── */}
+          <div className="hidden sm:block">
+            <table className="w-full text-sm table-fixed">
               <thead>
                 <tr className="border-b border-outline-variant">
-                  {["Nombre", "Email", "Rol", "Fecha de registro", "Acciones"].map((h) => (
-                    <th
-                      key={h}
-                      className={`text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3
-                        ${h === "Email" ? "hidden md:table-cell" : ""}
-                        ${h === "Fecha de registro" ? "hidden lg:table-cell" : ""}
-                      `}
-                    >
-                      {h}
-                    </th>
-                  ))}
+
+                  {/* Nombre — siempre visible */}
+                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 w-auto">
+                    Nombre
+                  </th>
+
+                  {/* Email — solo xl */}
+                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 w-40 hidden xl:table-cell">
+                    Email
+                  </th>
+
+                  {/* Rol — siempre visible */}
+                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 w-28">
+                    Rol
+                  </th>
+
+                  {/* Fecha — solo xl */}
+                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 w-28 hidden xl:table-cell">
+                    Registro
+                  </th>
+
+                  {/* Acciones — ancho fijo */}
+                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 w-28">
+                    Acciones
+                  </th>
+
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/40">
                 {visible.map((u) => (
                   <tr key={u.id}>
-                    <td className="py-3 pr-3 font-medium text-on-surface whitespace-nowrap">
-                      {u.name}
+
+                    {/* Nombre + Avatar */}
+                    <td className="py-3 pr-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Avatar src={u.avatarUrl} name={u.name} size="sm" />
+                        <span className="font-medium text-on-surface truncate">
+                          {u.name}
+                        </span>
+                      </div>
                     </td>
-                    <td className="py-3 pr-3 text-on-surface-variant hidden md:table-cell whitespace-nowrap">
-                      {u.email}
+
+                    {/* Email — solo xl */}
+                    <td className="py-3 pr-3 text-on-surface-variant hidden xl:table-cell">
+                      <span className="truncate block text-xs">{u.email}</span>
                     </td>
+
+                    {/* Rol */}
                     <td className="py-3 pr-3">
                       <RoleBadge role={u.role} />
                     </td>
-                    <td className="py-3 pr-3 text-on-surface-variant hidden lg:table-cell whitespace-nowrap text-xs">
+
+                    {/* Fecha — solo xl */}
+                    <td className="py-3 pr-3 text-on-surface-variant hidden xl:table-cell text-xs whitespace-nowrap">
                       {formatDate(u.createdAt)}
                     </td>
+
+                    {/* ✅ Acciones — íconos en lugar de botones de texto */}
                     <td className="py-3">
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-0.5">
+
+                        {/* Editar */}
                         <button
                           onClick={() => onEdit(u)}
-                          className="text-xs cursor-pointer font-semibold text-on-surface border border-outline-variant px-3 py-1.5 rounded-full hover:bg-surface-container transition whitespace-nowrap"
+                          className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-surface-container transition text-on-surface-variant"
+                          title="Editar usuario"
                         >
-                          Editar
+                          <span className="material-symbols-outlined text-[18px]">edit</span>
                         </button>
+
                         {u.id !== currentUser?.id && (
                           <>
+                            {/* Cambiar rol */}
                             <button
                               onClick={() => onChangeRole(u.id, u.role)}
-                              className="text-xs cursor-pointer font-semibold text-on-surface border border-outline-variant px-3 py-1.5 rounded-full hover:bg-surface-container transition whitespace-nowrap"
+                              className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-primary/10 transition text-primary"
+                              title="Cambiar rol"
                             >
-                              Cambiar rol
+                              <span className="material-symbols-outlined text-[18px]">manage_accounts</span>
                             </button>
+
+                            {/* Eliminar */}
                             <button
                               onClick={() => onDelete(u)}
-                              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-error/10 transition text-error flex-shrink-0"
+                              className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-error/10 transition text-error"
+                              title="Eliminar usuario"
                             >
                               <span className="material-symbols-outlined text-[18px]">delete</span>
                             </button>
@@ -140,6 +182,7 @@ export default function AdminUsersSection({
                         )}
                       </div>
                     </td>
+
                   </tr>
                 ))}
               </tbody>

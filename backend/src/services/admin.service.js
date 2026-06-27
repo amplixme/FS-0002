@@ -137,6 +137,7 @@ export const getAllUsers = async () => {
       email: true,
       role: true,
       createdAt: true,
+      avatarUrl: true,
       _count: { select: { posts: true } },
     },
     orderBy: { createdAt: "desc" },
@@ -148,6 +149,7 @@ export const getAllUsers = async () => {
     email: u.email,
     role: u.role,
     createdAt: u.createdAt,
+    avatarUrl: u.avatarUrl,
     postCount: u._count.posts,
   }));
 };
