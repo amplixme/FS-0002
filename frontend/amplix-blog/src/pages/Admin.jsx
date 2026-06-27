@@ -13,6 +13,8 @@ import AdminCommentsSection from "../components/admin/AdminCommentsSection";
 import { useAdminData } from "../hooks/useAdminData";
 import * as adminService from "../services/admin.service";
 
+import { publishPost } from "../services/post.service";
+
 const formatDate = (date) =>
   new Date(date).toLocaleDateString("es-AR", {
     day: "2-digit",
@@ -123,6 +125,17 @@ export default function Admin() {
     }
   };
 
+  // ✅ Handler para publicar un borrador
+  const handlePublishPost = async (post) => {
+    try {
+      await publishPost(post.id);
+      fetchPosts();
+      fetchStats();
+      showToast(`"${post.title}" publicado correctamente`);
+    } catch (e) {
+      showToast(e.message, "error");
+    }
+  };
   
   return (
     <div className="min-h-screen bg-background">
@@ -163,6 +176,7 @@ export default function Admin() {
               loading={loadingPosts}
               showAll={showAllPosts}
               onToggleShowAll={() => setShowAllPosts((v) => !v)}
+              onPublish={handlePublishPost}
               onDelete={(p) =>
                 openConfirm(
                   "post",

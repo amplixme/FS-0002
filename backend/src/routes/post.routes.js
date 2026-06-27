@@ -9,6 +9,7 @@ import {
   getPostById,
   updatePost,
   deletePost,
+  publishPost,
 } from "../controllers/post.controller.js";
 import { createCommentSchema } from "../schemas/comment.schema.js";
 import {
@@ -193,6 +194,34 @@ router.post("/", authMiddleware, upload.single("image"), validateBody(createPost
  *         description: Post no encontrado
  */
 router.put("/:id", authMiddleware, upload.single("image"), updatePost);
+
+/**
+ * @swagger
+ * /api/posts/{id}/publish:
+ *   patch:
+ *     summary: Publicar un borrador (ADMIN o COLLABORATOR)
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         example: 17
+ *     responses:
+ *       200:
+ *         description: Post publicado correctamente
+ *       400:
+ *         description: El post ya está publicado
+ *       403:
+ *         description: No autorizado
+ *       404:
+ *         description: Post no encontrado
+ */
+router.patch("/:id/publish", authMiddleware, publishPost);
+
 
 /**
  * @swagger

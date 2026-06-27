@@ -96,3 +96,18 @@ export const uploadImage = async (file) => {
     throw new Error(error.response?.data?.error?.message || "Error al subir la imagen");
   }
 };
+
+/**
+ * Publica un post que estaba en borrador.
+ * Solo ADMIN y COLLABORATOR pueden usar este endpoint.
+ * @param {string|number} id - ID del post
+ * @returns {Promise<Object>} Post publicado
+ */
+export const publishPost = async (id) => {
+  try {
+    const response = await api.patch(`/posts/${id}/publish`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.error?.message || "Error al publicar el post");
+  }
+};

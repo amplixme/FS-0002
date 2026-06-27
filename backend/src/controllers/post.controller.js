@@ -162,3 +162,34 @@ export const deletePost = async (req, res, next) => {
     next(error);
   }
 };
+
+export const publishPost = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userRole = req.user.role;
+
+    // Solo ADMIN y COLLABORATOR pueden publicar
+    if (!CAN_PUBLISH_ROLES.includes(userRole)) {
+      throw new CustomError("No tienes permiso para publicar posts", 403);
+    }
+
+    const post = await getPostByIdService(id);
+    if (!post) throw new CustomError("Post no encontrado", 404);
+
+    if (post.published) {
+      throw new CustomError("El post ya está publicado", 400);
+    }
+
+    const updatedPost = await updatePostService(id, {
+      title: post.title,
+      content: post.content,
+      published: true,
+      coverImage: post.coverImage,
+      categories: post.categories.map((c) => c.id),
+    });
+
+    return success(res, updatedPost, 200);
+  } catch (error) {
+    next(error);
+  }
+};

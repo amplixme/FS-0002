@@ -259,11 +259,10 @@ export const deleteCommentAdmin = async (commentId) => {
 // getRecentPosts solo muestra posts publicados
 export const getRecentPosts = async () => {
   return prisma.post.findMany({
-    where: { published: true },
     take: 10,
     orderBy: { createdAt: "desc" },
     include: {
-      author: { select: { name: true } },
+      author: { select: { id: true, name: true, avatarUrl: true } },
       categories: true,
     },
   });

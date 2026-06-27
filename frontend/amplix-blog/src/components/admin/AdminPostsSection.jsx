@@ -1,3 +1,6 @@
+// frontend/amplix-blog/src/components/admin/AdminPostsSection.jsx
+
+import { useNavigate } from "react-router-dom";
 import CardSkeleton from "./CardSkeleton";
 import PostCard from "./PostCard";
 
@@ -7,8 +10,10 @@ export default function AdminPostsSection({
   showAll,
   onToggleShowAll,
   onDelete,
+  onPublish,  
   formatDate,
 }) {
+  const navigate = useNavigate();
   const visible = showAll ? posts : posts.slice(0, 2);
 
   return (
@@ -31,7 +36,7 @@ export default function AdminPostsSection({
         <p className="text-sm text-on-surface-variant text-center py-8">No hay publicaciones</p>
       ) : (
         <>
-          {/* Mobile */}
+          {/* ── Mobile ── */}
           <div className="sm:hidden space-y-3">
             {visible.map((p) => (
               <PostCard key={p.id} p={p} onDelete={() => onDelete(p)} formatDate={formatDate} />
@@ -46,7 +51,7 @@ export default function AdminPostsSection({
             )}
           </div>
 
-          {/* Desktop */}
+          {/* ── Desktop ── */}
           <div className="hidden sm:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -63,6 +68,9 @@ export default function AdminPostsSection({
                   <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 hidden sm:table-cell">
                     Fecha
                   </th>
+                  <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3 pr-3 hidden sm:table-cell">
+                    Estado
+                  </th>
                   <th className="text-left text-xs font-semibold text-on-surface-variant uppercase tracking-wide pb-3">
                     Acciones
                   </th>
@@ -71,6 +79,8 @@ export default function AdminPostsSection({
               <tbody className="divide-y divide-outline-variant/40">
                 {visible.map((p) => (
                   <tr key={p.id}>
+
+                    {/* Título + imagen */}
                     <td className="py-3 pr-3">
                       <div className="flex items-center gap-3">
                         {p.coverImage ? (
@@ -91,9 +101,13 @@ export default function AdminPostsSection({
                         </span>
                       </div>
                     </td>
+
+                    {/* Autor */}
                     <td className="py-3 pr-3 text-on-surface-variant whitespace-nowrap hidden sm:table-cell">
                       {p.author?.name}
                     </td>
+
+                    {/* Categorías */}
                     <td className="py-3 pr-3 hidden md:table-cell">
                       <div className="flex flex-wrap gap-1">
                         {p.categories?.slice(0, 2).map((c) => (
@@ -106,16 +120,61 @@ export default function AdminPostsSection({
                         ))}
                       </div>
                     </td>
+
+                    {/* Fecha */}
                     <td className="py-3 pr-3 text-on-surface-variant whitespace-nowrap text-xs hidden sm:table-cell">
                       {formatDate(p.createdAt)}
                     </td>
+
+                    {/* Estado */}
+                    <td className="py-3 pr-3 hidden sm:table-cell">
+                      {p.published ? (
+                        <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary">
+                          <span className="material-symbols-outlined text-[12px]">check_circle</span>
+                          Publicado
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-surface-container-highest text-on-surface-variant">
+                          <span className="material-symbols-outlined text-[12px]">draft</span>
+                          Borrador
+                        </span>
+                      )}
+                    </td>
+
+                    {/*  Acciones — Ver + Publicar (solo borradores) + Eliminar */}
                     <td className="py-3">
-                      <button
-                        onClick={() => onDelete(p)}
-                        className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-error/10 transition text-error"
-                      >
-                        <span className="material-symbols-outlined text-[18px]">delete</span>
-                      </button>
+                      <div className="flex items-center gap-1">
+
+                        {/* Ver contenido — siempre visible */}
+                        <button
+                          onClick={() => navigate(`/posts/${p.id}`)}
+                          className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-surface-container transition text-on-surface-variant"
+                          title="Ver post"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">visibility</span>
+                        </button>
+
+                        {/* Publicar — solo si es borrador */}
+                        {!p.published && (
+                          <button
+                            onClick={() => onPublish(p)}
+                            className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-primary/10 transition text-primary"
+                            title="Publicar borrador"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">publish</span>
+                          </button>
+                        )}
+
+                        {/* Eliminar — siempre visible */}
+                        <button
+                          onClick={() => onDelete(p)}
+                          className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-error/10 transition text-error"
+                          title="Eliminar post"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+
+                      </div>
                     </td>
                   </tr>
                 ))}
