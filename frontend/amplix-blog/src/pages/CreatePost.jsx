@@ -58,6 +58,7 @@ export default function CreatePost() {
       });
       sileo.success({
         title: "Artículo creado correctamente",
+        duration: 3000,
       });
       navigate("/");
     } catch (err) {
@@ -65,6 +66,7 @@ export default function CreatePost() {
       sileo.error({
         title: "Error al crear el artículo",
         description: err.message || "Intentá de nuevo más tarde.",
+        duration: 3000,
       });
     } finally {
       setLoading(false);

@@ -52,6 +52,7 @@ function Register() {
       });
       sileo.success({
         title: "Usuario creado correctamente",
+        duration: 4000,
       });
       navigate("/login", {
         state: { success: "Cuenta creada exitosamente. Iniciá sesión." },
@@ -61,6 +62,7 @@ function Register() {
       sileo.error({
         title: "Error al crear usuario",
         description: error.message || "Intentá de nuevo más tarde.",
+        duration: 3000,
       });
     } finally {
       setLoading(false);
